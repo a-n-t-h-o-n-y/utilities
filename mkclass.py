@@ -17,7 +17,9 @@ def make_class():
                 + " argument.")
         return
     make_header()
-    make_source()
+    if len(sys.argv) == 2:
+        make_source()
+    return
 
 def make_header():
     class_name = sys.argv[1]
@@ -27,7 +29,7 @@ def make_header():
         is_template = True
         template_args = sys.argv[3:]
      
-    header = open(class_name + ".hpp", "w")
+    header = open(class_name.lower() + ".hpp", "w")
     define = class_name.upper() + "_HPP"
     header_contents = (
             r'#ifndef ' + define + '\n'
@@ -54,6 +56,13 @@ def make_header():
     return
 
 def make_source():
+    class_name = sys.argv[1]
+    source_file = open(class_name.lower() + ".cpp", "w")
+    source_contents = (
+            r'#include <' + class_name.lower() + ".hpp>"
+            )
+    source_file.write(source_contents)
+    source_file.close()
     return
 
 if __name__ == '__main__':
