@@ -30,7 +30,7 @@ def create_main():
 def create_build_dir():
     makedirs('build')
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     create_cmake()
     create_main()
     create_build_dir()
