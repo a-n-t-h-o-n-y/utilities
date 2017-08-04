@@ -57,9 +57,9 @@ def make_header():
 
 def make_source():
     class_name = sys.argv[1]
-    source_file = open(class_name.lower() + ".cpp", "w")
+    source_file = open(class_name.lower() + '.cpp', "w")
     source_contents = (
-            r'#include <' + class_name.lower() + ".hpp>"
+            r'#include "' + class_name.lower() + '.hpp"'
             )
     source_file.write(source_contents)
     source_file.close()
