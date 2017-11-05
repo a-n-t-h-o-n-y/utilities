@@ -16,7 +16,7 @@ class bcolors:
     UNDERLINE = '\033[4m'
 
 # Install all scripts to /usr/local/bin/ or provide path as command line arg.
-def install():
+def install_scripts():
     install_dir = '/usr/local/bin/'
     if len(sys.argv) > 1:
         install_dir = sys.argv[1]
@@ -37,5 +37,17 @@ def install():
         print(bcolors.OKGREEN + "Installed" + bcolors.ENDC + " '" + fn + "' to "
                 + new_path)
 
+def install_headers():
+    install_dir = '/usr/local/include/utility'
+    if not os.path.exists(install_dir):
+        os.makedirs(install_dir)
+    # for each file in headers, copy to install_dir
+    headers = glob.iglob('headers/*.hpp')
+    for h in headers:
+        shutil.copy2(h, install_dir)
+        print(bcolors.OKGREEN + "Installed" + bcolors.ENDC + " '" + h + "' to "
+                + install_dir + "/" + os.path.basename(h))
+
 if __name__ == '__main__':
-    install()
+    install_scripts()
+    install_headers()
