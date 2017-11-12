@@ -5,7 +5,8 @@ def create_cmake():
     cmake = open('CMakeLists.txt', 'w')
     cmake_contents = (
             r'cmake_minimum_required(VERSION 2.6)''\n'
-            r'set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++14 -Wall -g")''\n'
+            r'set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++14 -Wall -g '
+            r'-Werror")''\n'
             r'add_executable(main main.cpp)''\n\n'
             r'find_package(Boost)''\n'
             r'if (Boost_FOUND)''\n'
