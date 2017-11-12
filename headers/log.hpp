@@ -18,12 +18,12 @@ class Basic_log : public Stream_t {
     template <typename... Args>
     Basic_log(Args&&... args) : Stream_t{std::forward<Args>(args)...} {}
 
-    // Constructor overload for default parameters to std::ofstream.
+    /// Constructor overload for default parameters to std::ofstream.
     Basic_log(const std::string filename = "log.txt",
               std::ios_base::openmode mode = std::ios_base::app)
         : Stream_t{filename, mode} {}
 
-    // Constructor overload for default parameters to std::ofstream.
+    /// Constructor overload for default parameters to std::ofstream.
     Basic_log(const char* filename,
               std::ios_base::openmode mode = std::ios_base::app)
         : Stream_t{filename, mode} {}
@@ -31,14 +31,14 @@ class Basic_log : public Stream_t {
     /// Sets the number of spaces for labels.
     void set_width(std::size_t width) { width_ = width; }
 
-    // Outputs 80 char line and blank space.
+    /// Outputs 80 char line and blank space.
     void line_break() {
         *this << std::setfill('-') << std::setw(80) << '-' << '\n'
               << std::endl
               << std::setfill(' ');
     }
 
-    // Outputs the current date and time on a single line.
+    /// Outputs the current date and time on a single line.
     void timestamp() {
         auto now = std::chrono::system_clock::now();
         auto now_t = std::chrono::system_clock::to_time_t(now);
@@ -51,13 +51,13 @@ class Basic_log : public Stream_t {
         *this << std::left << std::setw(width_) << label << value << std::endl;
     }
 
-    // Mark the beginning of the timer.
+    /// Mark the beginning of the timer.
     void start_timer() { timer_start_ = clock_t::now(); }
 
-    // Mark the end of the timer.
+    /// Mark the end of the timer.
     void end_timer() { timer_end_ = clock_t::now(); }
 
-    // Output the duration of the timer in units of Duration_t.
+    /// Output the duration of the timer in units of Duration_t.
     template <typename Duration_t = std::chrono::nanoseconds>
     void output_timer() {
         *this << std::chrono::duration_cast<Duration_t>(timer_end_ -
