@@ -56,8 +56,9 @@ std::ostream& operator<<(std::ostream& os, const Property<T>& prop) {
 template <typename T>
 std::istream& operator>>(std::istream& is, Property<T>& prop) {
     T temp;
-    return is >> temp;
+    is >> temp;
     prop.set(std::move(temp));
+    return is;
 }
 
 // Specialized default constructors. UB if pod type comparison with
