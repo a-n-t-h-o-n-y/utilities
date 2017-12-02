@@ -1,5 +1,5 @@
-#ifndef UTILITIES_GEN_RANDOM_DATA_HPP
-#define UTILITIES_GEN_RANDOM_DATA_HPP
+#ifndef UTILITIES_RANDOM_VALUE_HPP
+#define UTILITIES_RANDOM_VALUE_HPP
 #include <array>
 #include <cstddef>
 #include <cstdint>
@@ -62,9 +62,9 @@ template <typename Container_t,
           typename std::enable_if<
               std::is_integral<typename Container_t::value_type>::value,
               int>::type = 0>
-Container_t gen_random_data(std::size_t n,
-                            typename Container_t::value_type lower_bound,
-                            typename Container_t::value_type upper_bound) {
+Container_t random_values(std::size_t n,
+                          typename Container_t::value_type lower_bound,
+                          typename Container_t::value_type upper_bound) {
     Container_t result;
     for (std::size_t i{0}; i < n; ++i) {
         result.insert(std::end(result), gen_int_type(lower_bound, upper_bound));
@@ -78,9 +78,9 @@ template <typename Container_t,
           typename std::enable_if<
               std::is_floating_point<typename Container_t::value_type>::value,
               int>::type = 0>
-Container_t gen_random_data(std::size_t n,
-                            typename Container_t::value_type lower_bound,
-                            typename Container_t::value_type upper_bound) {
+Container_t random_values(std::size_t n,
+                          typename Container_t::value_type lower_bound,
+                          typename Container_t::value_type upper_bound) {
     Container_t result;
     for (std::size_t i{0}; i < n; ++i) {
         result.insert(std::end(result),
@@ -97,8 +97,8 @@ template <
     typename std::enable_if<
         std::is_integral<typename Container_t::value_type>::value,
         int>::type = 0>
-Container_t gen_random_data(typename Container_t::value_type lower_bound,
-                            typename Container_t::value_type upper_bound) {
+Container_t random_values(typename Container_t::value_type lower_bound,
+                          typename Container_t::value_type upper_bound) {
     Container_t result;
     for (std::size_t i{0}; i < std::tuple_size<Container_t>::value; ++i) {
         result[i] = gen_int_type(lower_bound, upper_bound);
@@ -114,8 +114,8 @@ template <
     typename std::enable_if<
         std::is_floating_point<typename Container_t::value_type>::value,
         int>::type = 0>
-Container_t gen_random_data(typename Container_t::value_type lower_bound,
-                            typename Container_t::value_type upper_bound) {
+Container_t random_values(typename Container_t::value_type lower_bound,
+                          typename Container_t::value_type upper_bound) {
     Container_t result;
     for (std::size_t i{0}; i < std::tuple_size<Container_t>::value; ++i) {
         result[i] = gen_float_type(lower_bound, upper_bound);
@@ -124,4 +124,4 @@ Container_t gen_random_data(typename Container_t::value_type lower_bound,
 }
 
 }  // namespace utility
-#endif  // UTILITIES_GEN_RANDOM_DATA_HPP
+#endif  // UTILITIES_RANDOM_VALUE_HPP
