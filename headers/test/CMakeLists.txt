@@ -7,7 +7,8 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++14 -Wall")
 # Unit Tests
 enable_testing()
 set(TEST_SOURCES
-    "arbitrary_int_test.cpp"
+    # "signed_integer_test.cpp"
+    "unsigned_integer_test.cpp"
 )
 find_package(GTest REQUIRED)
 if (GTEST_FOUND)
