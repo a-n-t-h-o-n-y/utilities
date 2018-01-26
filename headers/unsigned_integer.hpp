@@ -5,6 +5,7 @@
 #include <cstddef>
 #include <cstdint>
 #include <iostream>
+#include <string>
 #include <type_traits>
 
 #include "detail/usign/arithmetic.hpp"
@@ -62,6 +63,21 @@ class Unsigned_integer {
     bool operator<=(const Unsigned_integer& rhs) const;
     bool operator>(const Unsigned_integer& rhs) const;
     bool operator>=(const Unsigned_integer& rhs) const;
+
+    // Bit Operators
+    Unsigned_integer operator&(const Unsigned_integer& rhs) const;
+    Unsigned_integer operator|(const Unsigned_integer& rhs) const;
+    Unsigned_integer operator^(const Unsigned_integer& rhs) const;
+    Unsigned_integer operator~() const;
+    Unsigned_integer operator<<(std::size_t pos) const;
+    Unsigned_integer operator>>(std::size_t pos) const;
+
+    // Compound Bit Operator Assignments
+    Unsigned_integer& operator&=(const Unsigned_integer& other);
+    Unsigned_integer& operator|=(const Unsigned_integer& other);
+    Unsigned_integer& operator^=(const Unsigned_integer& other);
+    Unsigned_integer& operator<<=(std::size_t pos);
+    Unsigned_integer& operator>>=(std::size_t pos);
 
     // friend class template
     template <std::size_t N2>
@@ -253,8 +269,125 @@ bool operator>=(const std::string lhs, const Unsigned_integer<N>& rhs) {
     return Unsigned_integer<N>{lhs} >= rhs;
 }
 
-// ARITHMETIC - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-// Addition
+// BIT OPERATORS - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+// AND
+template <std::size_t N>
+Unsigned_integer<N> Unsigned_integer<N>::operator&(
+    const Unsigned_integer& rhs) const {
+    return Unsigned_integer{this->data_ & rhs.data_};
+}
+
+// OR
+template <std::size_t N>
+Unsigned_integer<N> Unsigned_integer<N>::operator|(
+    const Unsigned_integer& rhs) const {
+    return Unsigned_integer{this->data_ | rhs.data_};
+}
+
+// XOR
+template <std::size_t N>
+Unsigned_integer<N> Unsigned_integer<N>::operator^(
+    const Unsigned_integer& rhs) const {
+    return Unsigned_integer{this->data_ ^ rhs.data_};
+}
+
+// NOT
+template <std::size_t N>
+Unsigned_integer<N> Unsigned_integer<N>::operator~() const {
+    return Unsigned_integer<N>{~this->data_};
+}
+
+// Shift Left
+template <std::size_t N>
+Unsigned_integer<N> Unsigned_integer<N>::operator<<(std::size_t pos) const {
+    return Unsigned_integer{this->data_ << pos};
+}
+
+// Shift Right
+template <std::size_t N>
+Unsigned_integer<N> Unsigned_integer<N>::operator>>(std::size_t pos) const {
+    return Unsigned_integer{this->data_ >> pos};
+}
+
+// FORWARDING BIT OPERATORS - - - - - - - - - - - - - - - - - - - - - - - -
+// - - AND
+template <std::size_t N>
+Unsigned_integer<N> operator&(std::uint64_t lhs,
+                              const Unsigned_integer<N>& rhs) {
+    return Unsigned_integer<N>{rhs & lhs};
+}
+
+template <std::size_t N>
+Unsigned_integer<N> operator&(const std::string& lhs,
+                              const Unsigned_integer<N>& rhs) {
+    return Unsigned_integer<N>{rhs & lhs};
+}
+
+// OR
+template <std::size_t N>
+Unsigned_integer<N> operator|(std::uint64_t lhs,
+                              const Unsigned_integer<N>& rhs) {
+    return Unsigned_integer<N>{rhs | lhs};
+}
+
+template <std::size_t N>
+Unsigned_integer<N> operator|(const std::string& lhs,
+                              const Unsigned_integer<N>& rhs) {
+    return Unsigned_integer<N>{rhs | lhs};
+}
+
+// XOR
+template <std::size_t N>
+Unsigned_integer<N> operator^(std::uint64_t lhs,
+                              const Unsigned_integer<N>& rhs) {
+    return Unsigned_integer<N>{rhs ^ lhs};
+}
+
+template <std::size_t N>
+Unsigned_integer<N> operator^(const std::string& lhs,
+                              const Unsigned_integer<N>& rhs) {
+    return Unsigned_integer<N>{rhs ^ lhs};
+}
+
+// COMPOUND BIT OPERATOR ASSIGNMENT - - - - - - - - - - - - - - - - - - - -
+// - -
+template <std::size_t N>
+Unsigned_integer<N>& Unsigned_integer<N>::operator&=(
+    const Unsigned_integer& other) {
+    this->data_ &= other.data_;
+    return *this;
+}
+
+template <std::size_t N>
+Unsigned_integer<N>& Unsigned_integer<N>::operator|=(
+    const Unsigned_integer& other) {
+    this->data_ |= other.data_;
+    return *this;
+}
+
+template <std::size_t N>
+Unsigned_integer<N>& Unsigned_integer<N>::operator^=(
+    const Unsigned_integer& other) {
+    this->data_ ^= other.data_;
+    return *this;
+}
+
+// Shift Left
+template <std::size_t N>
+Unsigned_integer<N>& Unsigned_integer<N>::operator<<=(std::size_t pos) {
+    this->data_ <<= pos;
+    return *this;
+}
+
+// Shift Right
+template <std::size_t N>
+Unsigned_integer<N>& Unsigned_integer<N>::operator>>=(std::size_t pos) {
+    this->data_ >>= pos;
+    return *this;
+}
+
+// ARITHMETIC - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+// - - Addition
 template <std::size_t N>
 Unsigned_integer<N> Unsigned_integer<N>::operator+(
     const Unsigned_integer& rhs) const {
@@ -306,8 +439,8 @@ Unsigned_integer<N> Unsigned_integer<N>::operator*(
     return Unsigned_integer<N>{result};
 }
 
-// FORWARDING ARITHMETIC - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-// Addition
+// FORWARDING ARITHMETIC - - - - - - - - - - - - - - - - - - - - - - - - - -
+// - - Addition
 template <std::size_t N>
 Unsigned_integer<N> operator+(std::uint64_t lhs,
                               const Unsigned_integer<N>& rhs) {
@@ -370,6 +503,30 @@ template <std::size_t N>
 Unsigned_integer<N> operator*(const std::string& lhs,
                               const Unsigned_integer<N>& rhs) {
     return rhs * lhs;
+}
+
+// IOSTREAMS - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+template <std::size_t N>
+std::ostream& operator<<(std::ostream& os, const Unsigned_integer<N>& value) {
+    int base{10};
+    auto flags = os.flags() & std::ios::basefield;
+    if (flags == std::ios::hex) {
+        base = 16;
+    } else if (flags == std::ios::oct) {
+        base = 8;
+    }
+    os << value.to_string(base);
+    return os;
+}
+
+template <std::size_t N>
+std::istream& operator>>(std::istream& is, Unsigned_integer<N>& value) {
+    std::string input;
+    if (is.good()) {
+        is >> input;
+    }
+    value = Unsigned_integer<N>{input};
+    return is;
 }
 
 }  // namespace utility

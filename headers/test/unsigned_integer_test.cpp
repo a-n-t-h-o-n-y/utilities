@@ -1,4 +1,5 @@
 #include <cstdint>
+#include <sstream>
 
 #include <gtest/gtest.h>
 
@@ -639,4 +640,118 @@ TEST(UnsignedIntegerTest, Multiplication) {
     EXPECT_EQ("5", (s * i2).to_string());
     EXPECT_EQ("5", (5ll * i2).to_string());
     EXPECT_EQ("8", (4.0 * i6).to_string());
+}
+
+TEST(UnsignedIntegerTest, BitOperators) {
+    Unsigned_integer<64> i1{6};
+    Unsigned_integer<16> i2{3};
+    Unsigned_integer<4> i3{3};
+    EXPECT_EQ(2, i1 & i2);
+    EXPECT_EQ(7, i1 | i2);
+    EXPECT_EQ(5, i1 ^ i2);
+    EXPECT_EQ(12, ~i3);
+
+    EXPECT_EQ(7, i1 | 3);
+    EXPECT_EQ(2, i1 & 3);
+    EXPECT_EQ(5, i1 ^ 3);
+    EXPECT_EQ(7, i1 | "3");
+    EXPECT_EQ(2, i1 & "3");
+    EXPECT_EQ(5, i1 ^ "3");
+    EXPECT_EQ(7, 6 | i2);
+    EXPECT_EQ(2, 6 & i2);
+    EXPECT_EQ(5, 6 ^ i2);
+    EXPECT_EQ(7, "6" | i2);
+    EXPECT_EQ(2, "6" & i2);
+    EXPECT_EQ(5, "6" ^ i2);
+
+    EXPECT_EQ(48, i1 << 3);
+    EXPECT_EQ(1, i1 >> 2);
+    EXPECT_EQ(0, i1 >> 3);
+    EXPECT_EQ(0, i1 >> 4);
+}
+
+TEST(UnsignedIntegerTest, CompoundBitOperators) {
+    Unsigned_integer<64> i1{6};
+    Unsigned_integer<16> i2{3};
+
+    i1 &= i2;
+    EXPECT_EQ(2, i1);
+    i1 = 6;
+    i1 &= 3;
+    EXPECT_EQ(2, i1);
+    i1 = 6;
+    (i1 &= "3")++;
+    EXPECT_EQ(3, i1);
+    i1 = 6;
+
+    i1 |= i2;
+    EXPECT_EQ(7, i1);
+    i1 = 6;
+    i1 |= 3;
+    EXPECT_EQ(7, i1);
+    i1 = 6;
+    (i1 |= "3")++;
+    EXPECT_EQ(8, i1);
+    i1 = 6;
+
+    i1 ^= i2;
+    EXPECT_EQ(5, i1);
+    i1 = 6;
+    i1 ^= 3;
+    EXPECT_EQ(5, i1);
+    i1 = 6;
+    (i1 ^= "3")++;
+    EXPECT_EQ(6, i1);
+    i1 = 6;
+
+    i1 <<= 3;
+    EXPECT_EQ(48, i1);
+    i1 = 6;
+    i1 >>= 2;
+    EXPECT_EQ(1, i1);
+    i1 = 6;
+    (i1 >>= 3)++;
+    EXPECT_EQ(1, i1);
+    i1 = 6;
+}
+
+TEST(UnsignedIntegerTest, OStreamOutput) {
+    std::stringstream ss;
+    Unsigned_integer<64> i{9999999};
+    ss << i;
+    EXPECT_EQ("9999999", ss.str());
+    ss.str("");
+
+    ss << std::hex << i;
+    EXPECT_EQ("98967F", ss.str());
+    ss.str("");
+
+    ss << std::oct << i;
+    EXPECT_EQ("46113177", ss.str());
+    ss.str("");
+}
+
+TEST(UnsignedIntegerTest, IStreamInput) {
+    std::stringstream ss;
+    Unsigned_integer<64> i1{9999999};
+    Unsigned_integer<64> i2{0};
+    ss << i1;
+    ss >> i2;
+    EXPECT_EQ(9999999, i2);
+    ss.clear();
+
+    ss << "0x98967F";
+    ss >> i2;
+    EXPECT_EQ(9999999, i2);
+    ss.clear();
+
+    ss << "046113177";
+    ss >> i2;
+    EXPECT_EQ(9999999, i2);
+    ss.clear();
+
+    ss << "0xF";
+    ss >> i2;
+    EXPECT_EQ(15, i2);
+    ss.clear();
 }
