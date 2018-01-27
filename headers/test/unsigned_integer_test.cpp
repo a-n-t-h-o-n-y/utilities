@@ -755,3 +755,44 @@ TEST(UnsignedIntegerTest, IStreamInput) {
     EXPECT_EQ(15, i2);
     ss.clear();
 }
+
+TEST(UnsignedIntegerTest, Exponentiation) {
+    Unsigned_integer<64> i1{1};
+    Unsigned_integer<64> i2{0};
+    Unsigned_integer<64> i3{4};
+    Unsigned_integer<1024> i4{9999};
+    EXPECT_EQ(1, i1.exp(i2));
+    EXPECT_EQ(1, i1.exp(1));
+    EXPECT_EQ(16, i3.exp(2));
+    EXPECT_EQ(
+        "9950122304230088282807169262820931544009761744243462256953938140772606"
+        "6148386743841546236419103479078394269912554383014712195070531219955897"
+        "146209915828840276319986866171890488126302980400122499500001",
+        i4.exp(50).to_string());
+    EXPECT_EQ(999700029999, i4.exp(3));
+    EXPECT_EQ(1, i2.exp(i2));
+}
+
+TEST(UnsignedIntegerTest, Root) {
+    Unsigned_integer<128> i1{16};
+    Unsigned_integer<64> i2{7776};
+    Unsigned_integer<54> i3{78126};
+    Unsigned_integer<128> i4{"93795878551873643905024"};
+    Unsigned_integer<128> i5{3404825447};
+    Unsigned_integer<34> i6{15};
+    Unsigned_integer<24> i7{23};
+    Unsigned_integer<14> i8{1};
+    Unsigned_integer<14> i9{0};
+    Unsigned_integer<14> i10{143};
+
+    EXPECT_EQ(4, i1.root(2));
+    EXPECT_EQ(6, i2.root("5"));
+    EXPECT_EQ(0, i9.root(10));
+    EXPECT_EQ(1, i8.root(15));
+    EXPECT_EQ(34, i4.root(i6));
+    EXPECT_EQ(23, i5.root(7));
+    EXPECT_EQ(23, i7.root(1));
+    EXPECT_EQ(5, i3.root(7));
+    EXPECT_EQ(11, i10.root(2));
+    EXPECT_EQ(0, i10.root(0));
+}

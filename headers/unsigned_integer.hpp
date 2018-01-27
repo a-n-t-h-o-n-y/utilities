@@ -55,6 +55,8 @@ class Unsigned_integer {
     Unsigned_integer operator/(const Unsigned_integer& divisor) const;
     Unsigned_integer operator*(const Unsigned_integer& rhs) const;
     Unsigned_integer operator%(const Unsigned_integer& divisor) const;
+    Unsigned_integer exp(const Unsigned_integer& exponent) const;
+    Unsigned_integer root(const Unsigned_integer& index) const;
 
     // Comparison Operators
     bool operator==(const Unsigned_integer& rhs) const;
@@ -436,6 +438,23 @@ Unsigned_integer<N> Unsigned_integer<N>::operator*(
     const Unsigned_integer& rhs) const {
     std::bitset<N> result{
         detail::usign::bit_multiplication(this->data_, rhs.data_)};
+    return Unsigned_integer<N>{result};
+}
+
+// Exponentiation
+template <std::size_t N>
+Unsigned_integer<N> Unsigned_integer<N>::exp(
+    const Unsigned_integer& exponent) const {
+    std::bitset<N> result{
+        detail::usign::bit_exponentiation(this->data_, exponent.data_)};
+    return Unsigned_integer<N>{result};
+}
+
+// Root
+template <std::size_t N>
+Unsigned_integer<N> Unsigned_integer<N>::root(
+    const Unsigned_integer& index) const {
+    std::bitset<N> result{detail::usign::bit_root(this->data_, index.data_)};
     return Unsigned_integer<N>{result};
 }
 

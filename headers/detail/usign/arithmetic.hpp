@@ -90,6 +90,60 @@ std::bitset<N> bit_multiplication(const std::bitset<N>& lhs,
     return product;
 }
 
+// EXPONENTIATION
+template <std::size_t N>
+std::bitset<N> bit_exponentiation(const std::bitset<N>& base,
+                                  const std::bitset<N>& exponent) {
+    std::bitset<N> multiple{base};
+    std::bitset<N> result{1};
+    std::size_t limit{0};
+    for (std::size_t i{0}; i < N; ++i) {
+        if (exponent[i]) {
+            limit = i + 1;
+        }
+    }
+    for (std::size_t i{1}; i < limit; ++i) {
+        multiple = bit_multiplication(multiple, multiple);
+        if (exponent[i]) {
+            result = bit_multiplication(result, multiple);
+        }
+    }
+    if (exponent[0]) {
+        result = bit_multiplication(result, base);
+    }
+    return result;
+}
+
+// ROOT
+template <std::size_t N>
+std::bitset<N> bit_root(std::bitset<N> radicand, const std::bitset<N>& index) {
+    if (index.count() == 0) {
+        return std::bitset<N>{0};
+    }
+    if (index.count() == 1 && index[0]) {
+        return radicand;
+    }
+    if (radicand.count() == 0) {
+        return std::bitset<N>{0};
+    }
+    if (radicand.count() == 1 && radicand[0]) {
+        return std::bitset<N>{1};
+    }
+    std::bitset<N> result{2};
+    while (true) {
+        std::bitset<N> test{result};
+        std::bitset<N> limit{bit_subtraction(index, std::bitset<N>{1})};
+        for (std::bitset<N> i{0}; i < limit;
+             i = bit_addition(i, std::bitset<N>{1})) {
+            test = bit_multiplication(test, result);
+        }
+        if (test > radicand) {
+            return bit_subtraction(result, std::bitset<N>{1});
+        }
+        result = bit_addition(result, std::bitset<N>{1});
+    }
+}
+
 }  // namespace usign
 }  // namespace detail
 }  // namespace utility
