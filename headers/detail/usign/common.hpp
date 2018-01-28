@@ -1,5 +1,6 @@
 #ifndef UTILITY_DETAIL_USIGN_COMMON_HPP
 #define UTILITY_DETAIL_USIGN_COMMON_HPP
+#include <bitset>
 #include <cctype>
 #include <string>
 
@@ -32,6 +33,17 @@ bool is_odd(const std::string& value) {
     }
     int last_digit{char_to_int(value.back())};
     return (last_digit % 2) == 1;
+}
+
+/// Finds the most significant bit index of the bitset.
+template <std::size_t N>
+std::size_t msb(const std::bitset<N>& bs) {
+    for (std::size_t i{N - 1}; i < N; --i) {
+        if (bs[i]) {
+            return i;
+        }
+    }
+    return 0;
 }
 
 }  // namespace usign

@@ -4,6 +4,7 @@
 #include <cstddef>
 
 #include "bit_comparisons.hpp"
+#include "common.hpp"
 
 namespace utility {
 namespace detail {
@@ -11,16 +12,24 @@ namespace usign {
 
 // ADDITION
 template <std::size_t N>
-std::bitset<N> bit_addition(const std::bitset<N>& lhs,
-                            const std::bitset<N>& rhs) {
-    std::bitset<N> result;
+std::bitset<N> bit_addition(std::bitset<N> lhs, const std::bitset<N>& rhs) {
+    if (lhs == rhs) {
+        return lhs << 1;
+    }
+    std::size_t lhs_msb{msb(lhs)};
+    std::size_t rhs_msb{msb(rhs)};
+    std::size_t limit{lhs_msb > rhs_msb ? lhs_msb : rhs_msb};
+    ++limit;
     bool carry_over{false};
-    for (std::size_t i{0}; i < N; ++i) {
+    for (std::size_t i{0}; i < limit; ++i) {
         int sum{carry_over + lhs[i] + rhs[i]};
-        result[i] = (sum % 2) == 1;
+        lhs[i] = sum == 1 || sum == 3;
         carry_over = sum > 1;
     }
-    return result;
+    if (limit != N) {
+        lhs[limit] = carry_over + lhs[limit] + rhs[limit];
+    }
+    return lhs;
 }
 
 // SUBTRACTION
