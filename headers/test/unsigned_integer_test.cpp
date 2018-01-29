@@ -40,6 +40,9 @@ TEST(UnsignedIntegerTest, ConstructorUnsignedInt64) {
 
     Unsigned_integer<6> i4{0b111101};
     EXPECT_EQ(i4.to_string(2), "111101");
+
+    Unsigned_integer<16> i5{0};
+    EXPECT_EQ("0", i5.to_string());
 }
 
 TEST(UnsignedIntegerTest, ConstructorStringBinary) {
