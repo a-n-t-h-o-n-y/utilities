@@ -26,88 +26,87 @@ TEST(UnsignedIntegerTest, ConstructorDefault) {
 
 TEST(UnsignedIntegerTest, ConstructorUnsignedInt64) {
     Unsigned_integer<16> i1{128};
-    EXPECT_EQ(i1.to_string(2), "10000000");
+    EXPECT_EQ(i1, 0b10000000);
 
     // Largest unsigned int
     Unsigned_integer<64> i2{static_cast<std::uint64_t>(-1)};
     EXPECT_EQ(
-        i2.to_string(2),
-        "1111111111111111111111111111111111111111111111111111111111111111");
+        i2, 0b1111111111111111111111111111111111111111111111111111111111111111);
 
     // Zero value if overflown
     Unsigned_integer<8> i3{256};
-    EXPECT_EQ(i3.to_string(2), "0");
+    EXPECT_EQ(i3, 0b0);
 
     Unsigned_integer<6> i4{0b111101};
-    EXPECT_EQ(i4.to_string(2), "111101");
+    EXPECT_EQ(i4, 0b111101);
 
     Unsigned_integer<16> i5{0};
-    EXPECT_EQ("0", i5.to_string());
+    EXPECT_EQ(0b0, i5);
 }
 
 TEST(UnsignedIntegerTest, ConstructorStringBinary) {
     Unsigned_integer<12> i1{"0B111111111111"};
-    EXPECT_EQ(i1.to_string(2), "111111111111");
+    EXPECT_EQ(i1, 0b111111111111);
 
     Unsigned_integer<8> i2{"0b1"};
-    EXPECT_EQ(i2.to_string(2), "1");
+    EXPECT_EQ(i2, 0b1);
 
     Unsigned_integer<8> i3{"0B"};
-    EXPECT_EQ(i3.to_string(2), "0");
+    EXPECT_EQ(i3, 0b0);
 
     Unsigned_integer<5> i4{"0b10101"};
-    EXPECT_EQ(i4.to_string(2), "10101");
+    EXPECT_EQ(i4, 0b10101);
 }
 
 TEST(UnsignedIntegerTest, ConstructorStringDecimal) {
     Unsigned_integer<8> i1{"128"};
-    EXPECT_EQ(i1.to_string(2), "10000000");
+    EXPECT_EQ(i1, 0b10000000);
 
     Unsigned_integer<5> i2{"9"};
-    EXPECT_EQ(i2.to_string(2), "1001");
+    EXPECT_EQ(i2, 0b1001);
 
     Unsigned_integer<4> i3{"0"};
-    EXPECT_EQ(i3.to_string(2), "0");
+    EXPECT_EQ(i3, 0b0);
 
     Unsigned_integer<17> i4{"101093"};
-    EXPECT_EQ(i4.to_string(2), "11000101011100101");
+    EXPECT_EQ(i4, 0b11000101011100101);
 }
 
 TEST(UnsignedIntegerTest, ConstructorStringHex) {
     Unsigned_integer<8> i1{"0x80"};
-    EXPECT_EQ(i1.to_string(2), "10000000");
+    EXPECT_EQ(i1, 0b10000000);
 
     Unsigned_integer<12> i2{"0X0"};
-    EXPECT_EQ(i2.to_string(2), "0");
+    EXPECT_EQ(i2, 0b0);
 
     Unsigned_integer<12> i3{"0x"};
-    EXPECT_EQ(i3.to_string(2), "0");
+    EXPECT_EQ(i3, 0b0);
 
     Unsigned_integer<16> i4{"0X3039"};
-    EXPECT_EQ(i4.to_string(2), "11000000111001");
+    EXPECT_EQ(i4, 0b11000000111001);
 
     Unsigned_integer<16> i5{"0xAAAA"};
-    EXPECT_EQ(i5.to_string(2), "1010101010101010");
+    EXPECT_EQ(i5, 0b1010101010101010);
 
     Unsigned_integer<20> i6{"0x5F02C"};
-    EXPECT_EQ(i6.to_string(2), "1011111000000101100");
+    EXPECT_EQ(i6, 0b1011111000000101100);
 }
 
 TEST(UnsignedIntegerTest, ConstructorStringOctal) {
     Unsigned_integer<8> i1{"0200"};
-    EXPECT_EQ(i1.to_string(2), "10000000");
+    EXPECT_EQ(i1, 0b10000000);
 
     Unsigned_integer<12> i2{"00"};
-    EXPECT_EQ(i2.to_string(2), "0");
+    EXPECT_EQ(i2, 0b0);
 
     Unsigned_integer<16> i4{"030071"};
-    EXPECT_EQ(i4.to_string(2), "11000000111001");
+    EXPECT_EQ(i4, 0b11000000111001);
 
     Unsigned_integer<16> i5{"0125252"};
-    EXPECT_EQ(i5.to_string(2), "1010101010101010");
+    EXPECT_EQ(i5, 0b1010101010101010);
 
     Unsigned_integer<20> i6{"01370054"};
-    EXPECT_EQ(i6.to_string(2), "1011111000000101100");
+    EXPECT_EQ(i6, 0b1011111000000101100);
 }
 
 TEST(UnsignedIntegerTest, StringOutputDecimal) {
@@ -286,24 +285,24 @@ TEST(UnsignedIntegerTest, StringOutputBinary) {
 TEST(UnsignedIntegerTest, ImplicitCasting) {
     Unsigned_integer<64> i1{999};
     Unsigned_integer<128> i2{i1};
-    EXPECT_EQ("999", i2.to_string());
+    EXPECT_EQ(999, i2);
 
     Unsigned_integer<128> i3{1234};
     Unsigned_integer<64> i4{i3};
-    EXPECT_EQ("1234", i4.to_string());
+    EXPECT_EQ(1234, i4);
 
     Unsigned_integer<128> result1{i1 + i3};
-    EXPECT_EQ("2233", result1.to_string());
+    EXPECT_EQ(2233, result1);
 
     Unsigned_integer<12> result2{i1 + i3};
-    EXPECT_EQ("2233", result2.to_string());
+    EXPECT_EQ(2233, result2);
 
     Unsigned_integer<1> i5{0};
     Unsigned_integer<12> result3{i1 + i3 + i5};
-    EXPECT_EQ("2233", result3.to_string());
+    EXPECT_EQ(2233, result3);
 
     Unsigned_integer<64> i6{i1};
-    EXPECT_EQ("999", i6.to_string());
+    EXPECT_EQ(999, i6);
 }
 
 TEST(UnsignedIntegerTest, Addition) {
@@ -314,39 +313,39 @@ TEST(UnsignedIntegerTest, Addition) {
     Unsigned_integer<64> i5{7};
 
     Unsigned_integer<64> result1{i1 + i1};
-    EXPECT_EQ("0", result1.to_string());
+    EXPECT_EQ(0, result1);
 
     Unsigned_integer<64> result2{i1 + i2};
-    EXPECT_EQ("1", result2.to_string());
+    EXPECT_EQ(1, result2);
 
     Unsigned_integer<64> result3{i2 + i2};
-    EXPECT_EQ("2", result3.to_string());
+    EXPECT_EQ(2, result3);
 
     Unsigned_integer<64> result4{i3 + i2};
-    EXPECT_EQ("10000000000", result4.to_string());
+    EXPECT_EQ(10000000000, result4);
 
     Unsigned_integer<64> result5{i3 + i1};
-    EXPECT_EQ("9999999999", result5.to_string());
+    EXPECT_EQ(9999999999, result5);
 
     Unsigned_integer<64> result6{i4 + i2};
-    EXPECT_EQ("46372892", result6.to_string());
+    EXPECT_EQ(46372892, result6);
 
     Unsigned_integer<64> result7{i5 + i5};
-    EXPECT_EQ("14", result7.to_string());
+    EXPECT_EQ(14, result7);
 
     Unsigned_integer<64> result8{i5 + i5 + i5};
-    EXPECT_EQ("21", result8.to_string());
+    EXPECT_EQ(21, result8);
 
     Unsigned_integer<64> result9{i1 + i2 + i3 + i4};
-    EXPECT_EQ("10046372891", result9.to_string());
+    EXPECT_EQ(10046372891, result9);
 
-    EXPECT_EQ("5", (i2 + 4).to_string());
-    EXPECT_EQ("5", (4 + i2).to_string());
-    EXPECT_EQ("1", (0 + i2).to_string());
-    EXPECT_EQ("5", ("4" + i2).to_string());
-    EXPECT_EQ("5", ("0b100" + i2).to_string());
-    EXPECT_EQ("5", (i2 + "4").to_string());
-    EXPECT_EQ("5", (i2 + "0b100").to_string());
+    EXPECT_EQ(5, i2 + 4);
+    EXPECT_EQ(5, 4 + i2);
+    EXPECT_EQ(1, 0 + i2);
+    EXPECT_EQ(5, "4" + i2);
+    EXPECT_EQ(5, "0b100" + i2);
+    EXPECT_EQ(5, i2 + "4");
+    EXPECT_EQ(5, i2 + "0b100");
 }
 
 TEST(UnsignedIntegerTest, Subtraction) {
@@ -357,41 +356,41 @@ TEST(UnsignedIntegerTest, Subtraction) {
     Unsigned_integer<64> i5{7};
 
     Unsigned_integer<64> result1{i1 - i1};
-    EXPECT_EQ("0", result1.to_string());
+    EXPECT_EQ(0, result1);
 
     Unsigned_integer<64> result2{i2 - i1};
-    EXPECT_EQ("1", result2.to_string());
+    EXPECT_EQ(1, result2);
 
     Unsigned_integer<64> result3{i2 - i2};
-    EXPECT_EQ("0", result3.to_string());
+    EXPECT_EQ(0, result3);
 
     Unsigned_integer<64> result4{i3 - i2};
-    EXPECT_EQ("9999999998", result4.to_string());
+    EXPECT_EQ(9999999998, result4);
 
     Unsigned_integer<64> result5{i3 - i1};
-    EXPECT_EQ("9999999999", result5.to_string());
+    EXPECT_EQ(9999999999, result5);
 
     Unsigned_integer<64> result6{i4 - i2};
-    EXPECT_EQ("46372890", result6.to_string());
+    EXPECT_EQ(46372890, result6);
 
     Unsigned_integer<64> result7{i5 - i5};
-    EXPECT_EQ("0", result7.to_string());
+    EXPECT_EQ(0, result7);
 
     Unsigned_integer<64> result8{i4 - i5 - i5};
-    EXPECT_EQ("46372877", result8.to_string());
+    EXPECT_EQ(46372877, result8);
 
     Unsigned_integer<64> result9{i3 - i4 - i2 - i1};
-    EXPECT_EQ("9953627107", result9.to_string());
+    EXPECT_EQ(9953627107, result9);
 
-    EXPECT_EQ("3", (i5 - 4).to_string());
-    EXPECT_EQ("3", (4 - i2).to_string());
-    EXPECT_EQ("3", ("4" - i2).to_string());
-    EXPECT_EQ("3", ("0b100" - i2).to_string());
+    EXPECT_EQ(3, i5 - 4);
+    EXPECT_EQ(3, 4 - i2);
+    EXPECT_EQ(3, "4" - i2);
+    EXPECT_EQ(3, "0b100" - i2);
 
     short s{5};
-    EXPECT_EQ("4", (s - i2).to_string());
-    EXPECT_EQ("4", (5ll - i2).to_string());
-    EXPECT_EQ("3", (4.0 - i2).to_string());
+    EXPECT_EQ(4, s - i2);
+    EXPECT_EQ(4, 5ll - i2);
+    EXPECT_EQ(3, 4.0 - i2);
 
     // Junk result, but does not hang or crash
     Unsigned_integer<64> result10{i2 - i4};
@@ -400,99 +399,99 @@ TEST(UnsignedIntegerTest, Subtraction) {
 
 TEST(UnsignedIntegerTest, PreIncrementOperator) {
     Unsigned_integer<64> i1{0};
-    EXPECT_EQ("1", (++i1).to_string());
+    EXPECT_EQ(1, ++i1);
     ++i1;
     ++i1;
     ++i1;
     ++i1;
-    EXPECT_EQ("5", i1.to_string());
+    EXPECT_EQ(5, i1);
 }
 
 TEST(UnsignedIntegerTest, PostIncrementOperator) {
     Unsigned_integer<64> i1{0};
-    EXPECT_EQ("0", (i1++).to_string());
-    EXPECT_EQ("1", i1.to_string());
+    EXPECT_EQ(0, i1++);
+    EXPECT_EQ(1, i1);
     i1++;
     i1++;
     i1++;
     i1++;
-    EXPECT_EQ("5", i1.to_string());
+    EXPECT_EQ(5, i1);
 }
 
 TEST(UnsignedIntegerTest, PreDecrementOperator) {
     Unsigned_integer<64> i1{10};
-    EXPECT_EQ("9", (--i1).to_string());
+    EXPECT_EQ(9, --i1);
     --i1;
     --i1;
     --i1;
     --i1;
-    EXPECT_EQ("5", i1.to_string());
+    EXPECT_EQ(5, i1);
 }
 
 TEST(UnsignedIntegerTest, PostDecrementOperator) {
     Unsigned_integer<64> i1{10};
-    EXPECT_EQ("10", (i1--).to_string());
-    EXPECT_EQ("9", i1.to_string());
+    EXPECT_EQ(10, i1--);
+    EXPECT_EQ(9, i1);
     i1--;
     i1--;
     i1--;
     i1--;
-    EXPECT_EQ("5", i1.to_string());
+    EXPECT_EQ(5, i1);
 }
 
 TEST(UnsignedIntegerTest, AdditionCompoundAssignment) {
     Unsigned_integer<16> i1{10};
     Unsigned_integer<32> i2{15};
     i1 += i2;
-    EXPECT_EQ("25", i1.to_string());
+    EXPECT_EQ(25, i1);
     --(i1 += i1);
-    EXPECT_EQ("49", i1.to_string());
-    EXPECT_EQ("51", (i1 += 2).to_string());
-    EXPECT_EQ("53", (i1 += "2").to_string());
+    EXPECT_EQ(49, i1);
+    EXPECT_EQ(51, i1 += 2);
+    EXPECT_EQ(53, i1 += "2");
 }
 
 TEST(UnsignedIntegerTest, SubtractionCompoundAssignment) {
     Unsigned_integer<16> i1{10};
     Unsigned_integer<32> i2{15};
     i2 -= i1;
-    EXPECT_EQ("5", i2.to_string());
+    EXPECT_EQ(5, i2);
     (i2 -= i2)++;
-    EXPECT_EQ("1", i2.to_string());
-    EXPECT_EQ("8", (i1 -= 2).to_string());
-    EXPECT_EQ("6", (i1 -= "2").to_string());
+    EXPECT_EQ(1, i2);
+    EXPECT_EQ(8, i1 -= 2);
+    EXPECT_EQ(6, i1 -= "2");
 }
 
 TEST(UnsignedIntegerTest, DivisionCompoundAssignment) {
     Unsigned_integer<16> i1{100};
     Unsigned_integer<32> i2{10};
     i1 /= i2;
-    EXPECT_EQ("10", i1.to_string());
+    EXPECT_EQ(10, i1);
     (i2 /= i2)++;
-    EXPECT_EQ("2", i2.to_string());
-    EXPECT_EQ("5", (i1 /= 2).to_string());
-    EXPECT_EQ("2", (i1 /= "2").to_string());
+    EXPECT_EQ(2, i2);
+    EXPECT_EQ(5, i1 /= 2);
+    EXPECT_EQ(2, i1 /= "2");
 }
 
 TEST(UnsignedIntegerTest, ModuloCompoundAssignment) {
     Unsigned_integer<16> i1{10};
     Unsigned_integer<32> i2{15};
     i1 %= i2;
-    EXPECT_EQ("10", i1.to_string());
+    EXPECT_EQ(10, i1);
     (i2 %= i2)++;
-    EXPECT_EQ("1", i2.to_string());
-    EXPECT_EQ("0", (i1 %= 2).to_string());
-    EXPECT_EQ("0", (i1 %= "2").to_string());
+    EXPECT_EQ(1, i2);
+    EXPECT_EQ(0, i1 %= 2);
+    EXPECT_EQ(0, i1 %= "2");
 }
 
 TEST(UnsignedIntegerTest, MultiplicationCompoundAssignment) {
     Unsigned_integer<16> i1{10};
     Unsigned_integer<32> i2{15};
     i2 *= i1;
-    EXPECT_EQ("150", i2.to_string());
+    EXPECT_EQ(150, i2);
     (i2 *= i2)++;
-    EXPECT_EQ("22501", i2.to_string());
-    EXPECT_EQ("20", (i1 *= 2).to_string());
-    EXPECT_EQ("40", (i1 *= "2").to_string());
+    EXPECT_EQ(22501, i2);
+    EXPECT_EQ(20, i1 *= 2);
+    EXPECT_EQ(40, i1 *= "2");
 }
 
 TEST(UnsignedIntegerTest, ComparisonOperators) {
@@ -545,31 +544,31 @@ TEST(UnsignedIntegerTest, Division) {
     Unsigned_integer<1024> i5{7};
     Unsigned_integer<64> i6{2};
 
-    EXPECT_EQ("3", (i5 / i6).to_string());
-    EXPECT_EQ("0", (i2 / i1).to_string());
-    EXPECT_EQ("0", (i2 / i3).to_string());
-    EXPECT_EQ("0", (i2 / i4).to_string());
-    EXPECT_EQ("0", (i4 / i3).to_string());
-    EXPECT_EQ("215", (i3 / i4).to_string());
+    EXPECT_EQ(3, i5 / i6);
+    EXPECT_EQ(0, i2 / i1);
+    EXPECT_EQ(0, i2 / i3);
+    EXPECT_EQ(0, i2 / i4);
+    EXPECT_EQ(0, i4 / i3);
+    EXPECT_EQ(215, i3 / i4);
 
-    EXPECT_EQ("6624698", (i4 / i5).to_string());
-    EXPECT_EQ("1428571428", (i3 / i5).to_string());
+    EXPECT_EQ(6624698, i4 / i5);
+    EXPECT_EQ(1428571428, i3 / i5);
 
-    EXPECT_EQ("9999999999", (i3 / i2).to_string());
-    EXPECT_EQ("46372891", (i4 / i2).to_string());
-    EXPECT_EQ("7", (i5 / i2).to_string());
+    EXPECT_EQ(9999999999, i3 / i2);
+    EXPECT_EQ(46372891, i4 / i2);
+    EXPECT_EQ(7, i5 / i2);
 
-    EXPECT_EQ("0", (i5 / i1).to_string());
+    EXPECT_EQ(0, i5 / i1);
 
-    EXPECT_EQ("3", (i5 / 2).to_string());
-    EXPECT_EQ("4", (4 / i2).to_string());
-    EXPECT_EQ("4", ("4" / i2).to_string());
-    EXPECT_EQ("4", ("0b100" / i2).to_string());
+    EXPECT_EQ(3, i5 / 2);
+    EXPECT_EQ(4, 4 / i2);
+    EXPECT_EQ(4, "4" / i2);
+    EXPECT_EQ(4, "0b100" / i2);
 
     short s{5};
-    EXPECT_EQ("5", (s / i2).to_string());
-    EXPECT_EQ("5", (5ll / i2).to_string());
-    EXPECT_EQ("2", (4.0 / i6).to_string());
+    EXPECT_EQ(5, s / i2);
+    EXPECT_EQ(5, 5ll / i2);
+    EXPECT_EQ(2, 4.0 / i6);
 }
 
 TEST(UnsignedIntegerTest, Modulo) {
@@ -580,29 +579,29 @@ TEST(UnsignedIntegerTest, Modulo) {
     Unsigned_integer<1024> i5{7};
     Unsigned_integer<64> i6{2};
 
-    EXPECT_EQ("1", (i5 % i6).to_string());
-    EXPECT_EQ("0", (i2 % i1).to_string());
-    EXPECT_EQ("1", (i2 % i3).to_string());
-    EXPECT_EQ("1", (i2 % i4).to_string());
-    EXPECT_EQ("46372891", (i4 % i3).to_string());
-    EXPECT_EQ("29828434", (i3 % i4).to_string());
+    EXPECT_EQ(1, i5 % i6);
+    EXPECT_EQ(0, i2 % i1);
+    EXPECT_EQ(1, i2 % i3);
+    EXPECT_EQ(1, i2 % i4);
+    EXPECT_EQ(46372891, i4 % i3);
+    EXPECT_EQ(29828434, i3 % i4);
 
-    EXPECT_EQ("5", (i4 % i5).to_string());
-    EXPECT_EQ("3", (i3 % i5).to_string());
+    EXPECT_EQ(5, i4 % i5);
+    EXPECT_EQ(3, i3 % i5);
 
-    EXPECT_EQ("0", (i3 % i2).to_string());
-    EXPECT_EQ("0", (i4 % i2).to_string());
-    EXPECT_EQ("0", (i5 % i2).to_string());
+    EXPECT_EQ(0, i3 % i2);
+    EXPECT_EQ(0, i4 % i2);
+    EXPECT_EQ(0, i5 % i2);
 
-    EXPECT_EQ("3", (i5 % 4).to_string());
-    EXPECT_EQ("4", (4 % i5).to_string());
-    EXPECT_EQ("0", ("4" % i2).to_string());
-    EXPECT_EQ("0", ("0b100" % i2).to_string());
+    EXPECT_EQ(3, i5 % 4);
+    EXPECT_EQ(4, 4 % i5);
+    EXPECT_EQ(0, "4" % i2);
+    EXPECT_EQ(0, "0b100" % i2);
 
     short s{5};
-    EXPECT_EQ("0", (s % i2).to_string());
-    EXPECT_EQ("0", (5ll % i2).to_string());
-    EXPECT_EQ("0", (4.0 % i6).to_string());
+    EXPECT_EQ(0, s % i2);
+    EXPECT_EQ(0, 5ll % i2);
+    EXPECT_EQ(0, 4.0 % i6);
 }
 
 TEST(UnsignedIntegerTest, Multiplication) {
@@ -613,36 +612,36 @@ TEST(UnsignedIntegerTest, Multiplication) {
     Unsigned_integer<1024> i5{7};
     Unsigned_integer<64> i6{2};
 
-    EXPECT_EQ("14", (i5 * i6).to_string());
-    EXPECT_EQ("0", (i2 * i1).to_string());
-    EXPECT_EQ("69999999993", (i5 * i2 * i3).to_string());
-    EXPECT_EQ("46372891", (i4 * i2).to_string());
-    EXPECT_EQ("463728909953627109", (i4 * i3).to_string());
-    EXPECT_EQ("463728909953627109", (i3 * i4).to_string());
+    EXPECT_EQ(14, i5 * i6);
+    EXPECT_EQ(0, i2 * i1);
+    EXPECT_EQ(69999999993, i5 * i2 * i3);
+    EXPECT_EQ(46372891, i4 * i2);
+    EXPECT_EQ(463728909953627109, i4 * i3);
+    EXPECT_EQ(463728909953627109, i3 * i4);
 
-    EXPECT_EQ("324610237", (i4 * i5).to_string());
-    EXPECT_EQ("69999999993", (i3 * i5).to_string());
+    EXPECT_EQ(324610237, i4 * i5);
+    EXPECT_EQ(69999999993, i3 * i5);
 
-    EXPECT_EQ("9999999999", (i3 * i2).to_string());
-    EXPECT_EQ("46372891", (i4 * i2).to_string());
-    EXPECT_EQ("7", (i5 * i2).to_string());
+    EXPECT_EQ(9999999999, i3 * i2);
+    EXPECT_EQ(46372891, i4 * i2);
+    EXPECT_EQ(7, i5 * i2);
 
-    EXPECT_EQ("0", (i5 * i1).to_string());
+    EXPECT_EQ(0, i5 * i1);
 
-    EXPECT_EQ("21", (i5 * 3).to_string());
-    EXPECT_EQ("21", (3 * i5).to_string());
-    EXPECT_EQ("21", ("3" * i5).to_string());
-    EXPECT_EQ("21", (i5 * "3").to_string());
+    EXPECT_EQ(21, i5 * 3);
+    EXPECT_EQ(21, 3 * i5);
+    EXPECT_EQ(21, "3" * i5);
+    EXPECT_EQ(21, i5 * "3");
 
-    EXPECT_EQ("28", (i5 * 4).to_string());
-    EXPECT_EQ("4", (4 * i2).to_string());
-    EXPECT_EQ("4", ("4" * i2).to_string());
-    EXPECT_EQ("4", ("0b100" * i2).to_string());
+    EXPECT_EQ(28, i5 * 4);
+    EXPECT_EQ(4, 4 * i2);
+    EXPECT_EQ(4, "4" * i2);
+    EXPECT_EQ(4, "0b100" * i2);
 
     short s{5};
-    EXPECT_EQ("5", (s * i2).to_string());
-    EXPECT_EQ("5", (5ll * i2).to_string());
-    EXPECT_EQ("8", (4.0 * i6).to_string());
+    EXPECT_EQ("5", s * i2);
+    EXPECT_EQ("5", 5ll * i2);
+    EXPECT_EQ("8", 4.0 * i6);
 }
 
 TEST(UnsignedIntegerTest, BitOperators) {

@@ -2,6 +2,7 @@
 #define UTILITY_DETAIL_USIGN_COMMON_HPP
 #include <bitset>
 #include <cctype>
+#include <cstddef>
 #include <string>
 
 namespace utility {
@@ -9,7 +10,7 @@ namespace detail {
 namespace usign {
 
 /// Converts ['0' - 'z'] to corresponding int, case insensitive
-int char_to_int(char c) {
+inline int char_to_int(char c) {
     int result{std::toupper(c) - static_cast<int>('0')};
     if (result > 9) {
         result -= 7;  // distance from '9' to 'A'
@@ -18,7 +19,7 @@ int char_to_int(char c) {
 }
 
 /// Converts an int to a corresponding char, ['0' - 'Z'], returns uppercase
-char int_to_char(int i) {
+inline char int_to_char(int i) {
     int result{i + static_cast<int>('0')};
     if (result > '9') {
         result += 7;  // distance from '9' to 'A'
@@ -27,7 +28,7 @@ char int_to_char(int i) {
 }
 
 /// Checks if value stored in string is odd, works for any base.
-bool is_odd(const std::string& value) {
+inline bool is_odd(const std::string& value) {
     if (value.empty()) {
         return false;
     }

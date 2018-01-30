@@ -1,7 +1,6 @@
 #ifndef UTILITY_DETAIL_USIGN_BITSET_TO_STRING_HPP
 #define UTILITY_DETAIL_USIGN_BITSET_TO_STRING_HPP
 #include <algorithm>
-#include <array>
 #include <bitset>
 #include <cstddef>
 #include <iterator>
@@ -13,7 +12,9 @@ namespace utility {
 namespace detail {
 namespace usign {
 
-void inplace_add_as(std::string& shorter, const std::string& longer, int base) {
+inline void inplace_add_as(std::string& shorter,
+                           const std::string& longer,
+                           int base) {
     bool carry_over{false};
     std::size_t li{longer.size() - 1};
     for (std::size_t i{shorter.size() - 1}; i < shorter.size(); --i, --li) {
@@ -33,7 +34,7 @@ void inplace_add_as(std::string& shorter, const std::string& longer, int base) {
     }
 }
 
-void inplace_double_as(std::string& value, int base) {
+inline void inplace_double_as(std::string& value, int base) {
     bool carry_over{false};
     for (std::size_t i{value.size() - 1}; i < value.size(); --i) {
         int digit{char_to_int(value[i]) * 2 + carry_over};
