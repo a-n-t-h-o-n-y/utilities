@@ -40,7 +40,10 @@ class Unsigned_integer {
         : data_{detail::usign::string_to_bitset<N>(value)} {}
 
     /// Construct from bitset
-    Unsigned_integer(const std::bitset<N>& value) : data_{value} {};
+    Unsigned_integer(const std::bitset<N>& value) : data_{value} {}
+
+    /// Construct from another Unsigned_integer<N>
+    Unsigned_integer(const Unsigned_integer& other) : data_{other.data_} {}
 
     /// Construct from other sized Integer types.
     template <std::size_t N2>
