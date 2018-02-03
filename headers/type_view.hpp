@@ -187,7 +187,7 @@ void property_queries(std::ostream& os = std::cout) {
 }
 
 /// Output all type_trait values from 'Type Relationships' subgroup.
-template <typename T, typename U>
+template <typename T, typename U = T>
 void type_relationships(std::ostream& os = std::cout) {
     os << std::boolalpha << "Type name: " << typeid(T).name();
     os << "\nis_same: " << std::is_same<T, U>::value
@@ -272,5 +272,17 @@ void limits(std::ostream& os = std::cout) {
 }
 
 }  // namespace type_view
+
+template <typename T>
+void type_view_all(std::ostream& os = std::cout) {
+    type_view::primary_categories<T>(os);
+    type_view::composite_categories<T>(os);
+    type_view::type_properties<T>(os);
+    type_view::operations<T>(os);
+    type_view::property_queries<T>(os);
+    type_view::type_relationships<T>(os);
+    type_view::limits<T>(os);
+}
+
 }  // namespace utility
 #endif  // UTILITY_TYPE_VIEW_HPP
