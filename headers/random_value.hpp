@@ -6,7 +6,9 @@
 #include <random>
 #include <type_traits>
 
-namespace {
+namespace utility {
+namespace detail {
+
 template <typename>
 struct is_std_array : std::false_type {};
 
@@ -29,7 +31,8 @@ static auto gen_float_type = [](auto lb, auto ub) {
     return dist(gen);
 };
 
-}  // namespace
+}  // namespace detail
+}  // namespace utility
 
 namespace utility {
 
@@ -38,7 +41,7 @@ template <
     typename Value_t,
     typename std::enable_if<std::is_integral<Value_t>::value, int>::type = 0>
 Value_t random_value(Value_t lower_bound, Value_t upper_bound) {
-    return gen_int_type(lower_bound, upper_bound);
+    return detail::gen_int_type(lower_bound, upper_bound);
 }
 
 /// Generate a single random floating point type value.
@@ -46,14 +49,20 @@ template <typename Value_t,
           typename std::enable_if<std::is_floating_point<Value_t>::value,
                                   int>::type = 0>
 Value_t random_value(Value_t lower_bound, Value_t upper_bound) {
-    return gen_float_type(lower_bound, upper_bound);
+    return detail::gen_float_type(static_cast<Value_t>(lower_bound),
+                                  static_cast<Value_t>(upper_bound));
 }
 
 /// Generate a single random value - non-integral and non-floating point types.
-/// Type must have a conversion from int.
-template <typename Value_t>
-Value_t random_value(int lower_bound, int upper_bound) {
-    return static_cast<Value_t>(gen_int_type(lower_bound, upper_bound));
+/// Type must have a conversion from U.
+template <typename Value_t,
+          typename U,
+          typename std::enable_if<!std::is_integral<Value_t>::value &&
+                                      !std::is_floating_point<Value_t>::value,
+                                  int>::type = 0>
+Value_t random_value(const U& lower_bound, const U& upper_bound) {
+    std::cout << typeid(Value_t).name() << std::endl;
+    return static_cast<Value_t>(detail::gen_int_type(lower_bound, upper_bound));
 }
 
 /// Generate a container of random values.
@@ -67,7 +76,8 @@ Container_t random_values(std::size_t n,
                           typename Container_t::value_type upper_bound) {
     Container_t result;
     for (std::size_t i{0}; i < n; ++i) {
-        result.insert(std::end(result), gen_int_type(lower_bound, upper_bound));
+        result.insert(std::end(result),
+                      detail::gen_int_type(lower_bound, upper_bound));
     }
     return result;
 }
@@ -84,41 +94,41 @@ Container_t random_values(std::size_t n,
     Container_t result;
     for (std::size_t i{0}; i < n; ++i) {
         result.insert(std::end(result),
-                      gen_float_type(lower_bound, upper_bound));
+                      detail::gen_float_type(lower_bound, upper_bound));
     }
     return result;
 }
 
 /// Generate a container of random values.
-/// Container_t == array; value_type == integral type.
-template <
-    typename Container_t,
-    typename std::enable_if<is_std_array<Container_t>::value, int>::type = 0,
-    typename std::enable_if<
-        std::is_integral<typename Container_t::value_type>::value,
-        int>::type = 0>
+/// Container_t == array type; value_type == integral type.
+template <typename Container_t,
+          typename std::enable_if<detail::is_std_array<Container_t>::value,
+                                  int>::type = 0,
+          typename std::enable_if<
+              std::is_integral<typename Container_t::value_type>::value,
+              int>::type = 0>
 Container_t random_values(typename Container_t::value_type lower_bound,
                           typename Container_t::value_type upper_bound) {
     Container_t result;
     for (std::size_t i{0}; i < std::tuple_size<Container_t>::value; ++i) {
-        result[i] = gen_int_type(lower_bound, upper_bound);
+        result[i] = detail::gen_int_type(lower_bound, upper_bound);
     }
     return result;
 }
 
 /// Generate a container of random values.
 /// Container_t == array type; value_type == float type.
-template <
-    typename Container_t,
-    typename std::enable_if<is_std_array<Container_t>::value, int>::type = 0,
-    typename std::enable_if<
-        std::is_floating_point<typename Container_t::value_type>::value,
-        int>::type = 0>
+template <typename Container_t,
+          typename std::enable_if<detail::is_std_array<Container_t>::value,
+                                  int>::type = 0,
+          typename std::enable_if<
+              std::is_floating_point<typename Container_t::value_type>::value,
+              int>::type = 0>
 Container_t random_values(typename Container_t::value_type lower_bound,
                           typename Container_t::value_type upper_bound) {
     Container_t result;
     for (std::size_t i{0}; i < std::tuple_size<Container_t>::value; ++i) {
-        result[i] = gen_float_type(lower_bound, upper_bound);
+        result[i] = detail::gen_float_type(lower_bound, upper_bound);
     }
     return result;
 }

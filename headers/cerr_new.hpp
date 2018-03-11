@@ -3,7 +3,13 @@
 #define UTILITY_COUT_NEW_HPP
 #include <iostream>
 
-std::ostream& stream{std::cerr};
+namespace utility {
+namespace detail {
+
+std::ostream& stream_{std::cerr};
+
+}  // namespace detail
+}  // namespace utility
 
 #include "detail/new_overloads.hpp"
 

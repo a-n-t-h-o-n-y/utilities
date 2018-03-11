@@ -14,7 +14,7 @@ template <typename T>
 class Property {
    public:
     /// Default construct object of type T.
-    Property() = default;
+    Property(){};
 
     /// Construct object of type T that is constructible from type U.
     template <typename U>

@@ -3,7 +3,13 @@
 #define UTILITY_CLOG_NEW_HPP
 #include <iostream>
 
-std::ostream& stream{std::clog};
+namespace utility {
+namespace detail {
+
+std::ostream& stream_{std::clog};
+
+}  // namespace detail
+}  // namespace utility
 
 #include "detail/new_overloads.hpp"
 

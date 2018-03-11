@@ -1,11 +1,14 @@
 #ifndef UTILITY_MEMORY_VIEW_HPP
 #define UTILITY_MEMORY_VIEW_HPP
 #include <bitset>
+#include <cctype>
 #include <cstddef>
 #include <sstream>
 #include <string>
 
 namespace utility {
+/// Used to determine output representation in a Memory_view object.
+enum Representation { Binary, Decimal, Hex, Octal };
 
 /// Provides functions to output raw data representation of an object of type T.
 /// Data Types larger than size_of(unsigned long long), typically 8 bytes, can
@@ -13,9 +16,6 @@ namespace utility {
 template <typename T>
 class Memory_view {
    public:
-    /// Type to determine output representation.
-    enum Representation { Binary, Decimal, Hex, Octal };
-
     /// Initialize with any value.
     Memory_view(const T& value);
 
@@ -32,7 +32,7 @@ class Memory_view {
    private:
     static const std::size_t bit_n_{sizeof(T) * 8};
     bool seperators_{true};
-    Representation rep_{Memory_view::Binary};
+    Representation rep_{Representation::Binary};
     std::bitset<bit_n_> bits_;
 
     // Initializes bitset to the raw binary representation of the value object.
@@ -52,7 +52,7 @@ class Memory_view {
 template <typename T>
 std::string as_binary(const T& value, bool seperators = true) {
     Memory_view<T> mv{value};
-    mv.set_representation(Memory_view<T>::Binary);
+    mv.set_representation(Representation::Binary);
     mv.enable_seperators(seperators);
     return mv.str();
 }
@@ -62,7 +62,7 @@ std::string as_binary(const T& value, bool seperators = true) {
 template <typename T>
 std::string as_hex(const T& value, bool seperators = true) {
     Memory_view<T> mv{value};
-    mv.set_representation(Memory_view<T>::Hex);
+    mv.set_representation(Representation::Hex);
     mv.enable_seperators(seperators);
     return mv.str();
 }
@@ -72,7 +72,7 @@ std::string as_hex(const T& value, bool seperators = true) {
 template <typename T>
 std::string as_decimal(const T& value, bool seperators = true) {
     Memory_view<T> mv{value};
-    mv.set_representation(Memory_view<T>::Decimal);
+    mv.set_representation(Representation::Decimal);
     mv.enable_seperators(seperators);
     return mv.str();
 }
@@ -82,7 +82,7 @@ std::string as_decimal(const T& value, bool seperators = true) {
 template <typename T>
 std::string as_octal(const T& value) {
     Memory_view<T> mv{value};
-    mv.set_representation(Memory_view<T>::Octal);
+    mv.set_representation(Representation::Octal);
     mv.enable_seperators(false);
     return mv.str();
 }
@@ -143,7 +143,11 @@ std::string Memory_view<T>::generate_string() {
         unsigned long long val{bits_.to_ullong()};
         std::stringstream ss;
         ss << std::hex << val;
-        return ss.str();
+        auto hex_str = ss.str();
+        for (char& c : hex_str) {
+            c = std::toupper(c);
+        }
+        return hex_str;
     } else if (rep_ == Representation::Octal) {
         if (ull_bit_n < bits_.size()) {
             return "";

@@ -11,6 +11,7 @@ namespace type_view {
 /// Output all type_trait values from 'Primary Type Categories' subgroup.
 template <typename T>
 void primary_categories(std::ostream& os = std::cout) {
+    os << "-- Primary Categories --\n";
     os << std::boolalpha << "Type name: " << typeid(T).name();
     os << "\nis_void: " << std::is_void<T>::value
 
@@ -48,6 +49,7 @@ void primary_categories(std::ostream& os = std::cout) {
 /// Output all type_trait values from 'Composite Type Categories' subgroup.
 template <typename T>
 void composite_categories(std::ostream& os = std::cout) {
+    os << "-- Composite Categories --\n";
     os << std::boolalpha << "Type name: " << typeid(T).name();
     os << "\nis_fundamental: " << std::is_fundamental<T>::value
 
@@ -69,6 +71,7 @@ void composite_categories(std::ostream& os = std::cout) {
 /// Output all type_trait values from 'Type Properties' subgroup.
 template <typename T>
 void type_properties(std::ostream& os = std::cout) {
+    os << "-- Type Properties --\n";
     os << std::boolalpha << "Type name: " << typeid(T).name();
     os << "\nis_const: " << std::is_const<T>::value
 
@@ -103,7 +106,9 @@ void type_properties(std::ostream& os = std::cout) {
 /// Type U used for is_assignable variants as the type assigned to type T.
 template <typename T, typename U = T>
 void operations(std::ostream& os = std::cout) {
-    os << std::boolalpha << "Type name: " << typeid(T).name();
+    os << "-- Operations --\n";
+    os << std::boolalpha << "Type name(T): " << typeid(T).name();
+    os << "\nType name(U): " << typeid(U).name();
     os << "\nis_constructible: " << std::is_constructible<T>::value
 
        << "\nis_trivially_constructible: "
@@ -137,12 +142,13 @@ void operations(std::ostream& os = std::cout) {
        << "\nis_nothrow_move_constructible: "
        << std::is_nothrow_move_constructible<T>::value
 
-       << "\nis_assignable: " << std::is_assignable<T, U>::value
+       << "\nis_assignable(T->U): " << std::is_assignable<T, U>::value
 
-       << "\nis_trivially_assignable: "
+       << "\nis_trivially_assignable(T->U): "
        << std::is_trivially_assignable<T, U>::value
 
-       << "\nis_nothrow_assignable: " << std::is_nothrow_assignable<T, U>::value
+       << "\nis_nothrow_assignable(T->U): "
+       << std::is_nothrow_assignable<T, U>::value
 
        << "\nis_copy_assignable: " << std::is_copy_assignable<T>::value
 
@@ -176,6 +182,7 @@ void operations(std::ostream& os = std::cout) {
 /// Output all type_trait values from 'Property Queries' subgroup.
 template <typename T, unsigned N = 0>
 void property_queries(std::ostream& os = std::cout) {
+    os << "-- Property Queries --\n";
     os << "Type name: " << typeid(T).name();
     os << "\nalignment_of: " << std::alignment_of<T>::value
 
@@ -189,7 +196,9 @@ void property_queries(std::ostream& os = std::cout) {
 /// Output all type_trait values from 'Type Relationships' subgroup.
 template <typename T, typename U = T>
 void type_relationships(std::ostream& os = std::cout) {
-    os << std::boolalpha << "Type name: " << typeid(T).name();
+    os << "-- Type Relationships --\n";
+    os << std::boolalpha << "Type name(T): " << typeid(T).name();
+    os << "\nType name(U): " << typeid(U).name();
     os << "\nis_same: " << std::is_same<T, U>::value
 
        << "\nis_base_of: " << std::is_base_of<T, U>::value
@@ -202,6 +211,7 @@ void type_relationships(std::ostream& os = std::cout) {
 /// Output all values from std::numeric_limits.
 template <typename T>
 void limits(std::ostream& os = std::cout) {
+    os << "-- Numeric Limits --\n";
     using lims = std::numeric_limits<T>;
     os << std::boolalpha << "Type name: " << typeid(T).name();
     os << "\nis_specialized: " << lims::is_specialized
@@ -273,14 +283,20 @@ void limits(std::ostream& os = std::cout) {
 
 }  // namespace type_view
 
-template <typename T>
+template <typename T, typename U = T>
 void type_view_all(std::ostream& os = std::cout) {
     type_view::primary_categories<T>(os);
+    os << '\n';
     type_view::composite_categories<T>(os);
+    os << '\n';
     type_view::type_properties<T>(os);
-    type_view::operations<T>(os);
+    os << '\n';
+    type_view::operations<T, U>(os);
+    os << '\n';
     type_view::property_queries<T>(os);
-    type_view::type_relationships<T>(os);
+    os << '\n';
+    type_view::type_relationships<T, U>(os);
+    os << '\n';
     type_view::limits<T>(os);
 }
 

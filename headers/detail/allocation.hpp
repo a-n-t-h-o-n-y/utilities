@@ -16,10 +16,11 @@ static std::uint64_t total_deallocs_{0};
 static std::uint64_t total_bytes_{0};
 
 void output_totals() {
-    stream << "- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -\n";
-    stream << "Total Allocations:     " << total_allocs_ << '\n';
-    stream << "Total Deallocations:   " << total_deallocs_ << '\n';
-    stream << "Total Bytes Allocated: " << total_bytes_ << '\n';
+    stream_
+        << "- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -\n";
+    stream_ << "Total Allocations:     " << total_allocs_ << '\n';
+    stream_ << "Total Deallocations:   " << total_deallocs_ << '\n';
+    stream_ << "Total Bytes Allocated: " << total_bytes_ << '\n';
 }
 
 static int register_atexit_{std::atexit(output_totals)};

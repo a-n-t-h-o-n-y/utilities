@@ -6,6 +6,7 @@
 #include <string>
 
 namespace utility {
+
 template <typename T>
 std::string thousands_seperator(T value) {
     std::stringstream ss;
