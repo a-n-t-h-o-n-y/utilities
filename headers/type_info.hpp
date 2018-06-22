@@ -18,7 +18,7 @@ struct Type_info {
     bool is_rvalue_reference;
 
     /// Human readable representation of the type.
-    operator std::string() const;
+    inline operator std::string() const;
 };
 
 /// Create a Type_info object from type T.
@@ -26,11 +26,14 @@ template <typename T>
 Type_info get_type_info();
 
 /// Memberwise equality.
-bool operator==(const Type_info& lhs, const Type_info& rhs);
-bool operator!=(const Type_info& lhs, const Type_info& rhs);
+inline bool operator==(const Type_info& lhs, const Type_info& rhs);
+inline bool operator!=(const Type_info& lhs, const Type_info& rhs);
+
+/// Provides unique ordering.
+inline bool operator<(const Type_info& lhs, const Type_info& rhs);
 
 /// Uses string conversion operator to output to stream.
-std::ostream& operator<<(std::ostream& os, const Type_info& rhs);
+inline std::ostream& operator<<(std::ostream& os, const Type_info& rhs);
 
 // IMPLEMENTATIONS - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 template <typename T>
@@ -136,6 +139,33 @@ bool operator==(const Type_info& lhs, const Type_info& rhs) {
 
 bool operator!=(const Type_info& lhs, const Type_info& rhs) {
     return !(lhs == rhs);
+}
+
+bool operator<(const Type_info& lhs, const Type_info& rhs) {
+    if (lhs.index == rhs.index) {
+        if (!lhs.is_const && rhs.is_const) {
+            return true;
+        } else if (lhs.is_const && !rhs.is_const) {
+            return false;
+        }
+        if (!lhs.is_volatile && rhs.is_volatile) {
+            return true;
+        } else if (lhs.is_volatile && !rhs.is_volatile) {
+            return false;
+        }
+        if (!lhs.is_lvalue_reference && rhs.is_lvalue_reference) {
+            return true;
+        } else if (lhs.is_lvalue_reference && !rhs.is_lvalue_reference) {
+            return false;
+        }
+        if (!lhs.is_rvalue_reference && rhs.is_rvalue_reference) {
+            return true;
+        } else if (lhs.is_rvalue_reference && !rhs.is_rvalue_reference) {
+            return false;
+        }
+        return false;
+    }
+    return lhs.index < rhs.index;
 }
 
 std::ostream& operator<<(std::ostream& os, const Type_info& rhs) {

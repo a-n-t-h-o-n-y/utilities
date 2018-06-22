@@ -3,6 +3,8 @@
 #include <cstdint>
 #include <utility>
 
+#include "type_info.hpp"
+
 namespace utility {
 
 /// Type to hold number of calls made for each SMF.

@@ -145,3 +145,43 @@ TEST(TypeInfo, InNamespace) {
     utility::Type_info info_1{utility::get_type_info<const bar::Foo&>()};
     EXPECT_EQ("const bar::Foo&", static_cast<std::string>(info_1));
 }
+
+TEST(TypeInfo, EqualityComparison) {
+    using Func_t = Foo (*)(int, long);
+    utility::Type_info info_1{utility::get_type_info<Func_t>()};
+    utility::Type_info info_2{utility::get_type_info<Foo (*)(int, long)>()};
+    EXPECT_EQ(info_1, info_2);
+
+    int i{5};
+    utility::Type_info info_3{utility::get_type_info<int>()};
+    utility::Type_info info_4{utility::get_type_info<decltype(i)>()};
+    EXPECT_EQ(info_3, info_4);
+    EXPECT_NE(info_3, info_1);
+
+    utility::Type_info info_5{utility::get_type_info<const int>()};
+    utility::Type_info info_6{utility::get_type_info<int&>()};
+    EXPECT_NE(info_3, info_5);
+    EXPECT_NE(info_3, info_6);
+    EXPECT_NE(info_5, info_6);
+}
+
+TEST(TypeInfo, LessThanComparison) {
+    utility::Type_info info_1{utility::get_type_info<int>()};
+    utility::Type_info info_2{utility::get_type_info<const int>()};
+
+    EXPECT_TRUE(info_1 < info_2);
+    EXPECT_FALSE(info_1 < info_1);
+    EXPECT_FALSE(info_2 < info_2);
+
+    utility::Type_info info_3{utility::get_type_info<int&&>()};
+    utility::Type_info info_4{utility::get_type_info<const int&>()};
+    utility::Type_info info_5{utility::get_type_info<volatile int>()};
+
+    EXPECT_TRUE(info_1 < info_3);
+    EXPECT_TRUE(info_1 < info_4);
+    EXPECT_TRUE(info_3 < info_2);
+    EXPECT_TRUE(info_2 < info_4);
+    EXPECT_TRUE(info_5 < info_2);
+    EXPECT_FALSE(info_2 < info_5);
+    EXPECT_FALSE(info_4 < info_3);
+}
