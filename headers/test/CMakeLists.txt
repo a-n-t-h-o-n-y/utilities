@@ -10,7 +10,9 @@ set(TEST_SOURCES
     "unsigned_integer_test.cpp"
     "strong_guarantee_test.cpp"
     "smf_call_counter_test.cpp"
+    "type_info_test.cpp"
 )
+
 find_package(GTest REQUIRED)
 if (GTEST_FOUND)
     add_executable(tests ${TEST_SOURCES})

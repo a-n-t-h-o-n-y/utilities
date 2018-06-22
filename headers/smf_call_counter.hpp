@@ -1,4 +1,7 @@
+#ifndef UTILITY_SMF_CALL_COUNTER_HPP
+#define UTILITY_SMF_CALL_COUNTER_HPP
 #include <cstdint>
+#include <utility>
 
 namespace utility {
 
@@ -214,3 +217,4 @@ void SMF_call_counter<T>::reset_destructor_count() {
 }
 
 }  // namespace utility
+#endif  // UTILITY_SMF_CALL_COUNTER_HPP
