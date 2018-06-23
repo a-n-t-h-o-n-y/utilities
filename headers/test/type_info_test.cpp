@@ -146,6 +146,10 @@ TEST(TypeInfo, InNamespace) {
     EXPECT_EQ("const bar::Foo&", static_cast<std::string>(info_1));
 }
 
+TEST(TypeInfo, ArrayTypes) {
+    // TODO
+}
+
 TEST(TypeInfo, EqualityComparison) {
     using Func_t = Foo (*)(int, long);
     utility::Type_info info_1{utility::get_type_info<Func_t>()};

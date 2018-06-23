@@ -28,6 +28,8 @@ class Foo {
 using FooCounter = SMF_call_counter<Foo>;
 
 TEST(SMFCallCounter, Transparency) {
+    FooCounter::reset_counts();
+
     // FooCounter Foo_1{};  // Should not compile.
     FooCounter Foo_2(5);
     EXPECT_EQ(5, Foo_2.get_int());
@@ -79,8 +81,10 @@ struct Bar {
     Bar(int, const std::string&) {}
 };
 using BarCounter = SMF_call_counter<Bar>;
+using namespace std::string_literals;
 
 TEST(SMFCallCounter, GetCount) {
+    BarCounter::reset_counts();
     // Default Constructor
     BarCounter Bar_1;
     BarCounter Bar_2;
@@ -94,10 +98,16 @@ TEST(SMFCallCounter, GetCount) {
 
     // Misc. Constructor
     BarCounter Bar_3{5};
-    BarCounter Bar_4{"Hello"};
-    BarCounter Bar_5{5, "Hello"};
+    BarCounter Bar_4{"Hello"s};
+    BarCounter Bar_5{5, "Hello"s};
+    BarCounter Bar_6x{2, "World"s};
     EXPECT_EQ(2, BarCounter::get_default_cstr_count());
-    EXPECT_EQ(3, BarCounter::get_misc_cstr_count());
+    EXPECT_EQ(1, BarCounter::get_cstr_count<int>());
+    EXPECT_EQ(1, BarCounter::get_cstr_count<std::string>());
+    // gtest macro fails with more than one template parameter
+    auto count = BarCounter::get_cstr_count<int, std::string>();
+    EXPECT_EQ(2, count);
+    EXPECT_EQ(4, BarCounter::get_misc_cstr_count());
     EXPECT_EQ(0, BarCounter::get_copy_cstr_count());
     EXPECT_EQ(0, BarCounter::get_move_cstr_count());
     EXPECT_EQ(0, BarCounter::get_copy_assignment_count());
@@ -107,7 +117,7 @@ TEST(SMFCallCounter, GetCount) {
     // Copy Constructor
     BarCounter Bar_6{Bar_3};
     EXPECT_EQ(2, BarCounter::get_default_cstr_count());
-    EXPECT_EQ(3, BarCounter::get_misc_cstr_count());
+    EXPECT_EQ(4, BarCounter::get_misc_cstr_count());
     EXPECT_EQ(1, BarCounter::get_copy_cstr_count());
     EXPECT_EQ(0, BarCounter::get_move_cstr_count());
     EXPECT_EQ(0, BarCounter::get_copy_assignment_count());
@@ -117,7 +127,7 @@ TEST(SMFCallCounter, GetCount) {
     // Move Constructor
     BarCounter Bar_7{std::move(Bar_3)};
     EXPECT_EQ(2, BarCounter::get_default_cstr_count());
-    EXPECT_EQ(3, BarCounter::get_misc_cstr_count());
+    EXPECT_EQ(4, BarCounter::get_misc_cstr_count());
     EXPECT_EQ(1, BarCounter::get_copy_cstr_count());
     EXPECT_EQ(1, BarCounter::get_move_cstr_count());
     EXPECT_EQ(0, BarCounter::get_copy_assignment_count());
@@ -128,7 +138,7 @@ TEST(SMFCallCounter, GetCount) {
     Bar_4 = Bar_5;
     Bar_4 = Bar_4;
     EXPECT_EQ(2, BarCounter::get_default_cstr_count());
-    EXPECT_EQ(3, BarCounter::get_misc_cstr_count());
+    EXPECT_EQ(4, BarCounter::get_misc_cstr_count());
     EXPECT_EQ(1, BarCounter::get_copy_cstr_count());
     EXPECT_EQ(1, BarCounter::get_move_cstr_count());
     EXPECT_EQ(2, BarCounter::get_copy_assignment_count());
@@ -138,7 +148,7 @@ TEST(SMFCallCounter, GetCount) {
     // Move Assignment
     Bar_4 = std::move(Bar_5);
     EXPECT_EQ(2, BarCounter::get_default_cstr_count());
-    EXPECT_EQ(3, BarCounter::get_misc_cstr_count());
+    EXPECT_EQ(4, BarCounter::get_misc_cstr_count());
     EXPECT_EQ(1, BarCounter::get_copy_cstr_count());
     EXPECT_EQ(1, BarCounter::get_move_cstr_count());
     EXPECT_EQ(2, BarCounter::get_copy_assignment_count());
@@ -149,12 +159,23 @@ TEST(SMFCallCounter, GetCount) {
     auto Bar_up = std::make_unique<BarCounter>();
     Bar_up.reset();
     EXPECT_EQ(3, BarCounter::get_default_cstr_count());
-    EXPECT_EQ(3, BarCounter::get_misc_cstr_count());
+    EXPECT_EQ(4, BarCounter::get_misc_cstr_count());
     EXPECT_EQ(1, BarCounter::get_copy_cstr_count());
     EXPECT_EQ(1, BarCounter::get_move_cstr_count());
     EXPECT_EQ(2, BarCounter::get_copy_assignment_count());
     EXPECT_EQ(1, BarCounter::get_move_assignment_count());
     EXPECT_EQ(1, BarCounter::get_destructor_count());
+}
 
-    BarCounter::reset_counts();
+TEST(SMFCallCounter, AsString) {
+    FooCounter::reset_counts();
+    FooCounter i{5, "Hello"s};
+    FooCounter ii{5, "Hello"s};
+    FooCounter iii{5, "Hello"s};
+    FooCounter iiii{5, "Hello"};
+    std::cout << FooCounter::all_counts_as_string() << '\n';
+    // // auto desc = FooCounter::cstr_count_as_string<int, std::string>();
+    // auto desc = FooCounter::misc_cstr_counts_as_string();
+    // EXPECT_EQ("", desc);
+    // EXPECT_EQ("", FooCounter::all_counts_as_string());
 }
