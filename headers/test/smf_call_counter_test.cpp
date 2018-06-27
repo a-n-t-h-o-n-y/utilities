@@ -66,16 +66,17 @@ TEST(SMFCallCounter, Transparency) {
 
     FooCounter::reset_counts();
     ASSERT_EQ(0, FooCounter::get_default_cstr_count());
-    ASSERT_EQ(0, FooCounter::get_misc_cstr_count());
+    ASSERT_EQ(0, FooCounter::get_constructor_counts());
     ASSERT_EQ(0, FooCounter::get_copy_cstr_count());
     ASSERT_EQ(0, FooCounter::get_move_cstr_count());
     ASSERT_EQ(0, FooCounter::get_copy_assignment_count());
     ASSERT_EQ(0, FooCounter::get_move_assignment_count());
     ASSERT_EQ(0, FooCounter::get_destructor_count());
 }
+// TEST WITH operator=(const T&) which is not operator=(const SMF_cc&)
 
 struct Bar {
-    Bar() = default;
+    Bar() {}
     Bar(int) {}
     Bar(const std::string&) {}
     Bar(int, const std::string&) {}
@@ -89,7 +90,7 @@ TEST(SMFCallCounter, GetCount) {
     BarCounter Bar_1;
     BarCounter Bar_2;
     EXPECT_EQ(2, BarCounter::get_default_cstr_count());
-    EXPECT_EQ(0, BarCounter::get_misc_cstr_count());
+    EXPECT_EQ(0, BarCounter::get_constructor_counts());
     EXPECT_EQ(0, BarCounter::get_copy_cstr_count());
     EXPECT_EQ(0, BarCounter::get_move_cstr_count());
     EXPECT_EQ(0, BarCounter::get_copy_assignment_count());
@@ -102,12 +103,12 @@ TEST(SMFCallCounter, GetCount) {
     BarCounter Bar_5{5, "Hello"s};
     BarCounter Bar_6x{2, "World"s};
     EXPECT_EQ(2, BarCounter::get_default_cstr_count());
-    EXPECT_EQ(1, BarCounter::get_cstr_count<int>());
-    EXPECT_EQ(1, BarCounter::get_cstr_count<std::string>());
+    EXPECT_EQ(1, BarCounter::get_constructor_count<int>());
+    EXPECT_EQ(1, BarCounter::get_constructor_count<std::string>());
     // gtest macro fails with more than one template parameter
-    auto count = BarCounter::get_cstr_count<int, std::string>();
+    auto count = BarCounter::get_constructor_count<int, std::string>();
     EXPECT_EQ(2, count);
-    EXPECT_EQ(4, BarCounter::get_misc_cstr_count());
+    EXPECT_EQ(4, BarCounter::get_constructor_counts());
     EXPECT_EQ(0, BarCounter::get_copy_cstr_count());
     EXPECT_EQ(0, BarCounter::get_move_cstr_count());
     EXPECT_EQ(0, BarCounter::get_copy_assignment_count());
@@ -117,7 +118,7 @@ TEST(SMFCallCounter, GetCount) {
     // Copy Constructor
     BarCounter Bar_6{Bar_3};
     EXPECT_EQ(2, BarCounter::get_default_cstr_count());
-    EXPECT_EQ(4, BarCounter::get_misc_cstr_count());
+    EXPECT_EQ(4, BarCounter::get_constructor_counts());
     EXPECT_EQ(1, BarCounter::get_copy_cstr_count());
     EXPECT_EQ(0, BarCounter::get_move_cstr_count());
     EXPECT_EQ(0, BarCounter::get_copy_assignment_count());
@@ -127,7 +128,7 @@ TEST(SMFCallCounter, GetCount) {
     // Move Constructor
     BarCounter Bar_7{std::move(Bar_3)};
     EXPECT_EQ(2, BarCounter::get_default_cstr_count());
-    EXPECT_EQ(4, BarCounter::get_misc_cstr_count());
+    EXPECT_EQ(4, BarCounter::get_constructor_counts());
     EXPECT_EQ(1, BarCounter::get_copy_cstr_count());
     EXPECT_EQ(1, BarCounter::get_move_cstr_count());
     EXPECT_EQ(0, BarCounter::get_copy_assignment_count());
@@ -138,7 +139,7 @@ TEST(SMFCallCounter, GetCount) {
     Bar_4 = Bar_5;
     Bar_4 = Bar_4;
     EXPECT_EQ(2, BarCounter::get_default_cstr_count());
-    EXPECT_EQ(4, BarCounter::get_misc_cstr_count());
+    EXPECT_EQ(4, BarCounter::get_constructor_counts());
     EXPECT_EQ(1, BarCounter::get_copy_cstr_count());
     EXPECT_EQ(1, BarCounter::get_move_cstr_count());
     EXPECT_EQ(2, BarCounter::get_copy_assignment_count());
@@ -148,7 +149,7 @@ TEST(SMFCallCounter, GetCount) {
     // Move Assignment
     Bar_4 = std::move(Bar_5);
     EXPECT_EQ(2, BarCounter::get_default_cstr_count());
-    EXPECT_EQ(4, BarCounter::get_misc_cstr_count());
+    EXPECT_EQ(4, BarCounter::get_constructor_counts());
     EXPECT_EQ(1, BarCounter::get_copy_cstr_count());
     EXPECT_EQ(1, BarCounter::get_move_cstr_count());
     EXPECT_EQ(2, BarCounter::get_copy_assignment_count());
@@ -159,7 +160,7 @@ TEST(SMFCallCounter, GetCount) {
     auto Bar_up = std::make_unique<BarCounter>();
     Bar_up.reset();
     EXPECT_EQ(3, BarCounter::get_default_cstr_count());
-    EXPECT_EQ(4, BarCounter::get_misc_cstr_count());
+    EXPECT_EQ(4, BarCounter::get_constructor_counts());
     EXPECT_EQ(1, BarCounter::get_copy_cstr_count());
     EXPECT_EQ(1, BarCounter::get_move_cstr_count());
     EXPECT_EQ(2, BarCounter::get_copy_assignment_count());
@@ -175,7 +176,11 @@ TEST(SMFCallCounter, AsString) {
     FooCounter iiii{5, "Hello"};
     std::cout << FooCounter::all_counts_as_string() << '\n';
     // // auto desc = FooCounter::cstr_count_as_string<int, std::string>();
-    // auto desc = FooCounter::misc_cstr_counts_as_string();
+    // auto desc = FooCounter::constructor_countss_as_string();
     // EXPECT_EQ("", desc);
     // EXPECT_EQ("", FooCounter::all_counts_as_string());
+}
+
+TEST(SMFCallCounter, ArrayConversion) {
+    const SMF_call_counter<int[5]> array_c{{1, 2, 3, 4, 5}};
 }
