@@ -27,7 +27,7 @@ class Foo {
 };
 using FooCounter = SMF_call_counter<Foo>;
 
-TEST(SMFCallCounter, Transparency) {
+TEST(SMFCallCounterClass, Transparency) {
     FooCounter::reset_counts();
 
     // FooCounter Foo_1{};  // Should not compile.
@@ -84,7 +84,7 @@ struct Bar {
 using BarCounter = SMF_call_counter<Bar>;
 using namespace std::string_literals;
 
-TEST(SMFCallCounter, GetCount) {
+TEST(SMFCallCounterClass, GetCount) {
     BarCounter::reset_counts();
     // Default Constructor
     BarCounter Bar_1;
@@ -168,7 +168,7 @@ TEST(SMFCallCounter, GetCount) {
     EXPECT_EQ(1, BarCounter::get_destructor_count());
 }
 
-TEST(SMFCallCounter, AsString) {
+TEST(SMFCallCounterClass, AsString) {
     FooCounter::reset_counts();
     FooCounter i{5, "Hello"s};
     FooCounter ii{5, "Hello"s};
@@ -181,6 +181,6 @@ TEST(SMFCallCounter, AsString) {
     // EXPECT_EQ("", FooCounter::all_counts_as_string());
 }
 
-TEST(SMFCallCounter, ArrayConversion) {
+TEST(SMFCallCounterClass, ArrayConversion) {
     const SMF_call_counter<int[5]> array_c{{1, 2, 3, 4, 5}};
 }

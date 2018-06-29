@@ -29,9 +29,7 @@ class SMF_call_counter : public T,
                          public detail::Copy_assignment_counter<T>,
                          public detail::Move_assignment_counter<T>,
                          public detail::Assignment_counter<T>,
-                         public detail::Destructor_counter<T>
-
-{
+                         public detail::Destructor_counter<T> {
    public:
     /// Increment the Default Constructor counter and default construct T.
     SMF_call_counter();
@@ -45,6 +43,15 @@ class SMF_call_counter : public T,
 
     /// Increment the Copy Constructor counter and copy construct T from other.
     SMF_call_counter(SMF_call_counter& other);
+
+    /// Increment the Copy Constructor counter and copy construct T from value.
+    SMF_call_counter(const T& value);
+
+    /// Increment the Copy Constructor counter and copy construct T from value.
+    SMF_call_counter(T& value);
+
+    /// Increment the Move Constructor counter and move construct T from value.
+    SMF_call_counter(T&& value);
 
     /// Increment the Move Constructor counter and move construct T from other.
     SMF_call_counter(SMF_call_counter&& other);
@@ -83,7 +90,7 @@ SMF_call_counter<T, SFINAE>::SMF_call_counter() {
 template <typename T, typename SFINAE>
 template <typename... Args>
 SMF_call_counter<T, SFINAE>::SMF_call_counter(Args&&... args)
-    : T{std::forward<Args>(args)...} {
+    : T(std::forward<Args>(args)...) {
     detail::Constructor_counter<T>::template increment_constructor_count<
         Args...>();
 }
@@ -100,6 +107,24 @@ SMF_call_counter<T, SFINAE>::SMF_call_counter(const SMF_call_counter& other)
 template <typename T, typename SFINAE>
 SMF_call_counter<T, SFINAE>::SMF_call_counter(SMF_call_counter& other)
     : SMF_call_counter{const_cast<const SMF_call_counter&>(other)} {}
+
+// COPY CONSTRUCTOR
+template <typename T, typename SFINAE>
+SMF_call_counter<T, SFINAE>::SMF_call_counter(const T& value) : T{value} {
+    detail::Copy_cstr_counter<T>::increment_copy_cstr_count();
+}
+
+// COPY CONSTRUCTOR
+template <typename T, typename SFINAE>
+SMF_call_counter<T, SFINAE>::SMF_call_counter(T& value) : T{value} {
+    detail::Copy_cstr_counter<T>::increment_copy_cstr_count();
+}
+
+// MOVE CONSTRUCTOR
+template <typename T, typename SFINAE>
+SMF_call_counter<T, SFINAE>::SMF_call_counter(T&& value) : T{std::move(value)} {
+    detail::Move_cstr_counter<T>::increment_move_cstr_count();
+}
 
 // MOVE CONSTRUCTOR
 template <typename T, typename SFINAE>
@@ -158,6 +183,7 @@ void SMF_call_counter<T, SFINAE>::reset_counts() {
     detail::Move_cstr_counter<T>::reset_move_cstr_count();
     detail::Copy_assignment_counter<T>::reset_copy_assignment_count();
     detail::Move_assignment_counter<T>::reset_move_assignment_count();
+    detail::Assignment_counter<T>::reset_assignment_counts();
     detail::Destructor_counter<T>::reset_destructor_count();
 }
 
@@ -180,6 +206,8 @@ std::string SMF_call_counter<T, SFINAE>::all_counts_as_string() {
     description.append(
         detail::Move_assignment_counter<T>::move_assignment_count_as_string() +
         nl);
+    description.append(
+        detail::Assignment_counter<T>::Assignment_counts_as_string() + nl);
     description.append(
         detail::Destructor_counter<T>::destructor_count_as_string());
     return description;

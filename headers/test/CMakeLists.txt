@@ -9,7 +9,9 @@ enable_testing()
 set(TEST_SOURCES
     "unsigned_integer_test.cpp"
     "strong_guarantee_test.cpp"
-    "smf_call_counter_test.cpp"
+    "smf_call_counter_class_test.cpp"
+    "smf_call_counter_array_test.cpp"
+    "smf_call_counter_trivial_test.cpp"
     "type_info_test.cpp"
 )
 

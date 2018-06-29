@@ -107,7 +107,7 @@ template <typename T>
 template <typename... Args>
 SMF_call_counter<T, Enable_if_trivial_and_not_array<T>>::SMF_call_counter(
     Args&&... args)
-    : value_{std::forward<Args>(args)...} {
+    : value_(std::forward<Args>(args)...) {
     detail::Constructor_counter<T>::template increment_constructor_count<
         Args...>();
 }

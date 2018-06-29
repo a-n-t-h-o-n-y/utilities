@@ -101,7 +101,7 @@ template <typename U>
 std::string Assignment_counter<T>::assignment_count_as_string() {
     utility::Type_info parameter_type{utility::get_type_info<U>()};
     std::string description{utility::get_type_info<T>()};
-    description.append("::operator(");
+    description.append("::operator=(");
     description.append(parameter_type);
     description.append(")");
     description.append(" called ");
