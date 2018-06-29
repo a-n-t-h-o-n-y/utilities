@@ -180,6 +180,87 @@ int main() {
 }
 ```
 
+### SMF_call_counter.hpp
+Template wrapper providing counts of the number of times each Special Member
+Function has been called.
+```
+#include <utility/smf_call_counter.hpp>
+int main() {
+    // Built-ins
+    using Integer = utility::SMF_call_counter<int>;
+    {
+        Integer var_1;        // Default Constructor
+        Integer var_2{1};     // Copy Constructor
+        var_1 = var_2;        // Copy Assignment
+        var_2 = 42;           // Copy Assignment
+    }
+    assert(1 == Integer::get_default_cstr_count());
+    assert(1 == Integer::get_copy_cstr_count());
+    assert(2 == Integer::get_copy_assignment_count());
+    assert(2 == Integer::get_destructor_count());
+
+    Integer::all_counts_as_string();
+    Integer::copy_cstr_as_string();
+    Integer::reset_copy_assignment_count();
+    Integer::reset_counts();
+
+    // Non-Trivial Classes
+    using Unique_ptr = utility::SMF_call_counter<std::unique_ptr<int>>;
+    {
+        Unique_ptr var_1;                            // Default constructor
+        Unique_ptr var_2{std::make_unique<int>(1)};  // Move constructor
+        Unique_ptr var_3{std::move(var_2)};          // Move constructor
+        var_1 = std::move(var_3);                    // Move assignment
+        var_1.reset()     // Transparent calls to template type's members.
+    }
+    assert(1 == Unique_ptr::get_default_cstr_count());
+    assert(0 == Unique_ptr::get_direct_cstr_counts());
+    assert(0 == Unique_ptr::get_direct_cstr_count<std::unique_ptr<int>>());
+    assert(0 == Unique_ptr::get_copy_cstr_count());
+    assert(2 == Unique_ptr::get_move_cstr_count());
+    assert(0 == Unique_ptr::get_assignment_counts());
+    assert(0 == Unique_ptr::get_copy_assignment_count());
+    assert(1 == Unique_ptr::get_move_assignment_count());
+    assert(3 == Unique_ptr::get_destructor_count());
+
+    // C-Arrays
+    using Array = utility::SMF_call_counter<int[5]>;
+    {
+        Array var_1;                 // Default Constructor
+        Array var_2{1, 2, 3, 4, 5};  // Initializer List Constructor
+        Array var_3{1, 2, 3};        // Initializer List Constructor
+        Array var_4{};               // Default Constructor
+    }
+    assert(2 == Array::get_default_cstr_count());
+    assert(2 == Array::get_initializer_list_cstr_count());
+    assert(4 == Array::get_destructor_count());
+
+    // Aggregates
+    struct Bar { int a; double b; char c; };
+    using Baz = utility::SMF_call_counter<Bar>;
+    {
+        Baz var_1;                    // Default Constructor
+        Baz var_2{1, 2.3, 'a'};       // Aggregate Direct Constructor
+        Baz var_3{var_2};             // Copy Constructor
+        Baz var_4{std::move(var_2)};  // Copy Constructor
+        Baz var_5{Baz{3, 2.1, 'b'}};  // Aggregate Direct Cstr; Copy Elision
+        var_1 = var_3;                // Copy Assignment
+        var_3 = std::move(var_1);     // Copy Assignment
+    }
+    assert(1 == Baz::get_default_cstr_count());
+    assert(2 == Baz::get_direct_cstr_counts());
+    assert(2 == (Baz::get_direct_cstr_count<int, double, char>()));
+    assert(2 == Baz::get_copy_cstr_count());
+    assert(2 == Baz::get_copy_assignment_count());
+    assert(5 == Baz::get_destructor_count());
+
+    Array::direct_cstr_count_as_string<int, double, char>();
+    Array::direct_cstr_counts_as_string();
+    Array::reset_direct_cstr_count<int, double, char>();
+    Array::reset_direct_cstr_counts();
+}
+```
+
 ### random_value.hpp
 Produces individual random values as well as containers of values.
 ```cpp
