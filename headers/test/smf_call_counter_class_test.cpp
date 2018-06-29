@@ -15,8 +15,8 @@ TEST(SMFCallCounterClass, UniquePtr) {
     var_1 = std::move(var_3);                    // Move assignment
 
     EXPECT_EQ(1, Unique_ptr::get_default_cstr_count());
-    EXPECT_EQ(0, Unique_ptr::get_constructor_counts());
-    EXPECT_EQ(0, Unique_ptr::get_constructor_count<std::unique_ptr<int>>());
+    EXPECT_EQ(0, Unique_ptr::get_direct_cstr_counts());
+    EXPECT_EQ(0, Unique_ptr::get_direct_cstr_count<std::unique_ptr<int>>());
     EXPECT_EQ(0, Unique_ptr::get_copy_cstr_count());
     EXPECT_EQ(2, Unique_ptr::get_move_cstr_count());
     EXPECT_EQ(0, Unique_ptr::get_assignment_counts());
@@ -56,11 +56,11 @@ TEST(SMFCallCounterClass, NonTrivialType) {
     EXPECT_EQ(5, i);                   // Transparent Misc. operator=(U)
 
     EXPECT_EQ(2, Foobar::get_default_cstr_count());
-    EXPECT_EQ(5, Foobar::get_constructor_counts());
-    EXPECT_EQ(2, (Foobar::get_constructor_count<int, double>()));
-    EXPECT_EQ(1, (Foobar::get_constructor_count<float, int>()));
-    EXPECT_EQ(1, Foobar::get_constructor_count<std::string>());
-    EXPECT_EQ(1, Foobar::get_constructor_count<const char(&)[4]>());
+    EXPECT_EQ(5, Foobar::get_direct_cstr_counts());
+    EXPECT_EQ(2, (Foobar::get_direct_cstr_count<int, double>()));
+    EXPECT_EQ(1, (Foobar::get_direct_cstr_count<float, int>()));
+    EXPECT_EQ(1, Foobar::get_direct_cstr_count<std::string>());
+    EXPECT_EQ(1, Foobar::get_direct_cstr_count<const char(&)[4]>());
     EXPECT_EQ(1, Foobar::get_copy_cstr_count());
     EXPECT_EQ(2, Foobar::get_move_cstr_count());
     EXPECT_EQ(1, Foobar::get_assignment_counts());
@@ -71,11 +71,11 @@ TEST(SMFCallCounterClass, NonTrivialType) {
 
     Foobar::reset_counts();
     EXPECT_EQ(0, Foobar::get_default_cstr_count());
-    EXPECT_EQ(0, Foobar::get_constructor_counts());
-    EXPECT_EQ(0, (Foobar::get_constructor_count<int, double>()));
-    EXPECT_EQ(0, (Foobar::get_constructor_count<float, int>()));
-    EXPECT_EQ(0, Foobar::get_constructor_count<std::string>());
-    EXPECT_EQ(0, Foobar::get_constructor_count<const char(&)[4]>());
+    EXPECT_EQ(0, Foobar::get_direct_cstr_counts());
+    EXPECT_EQ(0, (Foobar::get_direct_cstr_count<int, double>()));
+    EXPECT_EQ(0, (Foobar::get_direct_cstr_count<float, int>()));
+    EXPECT_EQ(0, Foobar::get_direct_cstr_count<std::string>());
+    EXPECT_EQ(0, Foobar::get_direct_cstr_count<const char(&)[4]>());
     EXPECT_EQ(0, Foobar::get_copy_cstr_count());
     EXPECT_EQ(0, Foobar::get_move_cstr_count());
     EXPECT_EQ(0, Foobar::get_assignment_counts());
@@ -84,6 +84,51 @@ TEST(SMFCallCounterClass, NonTrivialType) {
     EXPECT_EQ(0, Foobar::get_move_assignment_count());
     EXPECT_EQ(0, Foobar::get_destructor_count());
 }
+
+// const T types do not work, copy cstr: SMF(T&) and SMF(const T&) ambiguity
+// TEST(SMFCallCounterClass, ConstNonTrivialType) {
+//     using Foobar = utility::SMF_call_counter<const Foo>;
+//     Foobar::reset_counts();
+//     Foobar var_1;                      // Foo()
+//     Foobar var_2{1, 2.3};              // Foo(int, double)
+//     Foobar var_25{1, 2.3};             // Foo(int, double)
+//     Foobar var_3{std::string{"abc"}};  // Foo(std::string)
+//     Foobar var_4{std::move(var_1)};    // Move Constructor
+//     Foobar var_5{Foo{}};               // Move Constructor
+//     Foobar var_6{"abc"};               // Foo(const char[4])
+//     Foobar var_7(7.6f, 5);             // Foo(int, double)
+//     Foobar var_8{var_7};               // Copy Construction
+//     { Foobar var_9; }                  // Foo(); ~Foo();
+
+//     EXPECT_EQ(2, Foobar::get_default_cstr_count());
+//     EXPECT_EQ(5, Foobar::get_direct_cstr_counts());
+//     EXPECT_EQ(2, (Foobar::get_direct_cstr_count<int, double>()));
+//     EXPECT_EQ(1, (Foobar::get_direct_cstr_count<float, int>()));
+//     EXPECT_EQ(1, Foobar::get_direct_cstr_count<std::string>());
+//     EXPECT_EQ(1, Foobar::get_direct_cstr_count<const char(&)[4]>());
+//     EXPECT_EQ(1, Foobar::get_copy_cstr_count());
+//     EXPECT_EQ(2, Foobar::get_move_cstr_count());
+//     EXPECT_EQ(0, Foobar::get_assignment_counts());
+//     EXPECT_EQ(0, Foobar::get_assignment_count<bool>());
+//     EXPECT_EQ(0, Foobar::get_copy_assignment_count());
+//     EXPECT_EQ(0, Foobar::get_move_assignment_count());
+//     EXPECT_EQ(1, Foobar::get_destructor_count());
+
+//     Foobar::reset_counts();
+//     EXPECT_EQ(0, Foobar::get_default_cstr_count());
+//     EXPECT_EQ(0, Foobar::get_direct_cstr_counts());
+//     EXPECT_EQ(0, (Foobar::get_direct_cstr_count<int, double>()));
+//     EXPECT_EQ(0, (Foobar::get_direct_cstr_count<float, int>()));
+//     EXPECT_EQ(0, Foobar::get_direct_cstr_count<std::string>());
+//     EXPECT_EQ(0, Foobar::get_direct_cstr_count<const char(&)[4]>());
+//     EXPECT_EQ(0, Foobar::get_copy_cstr_count());
+//     EXPECT_EQ(0, Foobar::get_move_cstr_count());
+//     EXPECT_EQ(0, Foobar::get_assignment_counts());
+//     EXPECT_EQ(0, Foobar::get_assignment_count<bool>());
+//     EXPECT_EQ(0, Foobar::get_copy_assignment_count());
+//     EXPECT_EQ(0, Foobar::get_move_assignment_count());
+//     EXPECT_EQ(0, Foobar::get_destructor_count());
+// }
 
 TEST(SMFCallCounterClass, TranparentClassWrapper) {
     using Unique_ptr = utility::SMF_call_counter<std::unique_ptr<int>>;
@@ -101,15 +146,15 @@ TEST(SMFCallCounterClass, DefaultCstrStringOutput) {
     EXPECT_EQ("Foo() called 2 times.", Foobar::default_cstr_count_as_string());
 }
 
-TEST(SMFCallCounterClass, ConstructorStringOutput) {
+TEST(SMFCallCounterClass, DirectCstrStringOutput) {
     using Foobar = utility::SMF_call_counter<Foo>;
     Foobar::reset_counts();
     Foobar var_1{5, 1.2};
     Foobar var_2{1, 2.5};
-    EXPECT_EQ("Foo(int, double) called 2 times.",
-              (Foobar::constructor_count_as_string<int, double>()));
-    EXPECT_EQ("Foo(int, double) called 2 times.",
-              Foobar::constructor_counts_as_string());
+    EXPECT_EQ("Foo{int, double} called 2 times.",
+              (Foobar::direct_cstr_count_as_string<int, double>()));
+    EXPECT_EQ("Foo{int, double} called 2 times.",
+              Foobar::direct_cstr_counts_as_string());
 }
 
 TEST(SMFCallCounterClass, CopyCstrStringOutput) {

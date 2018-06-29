@@ -11,7 +11,8 @@ set(TEST_SOURCES
     "strong_guarantee_test.cpp"
     "smf_call_counter_class_test.cpp"
     "smf_call_counter_array_test.cpp"
-    "smf_call_counter_trivial_test.cpp"
+    "smf_call_counter_builtin_test.cpp"
+    "smf_call_counter_aggregate_test.cpp"
     "type_info_test.cpp"
 )
 
