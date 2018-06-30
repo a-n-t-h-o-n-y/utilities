@@ -187,6 +187,12 @@ member if each type is true to the trait.
 #include <utility/trait_conjunction.hpp>
 struct Foo {};
 struct Bar {};
+
+template <typename... Types>
+constexpr bool is_class() {
+    return utility::trait_conjunction_v<std::is_class, Types...>;
+}
+
 int main() {
     using TC_1 = utility::Trait_conjunction<std::is_class, Foo, Bar>;
     assert(TC_1::value);    
@@ -197,6 +203,12 @@ int main() {
     constexpr bool var =
         utility::trait_conjunction_v<std::is_void, void, void, void, void>;
     assert(var);
+
+    constexpr bool var_3 = is_class<Foo, Bar>();
+    assert(var_3);
+
+    constexpr bool var_4 = is_class<Foo, Bar, int, double, Foo, int>();
+    assert(!var_4);
 }
 ```
 

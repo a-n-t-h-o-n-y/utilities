@@ -54,6 +54,11 @@ TEST(TypeConjunction, IsVoid) {
     EXPECT_FALSE(TC_4::value);
 }
 
+template <typename... Types>
+constexpr bool is_class() {
+    return utility::trait_conjunction_v<std::is_class, Types...>;
+}
+
 TEST(TypeConjunction, HelperValue) {
     constexpr bool var_1 =
         utility::trait_conjunction_v<std::is_void, void, void, int, void, void>;
@@ -62,4 +67,10 @@ TEST(TypeConjunction, HelperValue) {
     constexpr bool var_2 =
         utility::trait_conjunction_v<std::is_class, Foo, Bar, Baz>;
     EXPECT_TRUE(var_2);
+
+    constexpr bool var_3 = is_class<Foo, Bar>();
+    EXPECT_TRUE(var_3);
+
+    constexpr bool var_4 = is_class<Foo, Bar, int, double, Baz, Foo, int>();
+    EXPECT_FALSE(var_4);
 }
