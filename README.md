@@ -182,7 +182,7 @@ int main() {
 
 ### trait_conjunction.hpp
 Type trait to check a trait against multiple types, providing a static `value`
-member if each type is true to the trait.
+member if each type is true to the trait. Logical AND. Requires C++17.
 ```cpp
 #include <utility/trait_conjunction.hpp>
 struct Foo {};
@@ -208,6 +208,38 @@ int main() {
     assert(var_3);
 
     constexpr bool var_4 = is_class<Foo, Bar, int, double, Foo, int>();
+    assert(!var_4);
+}
+```
+
+### trait_disjunction.hpp
+Type trait to check a trait against multiple types, providing a static `value`
+member if at least one type is true to the trait. Logical OR. Requires C++17.
+```cpp
+#include <utility/trait_disjunction.hpp>
+struct Foo {};
+struct Bar {};
+
+template <typename... Types>
+constexpr bool has_class() {
+    return utility::trait_disjunction_v<std::is_class, Types...>;
+}
+
+int main() {
+    using TC_1 = utility::Trait_disjunction<std::is_class, Foo, Bar>;
+    assert(TC_1::value);    
+
+    using TC_2 = utility::Trait_disjunction<std::is_class, int, double>;
+    assert(!TC_2::value);
+
+    constexpr bool var =
+        utility::trait_disjunction_v<std::is_void, void, void, void, void>;
+    assert(var);
+
+    constexpr bool var_3 = has_class<Foo, Bar>();
+    assert(var_3);
+
+    constexpr bool var_4 = has_class<int, double, int, char>();
     assert(!var_4);
 }
 ```

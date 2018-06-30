@@ -15,6 +15,7 @@ set(TEST_SOURCES
     "smf_call_counter_aggregate_test.cpp"
     "type_info_test.cpp"
     "trait_conjunction_test.cpp"
+    "trait_disjunction_test.cpp"
 )
 
 find_package(GTest REQUIRED)

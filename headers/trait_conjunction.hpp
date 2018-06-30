@@ -5,7 +5,8 @@
 namespace utility {
 
 /// Type trait to check a trait against multiple types, providing a static
-/// `value` member if each type is true to the trait.
+/// `value` member if each type is true to the trait. Logical AND.
+/// Requires C++17.
 template <template <typename> typename Trait,
           typename Type,
           typename... Trailing_types>
