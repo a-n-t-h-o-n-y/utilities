@@ -180,6 +180,26 @@ int main() {
 }
 ```
 
+### trait_conjunction.hpp
+Type trait to check a trait against multiple types, providing a static `value`
+member if each type is true to the trait.
+```cpp
+#include <utility/trait_conjunction.hpp>
+struct Foo {};
+struct Bar {};
+int main() {
+    using TC_1 = utility::Trait_conjunction<std::is_class, Foo, Bar>;
+    assert(TC_1::value);    
+
+    using TC_2 = utility::Trait_conjunction<std::is_class, int, double, Foo>;
+    assert(!TC_2::value);
+
+    constexpr bool var =
+        utility::trait_conjunction_v<std::is_void, void, void, void, void>;
+    assert(var);
+}
+```
+
 ### type_info.hpp
 Provides unmangled names as well as cv-qualified and reference type infomation
 for a provided type.
