@@ -15,7 +15,7 @@ struct Foo {};
 
 TEST(TypeInfo, ObjectType) {
     utility::Type_info info_1{utility::get_type_info<int>()};
-    EXPECT_EQ("int", static_cast<std::string>(info_1));
+    EXPECT_EQ("int", info_1.full_type_name());
 
     utility::Type_info info_2{utility::get_type_info<const int>()};
     EXPECT_EQ("const int", static_cast<std::string>(info_2));
@@ -31,6 +31,7 @@ TEST(TypeInfo, ObjectType) {
 
     utility::Type_info info_6{utility::get_type_info<const volatile int&&>()};
     EXPECT_EQ("const volatile int&&", static_cast<std::string>(info_6));
+    EXPECT_EQ("int", info_6.type_name());
 
     utility::Type_info info_7{utility::get_type_info<const Foo&>()};
     EXPECT_EQ("const Foo&", static_cast<std::string>(info_7));
@@ -72,7 +73,7 @@ TEST(TypeInfo, PointerType) {
     utility::Type_info info_6{
         utility::get_type_info<volatile long** const*** volatile* const>()};
     EXPECT_EQ("long volatile** const*** volatile* const",
-              static_cast<std::string>(info_6));
+              info_6.full_type_name());
 
     int i{500};
     int* const ip{&i};

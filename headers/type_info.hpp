@@ -17,6 +17,12 @@ struct Type_info {
     bool is_lvalue_reference;
     bool is_rvalue_reference;
 
+    /// cv-qualified, unmangled type name with reference.
+    inline std::string full_type_name() const;
+
+    /// Core type name, unqualified with reference removed.
+    inline std::string type_name() const;
+
     /// Human readable representation of the type.
     inline operator std::string() const;
 };
@@ -122,10 +128,18 @@ inline Gen_func_t find_string_generator(const Type_info& info) {
 
 }  // namespace detail
 
-Type_info::operator std::string() const {
+std::string Type_info::full_type_name() const {
     // Generate string based on function/pointer/object type
     auto generate_string = detail::find_string_generator(*this);
     return generate_string(*this);
+}
+
+std::string Type_info::type_name() const {
+    return boost::core::demangle(this->index.name());
+}
+
+Type_info::operator std::string() const {
+    return this->full_type_name();
 }
 
 bool operator==(const Type_info& lhs, const Type_info& rhs) {

@@ -180,10 +180,42 @@ int main() {
 }
 ```
 
-### SMF_call_counter.hpp
+### type_info.hpp
+Provides unmangled names as well as cv-qualified and reference type infomation
+for a provided type.
+```cpp
+#include <utility/type_info.hpp>
+int main() {
+    utility::Type_info info_1 = utility::get_type_info<int>();
+    assert("int" == static_cast<std::string>(info_1));
+
+    utility::Type_info info_2{utility::get_type_info<const volatile int&&>()};
+    assert("const volatile int&&" == info_2.full_type_name());
+    assert("int" == info_2.type_name());
+    
+    utility::Type_info info_3{
+        utility::get_type_info<volatile long** const*** volatile* const>()};
+    assert("long volatile** const*** volatile* const" == 
+              info_3.full_type_name());
+
+    // Function Types
+    using Func1_t = Foo (*)(int, long);
+    utility::Type_info info_4{utility::get_type_info<Func2_t>()};
+    assert("Foo (*)(int, long)" == info_4.full_type_name());
+
+    using Func2_t = int (*volatile &&)(int);
+    using Func3_t = Func2_t (*const volatile&&)(Func2_t);
+    utility::Type_info info_5{utility::get_type_info<Func7_t>()};
+    assert(
+        "int (* volatile&& (* const volatile&&)(Foo (*)(int, long)))(int)" ==
+        info_5.full_type_name());
+}
+```
+
+### smf_call_counter.hpp
 Template wrapper providing counts of the number of times each Special Member
 Function has been called.
-```
+```cpp
 #include <utility/smf_call_counter.hpp>
 int main() {
     // Built-ins
