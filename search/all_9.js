@@ -1,0 +1,11 @@
+var searchData=
+[
+  ['make_5foperation_5fstrong',['make_operation_strong',['../namespaceutility.html#a6bd2c03751350a4176557c4ce141377e',1,'utility']]],
+  ['memory_5fview',['Memory_view',['../classutility_1_1Memory__view.html',1,'utility::Memory_view&lt; T &gt;'],['../classutility_1_1Memory__view.html#a441c1b50385db5c461a03e099160e72f',1,'utility::Memory_view::Memory_view()']]],
+  ['move_5fassignment_5fcount_5fas_5fstring',['move_assignment_count_as_string',['../classutility_1_1detail_1_1Move__assignment__counter.html#a4492bedeba394e6fbfe3a22303eb0e41',1,'utility::detail::Move_assignment_counter']]],
+  ['move_5fassignment_5fcounter',['Move_assignment_counter',['../classutility_1_1detail_1_1Move__assignment__counter.html',1,'utility::detail']]],
+  ['move_5fassignment_5fcounter_3c_20t_20_3e',['Move_assignment_counter&lt; T &gt;',['../classutility_1_1detail_1_1Move__assignment__counter.html',1,'utility::detail']]],
+  ['move_5fcstr_5fcount_5fas_5fstring',['move_cstr_count_as_string',['../classutility_1_1detail_1_1Move__cstr__counter.html#a92bfc5964de2ca3548ba086cac8a3a54',1,'utility::detail::Move_cstr_counter']]],
+  ['move_5fcstr_5fcounter',['Move_cstr_counter',['../classutility_1_1detail_1_1Move__cstr__counter.html',1,'utility::detail']]],
+  ['move_5fcstr_5fcounter_3c_20t_20_3e',['Move_cstr_counter&lt; T &gt;',['../classutility_1_1detail_1_1Move__cstr__counter.html',1,'utility::detail']]]
+];
