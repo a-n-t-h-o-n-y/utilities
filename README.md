@@ -180,6 +180,26 @@ int main() {
 }
 ```
 
+### compound_trait.hpp
+Combines any number of traits to provide a static `type` member which acts as a
+single trait with a `value` member which is true if all traits are true for the
+given type.
+```cpp
+#include <utility/compound_trait.hpp>
+
+struct Foo {};
+
+template <typename T>
+using is_const_class =
+    utility::Compound_trait<std::is_class, std::is_const>::type<T>;
+
+int main() {
+    assert(!is_const_class<int>::value);
+    assert(!is_const_class<const int>::value);
+    assert(is_const_class<const Foo>::value);
+}
+```
+
 ### trait_conjunction.hpp
 Type trait to check a trait against multiple types, providing a static `value`
 member if each type is true to the trait. Logical AND. Requires C++17.
@@ -200,15 +220,15 @@ int main() {
     using TC_2 = utility::Trait_conjunction<std::is_class, int, double, Foo>;
     assert(!TC_2::value);
 
-    constexpr bool var =
+    constexpr bool var_1 =
         utility::trait_conjunction_v<std::is_void, void, void, void, void>;
-    assert(var);
+    assert(var_1);
 
-    constexpr bool var_3 = is_class<Foo, Bar>();
-    assert(var_3);
+    constexpr bool var_2 = is_class<Foo, Bar>();
+    assert(var_2);
 
-    constexpr bool var_4 = is_class<Foo, Bar, int, double, Foo, int>();
-    assert(!var_4);
+    constexpr bool var_3 = is_class<Foo, Bar, int, double, Foo, int>();
+    assert(!var_3);
 }
 ```
 

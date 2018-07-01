@@ -16,6 +16,7 @@ set(TEST_SOURCES
     "type_info_test.cpp"
     "trait_conjunction_test.cpp"
     "trait_disjunction_test.cpp"
+    "compound_trait_test.cpp"
 )
 
 find_package(GTest REQUIRED)
