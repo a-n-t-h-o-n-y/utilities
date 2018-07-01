@@ -45,13 +45,13 @@ def install_headers():
     if os.path.exists(install_detail_dir):
         shutil.rmtree(install_detail_dir)
     # for each file in headers, copy to install_dir
-    headers = glob.iglob('headers/*.hpp')
+    headers = glob.iglob('include/utility/*.hpp')
     for h in headers:
         shutil.copy2(h, install_dir)
         print(bcolors.OKGREEN + "Installed" + bcolors.ENDC + " '" + h + "' to "
                 + install_dir + "/" + os.path.basename(h))
     # install everything from detail directory
-    shutil.copytree('headers/detail/', install_detail_dir)
+    shutil.copytree('include/utility/detail/', install_detail_dir)
     print(bcolors.OKGREEN + "Installed" + bcolors.ENDC + " 'headers/detail/'")
 
 if __name__ == '__main__':
