@@ -1,4 +1,3 @@
-/// ONLY INCLUDE ONE OF THE NEW OVERLOAD HEADERS ONCE IN ENTIRE PROGRAM.
 #ifndef UTILITY_COUT_NEW_HPP
 #define UTILITY_COUT_NEW_HPP
 #include <iostream>
@@ -6,6 +5,7 @@
 namespace utility {
 namespace detail {
 
+// Only include one new overload header in the entire program.
 std::ostream& stream_{std::cout};
 
 }  // namespace detail

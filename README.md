@@ -1,3 +1,5 @@
+[Reference](https://a-n-t-h-o-n-y.github.io/utilities/annotated.html)
+
 # Scripts
 ### cppinit.py
 Initialized a directory with `CMakeLists.txt`, `main.cpp`, `test.cpp` and a
