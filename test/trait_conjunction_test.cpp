@@ -1,9 +1,9 @@
 #include <string>
 #include <type_traits>
 
-#include "../trait_conjunction.hpp"
-
 #include <gtest/gtest.h>
+
+#include <utility/trait_conjunction.hpp>
 
 struct Foo {};
 
@@ -55,7 +55,7 @@ TEST(TypeConjunction, IsVoid) {
 }
 
 template <typename... Types>
-constexpr bool is_class() {
+constexpr bool Is_class() {
     return utility::trait_conjunction_v<std::is_class, Types...>;
 }
 
@@ -68,9 +68,9 @@ TEST(TypeConjunction, HelperValue) {
         utility::trait_conjunction_v<std::is_class, Foo, Bar, Baz>;
     EXPECT_TRUE(var_2);
 
-    constexpr bool var_3 = is_class<Foo, Bar>();
+    constexpr bool var_3 = Is_class<Foo, Bar>();
     EXPECT_TRUE(var_3);
 
-    constexpr bool var_4 = is_class<Foo, Bar, int, double, Baz, Foo, int>();
+    constexpr bool var_4 = Is_class<Foo, Bar, int, double, Baz, Foo, int>();
     EXPECT_FALSE(var_4);
 }

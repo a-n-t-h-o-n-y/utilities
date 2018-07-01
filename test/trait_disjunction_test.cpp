@@ -1,7 +1,7 @@
 #include <string>
 #include <type_traits>
 
-#include "../trait_disjunction.hpp"
+#include <utility/trait_disjunction.hpp>
 
 #include <gtest/gtest.h>
 

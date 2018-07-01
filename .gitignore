@@ -1,2 +1,4 @@
-headers/test/build
+build*
+docs/*
+!docs/Doxyfile
 tags

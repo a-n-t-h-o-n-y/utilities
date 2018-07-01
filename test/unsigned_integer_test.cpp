@@ -3,7 +3,7 @@
 
 #include <gtest/gtest.h>
 
-#include "../unsigned_integer.hpp"
+#include <utility/unsigned_integer.hpp>
 
 using namespace utility;
 

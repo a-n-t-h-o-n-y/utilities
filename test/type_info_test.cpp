@@ -4,14 +4,14 @@
 
 #include <gtest/gtest.h>
 
-#include "../type_info.hpp"
+#include <utility/type_info.hpp>
 
 class Foo {};
 
-namespace bar {
+namespace test {
 void foobar(const int&, Foo&&) {}
 struct Foo {};
-}  // namespace bar
+}  // namespace test
 
 TEST(TypeInfo, ObjectType) {
     utility::Type_info info_1{utility::get_type_info<int>()};
@@ -132,10 +132,11 @@ TEST(TypeInfo, FunctionPointerType) {
         "int (* volatile&& (* const volatile&&)(Foo (*)(int, long)))(int)",
         static_cast<std::string>(info_7));
 
-    utility::Type_info info_8{utility::get_type_info<decltype(&bar::foobar)>()};
+    utility::Type_info info_8{
+        utility::get_type_info<decltype(&test::foobar)>()};
     EXPECT_EQ("void (*)(int const&, Foo&&)", static_cast<std::string>(info_8));
 
-    utility::Type_info info_9{utility::get_type_info<decltype(bar::foobar)>()};
+    utility::Type_info info_9{utility::get_type_info<decltype(test::foobar)>()};
     EXPECT_EQ("void (int const&, Foo&&)", static_cast<std::string>(info_9));
 
     utility::Type_info info_10{utility::get_type_info<const Func2_t>()};
@@ -143,8 +144,8 @@ TEST(TypeInfo, FunctionPointerType) {
 }
 
 TEST(TypeInfo, InNamespace) {
-    utility::Type_info info_1{utility::get_type_info<const bar::Foo&>()};
-    EXPECT_EQ("const bar::Foo&", static_cast<std::string>(info_1));
+    utility::Type_info info_1{utility::get_type_info<const test::Foo&>()};
+    EXPECT_EQ("const test::Foo&", static_cast<std::string>(info_1));
 }
 
 TEST(TypeInfo, ArrayTypes) {

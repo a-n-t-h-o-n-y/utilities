@@ -3,8 +3,8 @@
 #include <map>
 #include <string>
 
-#include "../count_t.hpp"
-#include "../type_info.hpp"
+#include <utility/count_t.hpp>
+#include <utility/type_info.hpp>
 
 namespace utility {
 namespace detail {

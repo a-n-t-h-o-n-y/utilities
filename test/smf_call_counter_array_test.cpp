@@ -1,6 +1,6 @@
 #include <gtest/gtest.h>
 
-#include "../smf_call_counter.hpp"
+#include <utility/smf_call_counter.hpp>
 
 using namespace utility;
 

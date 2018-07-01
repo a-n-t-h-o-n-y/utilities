@@ -4,7 +4,7 @@
 
 #include <gtest/gtest.h>
 
-#include "../strong_guarantee.hpp"
+#include <utility/strong_guarantee.hpp>
 
 using Container_t = std::vector<int>;
 

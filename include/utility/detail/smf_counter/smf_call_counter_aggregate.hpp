@@ -4,11 +4,11 @@
 #include <type_traits>
 #include <utility>
 
-#include "detail/copy_assignment_counter.hpp"
-#include "detail/copy_cstr_counter.hpp"
-#include "detail/default_cstr_counter.hpp"
-#include "detail/destructor_counter.hpp"
-#include "detail/direct_cstr_counter.hpp"
+#include <utility/detail/smf_counter/copy_assignment_counter.hpp>
+#include <utility/detail/smf_counter/copy_cstr_counter.hpp>
+#include <utility/detail/smf_counter/default_cstr_counter.hpp>
+#include <utility/detail/smf_counter/destructor_counter.hpp>
+#include <utility/detail/smf_counter/direct_cstr_counter.hpp>
 
 namespace utility {
 

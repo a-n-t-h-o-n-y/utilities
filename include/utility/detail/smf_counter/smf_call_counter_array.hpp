@@ -5,9 +5,9 @@
 #include <string>
 #include <type_traits>
 
-#include "detail/default_cstr_counter.hpp"
-#include "detail/destructor_counter.hpp"
-#include "detail/initializer_list_cstr_counter.hpp"
+#include <utility/detail/smf_counter/default_cstr_counter.hpp>
+#include <utility/detail/smf_counter/destructor_counter.hpp>
+#include <utility/detail/smf_counter/initializer_list_cstr_counter.hpp>
 
 namespace utility {
 template <typename T>

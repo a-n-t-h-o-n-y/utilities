@@ -2,8 +2,8 @@
 #define UTILITY_DETAIL_COPY_CSTR_COUNTER_HPP
 #include <string>
 
-#include "../count_t.hpp"
-#include "../type_info.hpp"
+#include <utility/count_t.hpp>
+#include <utility/type_info.hpp>
 
 namespace utility {
 namespace detail {

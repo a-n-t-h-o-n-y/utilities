@@ -4,7 +4,7 @@
 
 #include <gtest/gtest.h>
 
-#include "../smf_call_counter.hpp"
+#include <utility/smf_call_counter.hpp>
 
 TEST(SMFCallCounterClass, UniquePtr) {
     using Unique_ptr = utility::SMF_call_counter<std::unique_ptr<int>>;

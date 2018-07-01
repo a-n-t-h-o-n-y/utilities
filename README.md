@@ -190,13 +190,13 @@ given type.
 struct Foo {};
 
 template <typename T>
-using is_const_class =
-    utility::Compound_trait<std::is_class, std::is_const>::type<T>;
+using Is_const_class =
+    utility::Compound_trait<std::is_class, std::is_const>::template type<T>;
 
 int main() {
-    assert(!is_const_class<int>::value);
-    assert(!is_const_class<const int>::value);
-    assert(is_const_class<const Foo>::value);
+    assert(!Is_const_class<int>::value);
+    assert(!Is_const_class<const int>::value);
+    assert(Is_const_class<const Foo>::value);
 }
 ```
 
@@ -209,7 +209,7 @@ struct Foo {};
 struct Bar {};
 
 template <typename... Types>
-constexpr bool is_class() {
+constexpr bool Is_class() {
     return utility::trait_conjunction_v<std::is_class, Types...>;
 }
 
@@ -224,10 +224,10 @@ int main() {
         utility::trait_conjunction_v<std::is_void, void, void, void, void>;
     assert(var_1);
 
-    constexpr bool var_2 = is_class<Foo, Bar>();
+    constexpr bool var_2 = Is_class<Foo, Bar>();
     assert(var_2);
 
-    constexpr bool var_3 = is_class<Foo, Bar, int, double, Foo, int>();
+    constexpr bool var_3 = Is_class<Foo, Bar, int, double, Foo, int>();
     assert(!var_3);
 }
 ```

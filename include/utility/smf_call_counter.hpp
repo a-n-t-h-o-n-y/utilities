@@ -12,9 +12,9 @@ class SMF_call_counter;
 
 }  // namespace utility
 
-#include "smf_call_counter_aggregate.hpp"
-#include "smf_call_counter_array.hpp"
-#include "smf_call_counter_builtin.hpp"
-#include "smf_call_counter_class.hpp"
+#include <utility/detail/smf_counter/smf_call_counter_aggregate.hpp>
+#include <utility/detail/smf_counter/smf_call_counter_array.hpp>
+#include <utility/detail/smf_counter/smf_call_counter_builtin.hpp>
+#include <utility/detail/smf_counter/smf_call_counter_class.hpp>
 
 #endif  // UTILITY_SMF_CALL_COUNTER_HPP
