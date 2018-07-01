@@ -1,4 +1,0 @@
-var searchData=
-[
-  ['_7esmf_5fcall_5fcounter',['~SMF_call_counter',['../classutility_1_1SMF__call__counter_3_01T_00_01Is__aggregate_3_01T_01_4_01_4.html#a48e8f534a99364add908f3f6de3af2c6',1,'utility::SMF_call_counter&lt; T, Is_aggregate&lt; T &gt; &gt;::~SMF_call_counter()'],['../classutility_1_1SMF__call__counter_3_01T_00_01Is__array_3_01T_01_4_01_4.html#ae4d9b766ea07ce3513b866beddc9e8c3',1,'utility::SMF_call_counter&lt; T, Is_array&lt; T &gt; &gt;::~SMF_call_counter()'],['../classutility_1_1SMF__call__counter_3_01T_00_01Is__builtin_3_01T_01_4_01_4.html#a82c5869891979725e0cbb5f38ddc3cfa',1,'utility::SMF_call_counter&lt; T, Is_builtin&lt; T &gt; &gt;::~SMF_call_counter()'],['../classutility_1_1SMF__call__counter_3_01T_00_01Is__class_3_01T_01_4_01_4.html#a867e61312bd8f7026cd9a86334dbfffd',1,'utility::SMF_call_counter&lt; T, Is_class&lt; T &gt; &gt;::~SMF_call_counter()']]]
-];
