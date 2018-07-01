@@ -1,13 +1,4 @@
 var searchData=
 [
-  ['timestamp',['timestamp',['../classutility_1_1Basic__log.html#abaead5491f9d1fe76c620df41fdc9f7f',1,'utility::Basic_log']]],
-  ['to_5fstring',['to_string',['../classutility_1_1Unsigned__integer.html#a2019b15f1904b8cfcf449a49d3d6d4b1',1,'utility::Unsigned_integer']]],
-  ['trait_5fconjunction',['Trait_conjunction',['../structutility_1_1Trait__conjunction.html',1,'utility']]],
-  ['trait_5fconjunction_3c_20trait_2c_20type_20_3e',['Trait_conjunction&lt; Trait, Type &gt;',['../structutility_1_1Trait__conjunction_3_01Trait_00_01Type_01_4.html',1,'utility']]],
-  ['trait_5fconjunction_5fv',['trait_conjunction_v',['../namespaceutility.html#a8e4d4769f19bfd82fb1317535e35f78e',1,'utility']]],
-  ['trait_5fdisjunction',['Trait_disjunction',['../structutility_1_1Trait__disjunction.html',1,'utility']]],
-  ['trait_5fdisjunction_3c_20trait_2c_20type_20_3e',['Trait_disjunction&lt; Trait, Type &gt;',['../structutility_1_1Trait__disjunction_3_01Trait_00_01Type_01_4.html',1,'utility']]],
-  ['trait_5fdisjunction_5fv',['trait_disjunction_v',['../namespaceutility.html#a7f1e0020a6ea64343ee0dcc4fc4a4c32',1,'utility']]],
-  ['type_5finfo',['Type_info',['../structutility_1_1Type__info.html',1,'utility']]],
-  ['type_5fname',['type_name',['../structutility_1_1Type__info.html#a7182e7f8369a253edb32927a18586230',1,'utility::Type_info']]]
+  ['unsigned_5finteger',['Unsigned_integer',['../classutility_1_1Unsigned__integer.html',1,'utility::Unsigned_integer&lt; N &gt;'],['../classutility_1_1Unsigned__integer.html#a38bbca542db5d651a7b0bf314799ee8c',1,'utility::Unsigned_integer::Unsigned_integer()=default'],['../classutility_1_1Unsigned__integer.html#ac6b81a0b255bf2b040a7e0ecdb1c1176',1,'utility::Unsigned_integer::Unsigned_integer(const T &amp;value)'],['../classutility_1_1Unsigned__integer.html#a21258e6f71bfecd509b545348778908f',1,'utility::Unsigned_integer::Unsigned_integer(const std::string &amp;value)'],['../classutility_1_1Unsigned__integer.html#aee65f6515967b81574183763dcec86b0',1,'utility::Unsigned_integer::Unsigned_integer(const char *value)'],['../classutility_1_1Unsigned__integer.html#acd5e65c742d62002833f8e27eb71cb31',1,'utility::Unsigned_integer::Unsigned_integer(const std::bitset&lt; N &gt; &amp;value)'],['../classutility_1_1Unsigned__integer.html#af5d29835854f234782ade3be8759f107',1,'utility::Unsigned_integer::Unsigned_integer(const Unsigned_integer &amp;other)'],['../classutility_1_1Unsigned__integer.html#ae8e1c769630ee34f207a6b6246c0e7cb',1,'utility::Unsigned_integer::Unsigned_integer(const Unsigned_integer&lt; N2 &gt; &amp;other)']]]
 ];
