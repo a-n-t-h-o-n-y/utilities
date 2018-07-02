@@ -20,6 +20,9 @@ add_executable(tests
     trait_conjunction_test.cpp
     trait_disjunction_test.cpp
     compound_trait_test.cpp
+    property_test.cpp
+    duration_view_test.cpp
+    thousands_seperator_test.cpp
 )
 
 target_link_libraries(tests PRIVATE gtest libutility)

@@ -1,13 +1,17 @@
 #ifndef UTILITIES_LOG_HPP
 #define UTILITIES_LOG_HPP
 #include <chrono>
+#include <cstddef>
 #include <ctime>
 #include <fstream>
 #include <iomanip>
+#include <ios>
 #include <iostream>
+#include <ostream>
 #include <string>
-#include <type_traits>
-#include <typeinfo>
+#include <utility>
+
+#include <utility/duration_view.hpp>
 
 namespace utility {
 
@@ -59,24 +63,15 @@ class Basic_log : public Stream_t {
 
     /// Output the duration of the timer in units of Duration_t.
     template <typename Duration_t = std::chrono::nanoseconds>
-    void output_timer() {
-        *this << std::chrono::duration_cast<Duration_t>(timer_end_ -
-                                                        timer_start_)
-                     .count();
-        if (typeid(Duration_t) == typeid(std::chrono::nanoseconds)) {
-            *this << " nanoseconds";
-        } else if (typeid(Duration_t) == typeid(std::chrono::microseconds)) {
-            *this << " microseconds";
-        } else if (typeid(Duration_t) == typeid(std::chrono::milliseconds)) {
-            *this << " milliseconds";
-        } else if (typeid(Duration_t) == typeid(std::chrono::seconds)) {
-            *this << " seconds";
-        } else if (typeid(Duration_t) == typeid(std::chrono::minutes)) {
-            *this << " minutes";
-        } else if (typeid(Duration_t) == typeid(std::chrono::hours)) {
-            *this << " hours";
-        }
-        *this << std::endl;
+    void output_timer(bool seperators = true) {
+        *this << utility::duration_view<Duration_t>(timer_end_ - timer_start_,
+                                                    seperators);
+    }
+
+    /// Output the duration of the timer in units determined by digit_limit.
+    void output_timer(int digit_limit, bool seperators = true) {
+        *this << utility::duration_view(timer_end_ - timer_start_, digit_limit,
+                                        seperators);
     }
 
    private:

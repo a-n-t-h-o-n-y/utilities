@@ -74,6 +74,30 @@ int main() {
 }
 ```
 
+### duration_view.hpp
+Format a std::chrono::duration object to a string of a specified time unit, or
+to a unit determined by an output digit limit. Requires C++17.
+```cpp
+#include <utility/duration_view.hpp>
+int main() {
+    using Duration_t = std::chrono::duration<long, std::nano>;
+    using utility::duration_view;
+    Duration_t long_duration{18'000'000'000'000};
+
+    // 3 digit output limit
+    assert("300 minutes", duration_view(long_duration, 3));
+
+    // 6 digit output limit, thousands seperators by default.
+    assert("18,000 seconds", duration_view(long_duration, 6));
+    assert("18000 seconds", duration_view(long_duration, 6, false));
+
+    // Specified Time_unit
+    assert("5 hours", duration_view<std::chrono::hours>(long_duration));
+    assert("18000000000000 microseconds",
+           duration_view<std::chrono::microseconds>(long_duration, false));
+}
+```
+
 ### log.hpp
 Simple Logging class, can log to any stream with `Basic_log<Stream_t>` class
 template. Provides convenience objects log_cout, log_cerr, and log_clog, as well

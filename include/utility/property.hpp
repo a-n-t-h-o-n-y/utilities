@@ -17,8 +17,8 @@ class Property {
     Property(){};
 
     /// Construct object of type T that is constructible from type U.
-    template <typename U>
-    Property(U&& value) : value_{std::forward<U>(value)} {}
+    template <typename... Args>
+    Property(Args&&... args) : value_{std::forward<Args>(args)...} {}
 
     /// Return a non-const reference to the property's value.
     T& get() { return value_; }
