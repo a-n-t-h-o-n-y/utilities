@@ -3,6 +3,9 @@ project(libutility LANGUAGES CXX)
 include(GNUInstallDirs)
 enable_testing()
 
+# set(CMAKE_BUILD_TYPE Release)
+set(CMAKE_BUILD_TYPE Build)
+
 # CREATE UTILITY LIBRARY
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 add_library(libutility INTERFACE)

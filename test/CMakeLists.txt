@@ -23,9 +23,12 @@ add_executable(tests
     property_test.cpp
     duration_view_test.cpp
     thousands_seperator_test.cpp
+    # async_trigger_test.cpp
 )
 
-target_link_libraries(tests PRIVATE gtest libutility)
+find_package(Threads REQUIRED)
+
+target_link_libraries(tests PRIVATE gtest libutility ${CMAKE_THREAD_LIBS_INIT})
 target_compile_features(tests PRIVATE cxx_std_17)
 target_compile_options(tests PRIVATE -Wall)
 

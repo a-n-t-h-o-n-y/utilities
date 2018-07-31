@@ -61,7 +61,6 @@ template <typename Value_t,
                                       !std::is_floating_point<Value_t>::value,
                                   int>::type = 0>
 Value_t random_value(const U& lower_bound, const U& upper_bound) {
-    std::cout << typeid(Value_t).name() << std::endl;
     return static_cast<Value_t>(detail::gen_int_type(lower_bound, upper_bound));
 }
 
