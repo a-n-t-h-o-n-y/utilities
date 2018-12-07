@@ -27,6 +27,12 @@ class Delimiters : public std::ctype<Char_t> {
         typename Base_t::mask* table) {
         auto mask = Base_t::classic_table();
         std::copy(mask, mask + Base_t::table_size, table);
+        table[static_cast<unsigned>(' ')] = 0;
+        table[static_cast<unsigned>('\f')] = 0;
+        table[static_cast<unsigned>('\n')] = 0;
+        table[static_cast<unsigned>('\r')] = 0;
+        table[static_cast<unsigned>('\t')] = 0;
+        table[static_cast<unsigned>('\v')] = 0;
         for (unsigned char c : delimiters) {
             table[static_cast<unsigned>(c)] |= Base_t::space;
         }

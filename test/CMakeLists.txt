@@ -25,6 +25,7 @@ add_executable(tests
     thousands_seperator_test.cpp
     primes.test.cpp
     from_file.test.cpp
+    to_file.test.cpp
     # async_trigger_test.cpp
 )
 
