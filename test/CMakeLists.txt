@@ -23,6 +23,8 @@ add_executable(tests
     property_test.cpp
     duration_view_test.cpp
     thousands_seperator_test.cpp
+    primes.test.cpp
+    from_file.test.cpp
     # async_trigger_test.cpp
 )
 

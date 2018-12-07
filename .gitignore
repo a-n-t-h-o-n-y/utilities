@@ -2,3 +2,4 @@ build*
 docs/*
 !docs/Doxyfile
 tags
+notes/

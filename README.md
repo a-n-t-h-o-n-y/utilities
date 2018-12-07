@@ -16,7 +16,7 @@ Installs all headers in `/usr/local/include/utility/`.
 
 # C++ Headers
 ### unsigned_integer.hpp
-Big Integer class template with compile time bit precision. Implements:
+Variable precision integer class template. Implements:
 - operator+
 - operator-
 - operator\*
@@ -61,8 +61,8 @@ int main() {
 ```
 
 ### property.hpp
-Wraps a value and provides get/set members. Setting the value emits a Signal
-which passes on the value set.
+Wraps a value and provides get/set members. Setting the value emits a `Signal`
+which passes on the value which was set.
 ```cpp
 #include <utility/property.hpp>
 int main() {
@@ -99,9 +99,9 @@ int main() {
 ```
 
 ### log.hpp
-Simple Logging class, can log to any stream with `Basic_log<Stream_t>` class
-template. Provides convenience objects log_cout, log_cerr, and log_clog, as well
-as Log type alias to stream to an ofstream.
+Simple Logging class, can output to any stream with by using
+`Basic_log<Stream_t>` class template. Provides global log_cout, log_cerr, and
+log_clog objects as well as `Log` type alias to output to a std::ofstream.
 ```cpp
 #include <utility/log.hpp>
 
@@ -140,7 +140,7 @@ std::ostream& stream_{my_stream};
 ```
 
 ### type_view.hpp
-Output type traits and numeric limits to a given stream.
+Output categorized type traits and numeric limits to a given stream.
 ```cpp
 #include <utility/type_view.hpp>
 int main() {
@@ -159,7 +159,7 @@ int main() {
 ### memory_view.hpp
 Provides functions to output raw data representation of any object. Data types
 larger than `size_of(unsigned long long)`, typically 64 bits, can only be
-displayed as binary.
+displayed as binary. Combine with Unsigned_integer class to get past this.
 ```cpp
 #include <utility/memory_view.hpp>
 int main() {
@@ -191,8 +191,8 @@ int main() {
 ```
 
 ### container_view.hpp
-Formats a container of objects in a readable way, if the type has the
-std::ostream insertion operator overloaded. Returns as a std::string.
+Simple formatted string output of a container's contents. Requires the contained
+type have operator<<(std::ostream) overloaded.
 ```cpp
 #include <utility/container_view.hpp>
 int main() {
@@ -235,7 +235,7 @@ struct Foo {};
 struct Bar {};
 
 template <typename... Types>
-constexpr bool Is_class() {
+constexpr bool Are_classes() {
     return utility::trait_conjunction_v<std::is_class, Types...>;
 }
 
@@ -250,11 +250,25 @@ int main() {
         utility::trait_conjunction_v<std::is_void, void, void, void, void>;
     assert(var_1);
 
-    constexpr bool var_2 = Is_class<Foo, Bar>();
+    constexpr bool var_2 = Are_classes<Foo, Bar>();
     assert(var_2);
 
-    constexpr bool var_3 = Is_class<Foo, Bar, int, double, Foo, int>();
+    constexpr bool var_3 = Are_classes<Foo, Bar, int, double, Foo, int>();
     assert(!var_3);
+    
+    // Combine with Compound Trait.
+    template <typename T>
+    using Is_const_class =
+        utility::Compound_trait<std::is_class, std::is_const>::template type<T>;
+
+    template <typename... Types>
+    constexpr bool Are_const_classes() {
+        return utility::trait_conjunction_v<Is_const_class, Types...>;
+    
+    constexpr bool var_4 = Are_const_classes<const Foo, const Bar>();
+    assert(var_4);
+}
+    
 }
 ```
 
@@ -310,12 +324,12 @@ int main() {
 
     // Function Types
     using Func1_t = Foo (*)(int, long);
-    utility::Type_info info_4{utility::get_type_info<Func2_t>()};
+    utility::Type_info info_4{utility::get_type_info<Func1_t>()};
     assert("Foo (*)(int, long)" == info_4.full_type_name());
 
     using Func2_t = int (*volatile &&)(int);
     using Func3_t = Func2_t (*const volatile&&)(Func2_t);
-    utility::Type_info info_5{utility::get_type_info<Func7_t>()};
+    utility::Type_info info_5{utility::get_type_info<Func3_t>()};
     assert(
         "int (* volatile&& (* const volatile&&)(Foo (*)(int, long)))(int)" ==
         info_5.full_type_name());
