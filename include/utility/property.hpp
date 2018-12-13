@@ -55,7 +55,7 @@ std::ostream& operator<<(std::ostream& os, const Property<T>& prop) {
 /// std::istream operator
 template <typename T>
 std::istream& operator>>(std::istream& is, Property<T>& prop) {
-    T temp;
+    auto temp = T();
     is >> temp;
     prop.set(std::move(temp));
     return is;

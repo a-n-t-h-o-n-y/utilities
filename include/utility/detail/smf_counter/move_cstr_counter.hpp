@@ -1,5 +1,5 @@
-#ifndef UTILITY_DETAIL_MOVE_CSTR_COUNTER_HPP
-#define UTILITY_DETAIL_MOVE_CSTR_COUNTER_HPP
+#ifndef UTILITY_DETAIL_SMF_COUNTER_MOVE_CSTR_COUNTER_HPP
+#define UTILITY_DETAIL_SMF_COUNTER_MOVE_CSTR_COUNTER_HPP
 #include <string>
 
 #include <utility/count_t.hpp>
@@ -11,8 +11,9 @@ namespace detail {
 template <typename>
 class Move_cstr_counter {
    public:
-    /// Increment the counter by one. Should be called by the class inheriting
-    /// this class in the move constructor.
+    /// Increment the counter by one.
+    /** Should be called by the class inheriting this class in the move
+     *  constructor. */
     static void increment_move_cstr_count();
 
     /// Retrieve number of times the move constructor has been called.
@@ -48,8 +49,8 @@ void Move_cstr_counter<T>::reset_move_cstr_count() {
 
 template <typename T>
 std::string Move_cstr_counter<T>::move_cstr_count_as_string() {
-    std::string type_name{get_type_info<T>()};
-    std::string result{type_name};
+    const auto type_name = std::string{get_type_info<T>()};
+    auto result = type_name;
     result.append("(");
     result.append(type_name);
     result.append("&&) called ");
@@ -60,4 +61,4 @@ std::string Move_cstr_counter<T>::move_cstr_count_as_string() {
 
 }  // namespace detail
 }  // namespace utility
-#endif  // UTILITY_DETAIL_MOVE_CSTR_COUNTER_HPP
+#endif  // UTILITY_DETAIL_SMF_COUNTER_MOVE_CSTR_COUNTER_HPP

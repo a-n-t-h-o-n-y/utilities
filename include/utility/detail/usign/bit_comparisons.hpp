@@ -12,7 +12,7 @@ bool operator<(const std::bitset<N>& lhs, const std::bitset<N>& rhs) {
     if (N == 0) {
         return false;
     }
-    for (std::size_t i{N - 1}; i < N; --i) {
+    for (auto i = N - 1; i < N; --i) {
         if (lhs[i] != rhs[i]) {
             return rhs[i];
         }

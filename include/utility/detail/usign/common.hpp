@@ -11,7 +11,7 @@ namespace usign {
 
 /// Converts ['0' - 'z'] to corresponding int, case insensitive
 inline int char_to_int(char c) {
-    int result{std::toupper(c) - static_cast<int>('0')};
+    auto result = std::toupper(c) - static_cast<int>('0');
     if (result > 9) {
         result -= 7;  // distance from '9' to 'A'
     }
@@ -20,7 +20,7 @@ inline int char_to_int(char c) {
 
 /// Converts an int to a corresponding char, ['0' - 'Z'], returns uppercase
 inline char int_to_char(int i) {
-    int result{i + static_cast<int>('0')};
+    auto result = i + static_cast<int>('0');
     if (result > '9') {
         result += 7;  // distance from '9' to 'A'
     }
@@ -32,14 +32,14 @@ inline bool is_odd(const std::string& value) {
     if (value.empty()) {
         return false;
     }
-    int last_digit{char_to_int(value.back())};
+    const auto last_digit = char_to_int(value.back());
     return (last_digit % 2) == 1;
 }
 
 /// Finds the most significant bit index of the bitset.
 template <std::size_t N>
 std::size_t msb(const std::bitset<N>& bs) {
-    for (std::size_t i{N - 1}; i < N; --i) {
+    for (auto i = N - 1; i < N; --i) {
         if (bs[i]) {
             return i;
         }
@@ -50,5 +50,4 @@ std::size_t msb(const std::bitset<N>& bs) {
 }  // namespace usign
 }  // namespace detail
 }  // namespace utility
-
 #endif  // UTILITY_DETAIL_USIGN_COMMON_HPP

@@ -1,13 +1,14 @@
-#ifndef UTILITY_SMF_CALL_COUNTER_ARRAY_HPP
-#define UTILITY_SMF_CALL_COUNTER_ARRAY_HPP
-#include <algorithm>
+#ifndef UTILITY_DETAIL_SMF_COUNTER_SMF_CALL_COUNTER_ARRAY_HPP
+#define UTILITY_DETAIL_SMF_COUNTER_SMF_CALL_COUNTER_ARRAY_HPP
 #include <initializer_list>
 #include <string>
 #include <type_traits>
+#include <utility>
 
-#include <utility/detail/smf_counter/default_cstr_counter.hpp>
-#include <utility/detail/smf_counter/destructor_counter.hpp>
-#include <utility/detail/smf_counter/initializer_list_cstr_counter.hpp>
+#include "default_cstr_counter.hpp"
+#include "destructor_counter.hpp"
+#include "initializer_list_cstr_counter.hpp"
+#include "smf_call_counter_fwd.hpp"
 
 namespace utility {
 template <typename T>
@@ -23,8 +24,7 @@ class SMF_call_counter<T, Is_array<T>>
     /// Increments the Default Constructor count and default initializes a T.
     SMF_call_counter();
 
-    /// Increments the Initializer List Constructor count and initializes the
-    /// array.
+    /// Increments the Initializer List Constructor count and initializes array.
     template <typename... Args>
     SMF_call_counter(Args&&... args);
 
@@ -89,26 +89,26 @@ SMF_call_counter<T, Is_array<T>>::operator T&() {
 // RESET_COUNTS()
 template <typename T>
 void SMF_call_counter<T, Is_array<T>>::reset_counts() {
-    detail::Default_cstr_counter<T>::reset_default_cstr_count();
-    detail::Initializer_list_cstr_counter<
-        T>::reset_initializer_list_cstr_count();
-    detail::Destructor_counter<T>::reset_destructor_count();
+    using namespace detail;
+    Default_cstr_counter<T>::reset_default_cstr_count();
+    Initializer_list_cstr_counter<T>::reset_initializer_list_cstr_count();
+    Destructor_counter<T>::reset_destructor_count();
 }
 
 // ALL_COUNTS_AS_STRING()
 template <typename T>
 std::string SMF_call_counter<T, Is_array<T>>::all_counts_as_string() {
-    const char nl{'\n'};
-    std::string description;
-    description.append(
-        detail::Default_cstr_counter<T>::default_cstr_count_as_string() + nl);
-    description.append(detail::Initializer_list_cstr_counter<
+    const auto nl = '\n';
+    auto description = std::string{""};
+    using namespace detail;
+    description.append(Default_cstr_counter<T>::default_cstr_count_as_string() +
+                       nl);
+    description.append(Initializer_list_cstr_counter<
                            T>::initializer_list_cstr_count_as_string() +
                        nl);
-    description.append(
-        detail::Destructor_counter<T>::destructor_count_as_string());
+    description.append(Destructor_counter<T>::destructor_count_as_string());
     return description;
 }
 
 }  // namespace utility
-#endif  // UTILITY_SMF_CALL_COUNTER_ARRAY_HPP
+#endif  // UTILITY_DETAIL_SMF_COUNTER_SMF_CALL_COUNTER_ARRAY_HPP

@@ -1,5 +1,6 @@
 #ifndef UTILITY_DETAIL_USIGN_ARITHMETIC_HPP
 #define UTILITY_DETAIL_USIGN_ARITHMETIC_HPP
+#include <algorithm>
 #include <bitset>
 #include <cstddef>
 
@@ -16,18 +17,15 @@ std::bitset<N> bit_addition(std::bitset<N> lhs, const std::bitset<N>& rhs) {
     if (lhs == rhs) {
         return lhs << 1;
     }
-    std::size_t lhs_msb{msb(lhs)};
-    std::size_t rhs_msb{msb(rhs)};
-    std::size_t limit{lhs_msb > rhs_msb ? lhs_msb : rhs_msb};
-    ++limit;
-    bool carry_over{false};
-    for (std::size_t i{0}; i < limit; ++i) {
-        int sum{carry_over + lhs[i] + rhs[i]};
+    const auto limit = std::max(msb(lhs), msb(rhs)) + 1;
+    auto carry_out = false;
+    for (auto i = std::size_t{0}; i < limit; ++i) {
+        const auto sum = carry_out + lhs[i] + rhs[i];
         lhs[i] = sum == 1 || sum == 3;
-        carry_over = sum > 1;
+        carry_out = sum > 1;
     }
     if (limit != N) {
-        lhs[limit] = carry_over + lhs[limit] + rhs[limit];
+        lhs[limit] = carry_out + lhs[limit] + rhs[limit];
     }
     return lhs;
 }
@@ -35,10 +33,10 @@ std::bitset<N> bit_addition(std::bitset<N> lhs, const std::bitset<N>& rhs) {
 // SUBTRACTION
 template <std::size_t N>
 std::bitset<N> bit_subtraction(std::bitset<N> lhs, const std::bitset<N>& rhs) {
-    for (std::size_t i{0}; i < lhs.size(); ++i) {
+    for (auto i = std::size_t{0}; i < N; ++i) {
         lhs[i] = lhs[i] != rhs[i];
         if (lhs[i] && rhs[i]) {
-            for (std::size_t j{i + 1}; j < lhs.size(); ++j) {
+            for (auto j = i + 1; j < N; ++j) {
                 lhs.flip(j);
                 if (!lhs[j]) {
                     break;
@@ -54,13 +52,13 @@ template <std::size_t N>
 std::bitset<N> bit_division(const std::bitset<N>& num,
                             const std::bitset<N>& den) {
     if (den == std::bitset<N>(2)) {
-        std::bitset<N> result{num};
+        auto result = std::bitset<N>{num};
         result >>= 1;
         return result;
     }
-    std::bitset<N> quo{0};
-    std::bitset<N> rem{0};
-    for (std::size_t i{N - 1}; i < N; --i) {
+    auto quo = std::bitset<N>{0};
+    auto rem = std::bitset<N>{0};
+    for (auto i = N - 1; i < N; --i) {
         rem <<= 1;
         rem[0] = num[i];
         if (detail::usign::operator>=(rem, den)) {
@@ -75,8 +73,8 @@ std::bitset<N> bit_division(const std::bitset<N>& num,
 template <std::size_t N>
 std::bitset<N> bit_modulo(const std::bitset<N>& num,
                           const std::bitset<N>& den) {
-    std::bitset<N> rem{0};
-    for (std::size_t i{N - 1}; i < N; --i) {
+    auto rem = std::bitset<N>{0};
+    for (auto i = N - 1; i < N; --i) {
         rem <<= 1;
         rem[0] = num[i];
         if (detail::usign::operator>=(rem, den)) {
@@ -90,8 +88,8 @@ std::bitset<N> bit_modulo(const std::bitset<N>& num,
 template <std::size_t N>
 std::bitset<N> bit_multiplication(const std::bitset<N>& lhs,
                                   const std::bitset<N>& rhs) {
-    std::bitset<N> product{0};
-    for (std::size_t i{0}; i < N; ++i) {
+    auto product = std::bitset<N>{0};
+    for (auto i = std::size_t{0}; i < N; ++i) {
         if (rhs[i]) {
             product = bit_addition(product, lhs << i);
         }
@@ -103,15 +101,15 @@ std::bitset<N> bit_multiplication(const std::bitset<N>& lhs,
 template <std::size_t N>
 std::bitset<N> bit_exponentiation(const std::bitset<N>& base,
                                   const std::bitset<N>& exponent) {
-    std::bitset<N> multiple{base};
-    std::bitset<N> result{1};
-    std::size_t limit{0};
-    for (std::size_t i{0}; i < N; ++i) {
+    auto multiple = std::bitset<N>{base};
+    auto result = std::bitset<N>{1};
+    auto limit = std::size_t{0};
+    for (auto i = std::size_t{0}; i < N; ++i) {
         if (exponent[i]) {
             limit = i + 1;
         }
     }
-    for (std::size_t i{1}; i < limit; ++i) {
+    for (auto i = std::size_t{1}; i < limit; ++i) {
         multiple = bit_multiplication(multiple, multiple);
         if (exponent[i]) {
             result = bit_multiplication(result, multiple);
@@ -142,7 +140,7 @@ std::bitset<N> bit_root(std::bitset<N> radicand, const std::bitset<N>& index) {
     while (true) {
         std::bitset<N> test{result};
         std::bitset<N> limit{bit_subtraction(index, std::bitset<N>{1})};
-        for (std::bitset<N> i{0}; i < limit;
+        for (auto i = std::bitset<N>{0}; i < limit;
              i = bit_addition(i, std::bitset<N>{1})) {
             test = bit_multiplication(test, result);
         }

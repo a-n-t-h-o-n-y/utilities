@@ -52,19 +52,12 @@ void composite_categories(std::ostream& os = std::cout) {
     os << "-- Composite Categories --\n";
     os << std::boolalpha << "Type name: " << typeid(T).name();
     os << "\nis_fundamental: " << std::is_fundamental<T>::value
-
        << "\nis_arithmetic: " << std::is_arithmetic<T>::value
-
        << "\nis_scalar: " << std::is_scalar<T>::value
-
        << "\nis_object: " << std::is_object<T>::value
-
        << "\nis_compound: " << std::is_compound<T>::value
-
        << "\nis_reference: " << std::is_reference<T>::value
-
        << "\nis_member_pointer: " << std::is_member_pointer<T>::value
-
        << std::endl;
 }
 
@@ -74,32 +67,18 @@ void type_properties(std::ostream& os = std::cout) {
     os << "-- Type Properties --\n";
     os << std::boolalpha << "Type name: " << typeid(T).name();
     os << "\nis_const: " << std::is_const<T>::value
-
        << "\nis_volatile: " << std::is_volatile<T>::value
-
        << "\nis_trivial: " << std::is_trivial<T>::value
-
        << "\nis_trivially_copyable: " << std::is_trivially_copyable<T>::value
-
        << "\nis_standard_layout: " << std::is_standard_layout<T>::value
-
        << "\nis_pod: " << std::is_pod<T>::value
-
        << "\nis_literal_type: " << std::is_literal_type<T>::value
-
        << "\nis_empty: " << std::is_empty<T>::value
-
        << "\nis_polymorphic: " << std::is_polymorphic<T>::value
-
        << "\nis_abstract: " << std::is_abstract<T>::value
-
        << "\nis_final: " << std::is_final<T>::value
-
        << "\nis_signed: " << std::is_signed<T>::value
-
-       << "\nis_unsigned: " << std::is_unsigned<T>::value
-
-       << std::endl;
+       << "\nis_unsigned: " << std::is_unsigned<T>::value << std::endl;
 }
 
 /// Output all type_trait values from 'Supported Operations' subgroup.
@@ -185,12 +164,8 @@ void property_queries(std::ostream& os = std::cout) {
     os << "-- Property Queries --\n";
     os << "Type name: " << typeid(T).name();
     os << "\nalignment_of: " << std::alignment_of<T>::value
-
        << "\nrank: " << std::rank<T>::value
-
-       << "\nextent: " << std::extent<T, N>::value
-
-       << std::endl;
+       << "\nextent: " << std::extent<T, N>::value << std::endl;
 }
 
 /// Output all type_trait values from 'Type Relationships' subgroup.
@@ -200,12 +175,8 @@ void type_relationships(std::ostream& os = std::cout) {
     os << std::boolalpha << "Type name(T): " << typeid(T).name();
     os << "\nType name(U): " << typeid(U).name();
     os << "\nis_same: " << std::is_same<T, U>::value
-
        << "\nis_base_of: " << std::is_base_of<T, U>::value
-
-       << "\nis_convertible: " << std::is_convertible<T, U>::value
-
-       << std::endl;
+       << "\nis_convertible: " << std::is_convertible<T, U>::value << std::endl;
 }
 
 /// Output all values from std::numeric_limits.
@@ -215,70 +186,33 @@ void limits(std::ostream& os = std::cout) {
     using lims = std::numeric_limits<T>;
     os << std::boolalpha << "Type name: " << typeid(T).name();
     os << "\nis_specialized: " << lims::is_specialized
-
        << "\nis_signed: " << lims::is_signed
-
        << "\nis_integer: " << lims::is_integer
-
        << "\nis_exact: " << lims::is_exact
-
        << "\nhas_infinity: " << lims::has_infinity
-
        << "\nhas_quiet_NaN: " << lims::has_quiet_NaN
-
        << "\nhas_signaling_NaN: " << lims::has_signaling_NaN
-
        << "\nhas_denorm: " << lims::has_denorm
-
        << "\nhas_denorm_loss: " << lims::has_denorm_loss
-
        << "\nround_style: " << lims::round_style
-
        << "\nis_iec559: " << lims::is_iec559
-
        << "\nis_bounded: " << lims::is_bounded
-
-       << "\nis_modulo: " << lims::is_modulo
-
-       << "\ndigits: " << lims::digits
-
+       << "\nis_modulo: " << lims::is_modulo << "\ndigits: " << lims::digits
        << "\ndigits10: " << lims::digits10
-
-       << "\nmax_digits10: " << lims::max_digits10
-
-       << "\nradix: " << lims::radix
-
+       << "\nmax_digits10: " << lims::max_digits10 << "\nradix: " << lims::radix
        << "\nmin_exponent: " << lims::min_exponent
-
        << "\nmin_exponent10: " << lims::min_exponent10
-
        << "\nmax_exponent: " << lims::max_exponent
-
        << "\nmax_exponent10: " << lims::max_exponent10
-
        << "\ntraps: " << lims::traps
-
        << "\ntinyness_before: " << lims::tinyness_before
-
-       << "\nmin: " << lims::min()
-
-       << "\nlowest: " << lims::lowest()
-
-       << "\nmax: " << lims::max()
-
-       << "\nepsilon: " << lims::epsilon()
-
+       << "\nmin: " << lims::min() << "\nlowest: " << lims::lowest()
+       << "\nmax: " << lims::max() << "\nepsilon: " << lims::epsilon()
        << "\nround_error: " << lims::round_error()
-
        << "\ninfinity: " << lims::infinity()
-
        << "\nquiet_NaN: " << lims::quiet_NaN()
-
        << "\nsignaling_NaN: " << lims::signaling_NaN()
-
-       << "\ndenorm_min: " << lims::denorm_min()
-
-       << std::endl;
+       << "\ndenorm_min: " << lims::denorm_min() << std::endl;
 }
 
 }  // namespace type_view

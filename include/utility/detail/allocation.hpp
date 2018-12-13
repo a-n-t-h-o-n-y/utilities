@@ -44,5 +44,4 @@ void generic_deallocator(void* ptr, std::ostream& os) {
 
 }  // namespace detail
 }  // namespace utility
-
 #endif  // UTILITY_DETAIL_ALLOCATION_HPP

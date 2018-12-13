@@ -5,20 +5,16 @@
 
 namespace utility {
 
-/// Gives operations on containers the Strong Exception Guaranteed by a copy and
-/// swap. Specify the member function type to avoid ambiguity.
-template <typename Operation, typename Container, typename... Args>
-auto make_operation_strong(Operation op, Container& c, Args&&... args) ->
-    typename std::result_of<decltype(op)(Container*, Args...)>::type {
-    Container temp{c};
-    // Operations need to take place on the original container, not a copy,
-    // specifically for iterator parameters.
+/// Gives operations on containers the Strong Exception Guaranteed
+/** Performs a copy and swap. Specify the member function type to avoid
+ *  ambiguity. */
+template <typename Operation_t, typename Container_t, typename... Args>
+auto make_operation_strong(Operation_t op, Container_t& c, Args&&... args) {
+    auto copy = Container_t{c};
     try {
-        typename std::result_of<decltype(op)(Container*, Args...)>::type
-            result = (c.*op)(std::forward<Args>(args)...);
-        return result;
-    } catch (...) {  // If operation failed, then swap in the copy you took.
-        c.swap(temp);
+        return (c.*op)(std::forward<Args>(args)...);
+    } catch (...) {  // If operation failed.
+        c.swap(copy);
         throw;
     }
 }

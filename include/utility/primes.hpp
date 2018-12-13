@@ -1,24 +1,23 @@
 #ifndef UTILITY_PRIMES_HPP
 #define UTILITY_PRIMES_HPP
 #include <bitset>
+#include <memory>
 #include <vector>
 
 namespace utility {
 
-/// Generates list of all primes up to \p limit.
-/** Created using Sieve of Eratosthenes. */
+/// Generates a list of all primes up to, but not including, \p limit.
+/** Sieve of Eratosthenes. */
 template <int limit>
-auto generate_primes() {
-    auto sieve = std::bitset<limit>{};
-    sieve.flip();
+std::vector<int> generate_primes() {
+    auto sieve_ptr = std::make_unique<std::bitset<limit>>();
     auto result = std::vector<int>{};
-    // should only have to iterate through half? because i * j?
-    for (auto i = 2; i < limit; ++i) {
-        if (sieve[i]) {
-            for (auto j = i + i; j < limit; j += i) {
-                sieve[j] = false;
-            }
+    for (auto i = 2uL; i < limit; ++i) {
+        if (!(*sieve_ptr)[i]) {
             result.push_back(i);
+            for (auto j = i + i; j < limit; j += i) {
+                (*sieve_ptr)[j] = true;
+            }
         }
     }
     return result;

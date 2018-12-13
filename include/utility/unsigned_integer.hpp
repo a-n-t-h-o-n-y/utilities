@@ -173,8 +173,8 @@ Unsigned_integer<N>::Unsigned_integer(const Unsigned_integer<N2>& other) {
 template <std::size_t N>
 std::string Unsigned_integer<N>::to_string(int base) const {
     if (base == 2) {
-        std::string result{data_.to_string()};
-        std::size_t start_pos{result.find_first_not_of('0')};
+        const auto result = data_.to_string();
+        const auto start_pos = result.find_first_not_of('0');
         if (start_pos == std::string::npos) {
             return "0";
         }
@@ -279,39 +279,39 @@ bool operator>=(const std::string lhs, const Unsigned_integer<N>& rhs) {
 template <std::size_t N>
 Unsigned_integer<N> Unsigned_integer<N>::operator&(
     const Unsigned_integer& rhs) const {
-    return Unsigned_integer{this->data_ & rhs.data_};
+    return this->data_ & rhs.data_;
 }
 
 // OR
 template <std::size_t N>
 Unsigned_integer<N> Unsigned_integer<N>::operator|(
     const Unsigned_integer& rhs) const {
-    return Unsigned_integer{this->data_ | rhs.data_};
+    return this->data_ | rhs.data_;
 }
 
 // XOR
 template <std::size_t N>
 Unsigned_integer<N> Unsigned_integer<N>::operator^(
     const Unsigned_integer& rhs) const {
-    return Unsigned_integer{this->data_ ^ rhs.data_};
+    return this->data_ ^ rhs.data_;
 }
 
 // NOT
 template <std::size_t N>
 Unsigned_integer<N> Unsigned_integer<N>::operator~() const {
-    return Unsigned_integer<N>{~this->data_};
+    return ~this->data_;
 }
 
 // Shift Left
 template <std::size_t N>
 Unsigned_integer<N> Unsigned_integer<N>::operator<<(std::size_t pos) const {
-    return Unsigned_integer{this->data_ << pos};
+    return this->data_ << pos;
 }
 
 // Shift Right
 template <std::size_t N>
 Unsigned_integer<N> Unsigned_integer<N>::operator>>(std::size_t pos) const {
-    return Unsigned_integer{this->data_ >> pos};
+    return this->data_ >> pos;
 }
 
 // FORWARDING BIT OPERATORS - - - - - - - - - - - - - - - - - - - - - - - -
@@ -319,39 +319,39 @@ Unsigned_integer<N> Unsigned_integer<N>::operator>>(std::size_t pos) const {
 template <std::size_t N>
 Unsigned_integer<N> operator&(std::uint64_t lhs,
                               const Unsigned_integer<N>& rhs) {
-    return Unsigned_integer<N>{rhs & lhs};
+    return rhs & lhs;
 }
 
 template <std::size_t N>
 Unsigned_integer<N> operator&(const std::string& lhs,
                               const Unsigned_integer<N>& rhs) {
-    return Unsigned_integer<N>{rhs & lhs};
+    return rhs & lhs;
 }
 
 // OR
 template <std::size_t N>
 Unsigned_integer<N> operator|(std::uint64_t lhs,
                               const Unsigned_integer<N>& rhs) {
-    return Unsigned_integer<N>{rhs | lhs};
+    return rhs | lhs;
 }
 
 template <std::size_t N>
 Unsigned_integer<N> operator|(const std::string& lhs,
                               const Unsigned_integer<N>& rhs) {
-    return Unsigned_integer<N>{rhs | lhs};
+    return rhs | lhs;
 }
 
 // XOR
 template <std::size_t N>
 Unsigned_integer<N> operator^(std::uint64_t lhs,
                               const Unsigned_integer<N>& rhs) {
-    return Unsigned_integer<N>{rhs ^ lhs};
+    return rhs ^ lhs;
 }
 
 template <std::size_t N>
 Unsigned_integer<N> operator^(const std::string& lhs,
                               const Unsigned_integer<N>& rhs) {
-    return Unsigned_integer<N>{rhs ^ lhs};
+    return rhs ^ lhs;
 }
 
 // COMPOUND BIT OPERATOR ASSIGNMENT - - - - - - - - - - - - - - - - - - - -
@@ -396,16 +396,14 @@ Unsigned_integer<N>& Unsigned_integer<N>::operator>>=(std::size_t pos) {
 template <std::size_t N>
 Unsigned_integer<N> Unsigned_integer<N>::operator+(
     const Unsigned_integer& rhs) const {
-    std::bitset<N> result{detail::usign::bit_addition(data_, rhs.data_)};
-    return Unsigned_integer{result};
+    return detail::usign::bit_addition(data_, rhs.data_);
 }
 
 // Subtraction
 template <std::size_t N>
 Unsigned_integer<N> Unsigned_integer<N>::operator-(
     const Unsigned_integer& rhs) const {
-    std::bitset<N> result{detail::usign::bit_subtraction(data_, rhs.data_)};
-    return Unsigned_integer{result};
+    return detail::usign::bit_subtraction(data_, rhs.data_);
 }
 
 // Division
@@ -418,9 +416,7 @@ Unsigned_integer<N> Unsigned_integer<N>::operator/(
     if (divisor == 1) {
         return *this;
     }
-    std::bitset<N> result{
-        detail::usign::bit_division(this->data_, divisor.data_)};
-    return Unsigned_integer<N>{result};
+    return detail::usign::bit_division(this->data_, divisor.data_);
 }
 
 // Modulo
@@ -430,35 +426,28 @@ Unsigned_integer<N> Unsigned_integer<N>::operator%(
     if (N == 0 || divisor == 0 || divisor == 1) {
         return 0;
     }
-    std::bitset<N> result{
-        detail::usign::bit_modulo(this->data_, divisor.data_)};
-    return Unsigned_integer<N>{result};
+    return detail::usign::bit_modulo(this->data_, divisor.data_);
 }
 
 // Multiplication
 template <std::size_t N>
 Unsigned_integer<N> Unsigned_integer<N>::operator*(
     const Unsigned_integer& rhs) const {
-    std::bitset<N> result{
-        detail::usign::bit_multiplication(this->data_, rhs.data_)};
-    return Unsigned_integer<N>{result};
+    return detail::usign::bit_multiplication(this->data_, rhs.data_);
 }
 
 // Exponentiation
 template <std::size_t N>
 Unsigned_integer<N> Unsigned_integer<N>::exp(
     const Unsigned_integer& exponent) const {
-    std::bitset<N> result{
-        detail::usign::bit_exponentiation(this->data_, exponent.data_)};
-    return Unsigned_integer<N>{result};
+    return detail::usign::bit_exponentiation(this->data_, exponent.data_);
 }
 
 // Root
 template <std::size_t N>
 Unsigned_integer<N> Unsigned_integer<N>::root(
     const Unsigned_integer& index) const {
-    std::bitset<N> result{detail::usign::bit_root(this->data_, index.data_)};
-    return Unsigned_integer<N>{result};
+    return detail::usign::bit_root(this->data_, index.data_);
 }
 
 // FORWARDING ARITHMETIC - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -530,7 +519,7 @@ Unsigned_integer<N> operator*(const std::string& lhs,
 // IOSTREAMS - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 template <std::size_t N>
 std::ostream& operator<<(std::ostream& os, const Unsigned_integer<N>& value) {
-    int base{10};
+    auto base = 10;
     auto flags = os.flags() & std::ios::basefield;
     if (flags == std::ios::hex) {
         base = 16;
@@ -543,7 +532,7 @@ std::ostream& operator<<(std::ostream& os, const Unsigned_integer<N>& value) {
 
 template <std::size_t N>
 std::istream& operator>>(std::istream& is, Unsigned_integer<N>& value) {
-    std::string input;
+    auto input = std::string{};
     if (is.good()) {
         is >> input;
     }

@@ -3,17 +3,28 @@
 #include <stdexcept>
 #include <string>
 
-namespace utility {
+#include <utility/type_info.hpp>
 
-/// Throws runtime_error if value being cast is too large for Source type.
-template <typename Target, typename Source>
-Target narrow_cast(const Source& source) noexcept(false) {
-    auto result = static_cast<Target>(source);
-    if (static_cast<Source>(result) != source) {
-        std::string message{std::string{"narrow_cast<"} +
-                            typeid(Target).name() + ">(" +
-                            typeid(Source).name() + ") failed"};
-        throw std::runtime_error{message};
+namespace utility {
+namespace detail {
+namespace narrow_cast {
+
+template <typename Target_t, typename Source_t>
+std::string create_message() {
+    return "narrow_cast<" + std::string{get_type_info<Target_t>()} + ">(" +
+           std::string{get_type_info<Source_t>()} + ") failed";
+}
+
+}  // namespace narrow_cast
+}  // namespace detail
+
+/// Throws std::runtime_error if value being cast is too large for Target_t.
+template <typename Target_t, typename Source_t>
+Target_t narrow_cast(const Source_t& source) noexcept(false) {
+    auto result = static_cast<Target_t>(source);
+    if (static_cast<Source_t>(result) != source) {
+        throw std::runtime_error{
+            detail::narrow_cast::create_message<Target_t, Source_t>()};
     }
     return result;
 }

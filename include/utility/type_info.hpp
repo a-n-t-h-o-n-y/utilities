@@ -54,7 +54,7 @@ Type_info get_type_info() {
 namespace detail {
 
 inline std::string generate_object_type_string(const Type_info& info) {
-    std::string result;
+    auto result = std::string{""};
     if (info.is_const) {
         result.append("const ");
     }
@@ -71,7 +71,7 @@ inline std::string generate_object_type_string(const Type_info& info) {
 }
 
 inline std::string generate_pointer_type_string(const Type_info& info) {
-    std::string result{boost::core::demangle(info.index.name())};
+    auto result = std::string{boost::core::demangle(info.index.name())};
     if (info.is_const) {
         result.append(" const");
     }
@@ -88,8 +88,8 @@ inline std::string generate_pointer_type_string(const Type_info& info) {
 
 inline std::string generate_function_pointer_type_string(
     const Type_info& info) {
-    std::string result{boost::core::demangle(info.index.name())};
-    std::string qualifiers;
+    auto result = std::string{boost::core::demangle(info.index.name())};
+    auto qualifiers = std::string{""};
     if (info.is_const) {
         qualifiers.append(" const");
     }
@@ -114,10 +114,11 @@ inline bool is_function_pointer_type(const std::string& name) {
     return name.find(')') != std::string::npos;
 }
 
-using Gen_func_t = std::string (*)(const Type_info&);
-inline Gen_func_t find_string_generator(const Type_info& info) {
-    std::string type_name{boost::core::demangle(info.index.name())};
-    Gen_func_t return_func{generate_object_type_string};
+using Generator_fn_t = std::string (*)(const Type_info&);
+inline Generator_fn_t find_string_generator(const Type_info& info) {
+    const auto type_name =
+        std::string{boost::core::demangle(info.index.name())};
+    auto return_func = Generator_fn_t{generate_object_type_string};
     if (is_pointer_type(type_name)) {
         return_func = generate_pointer_type_string;
     } else if (is_function_pointer_type(type_name)) {
@@ -129,9 +130,9 @@ inline Gen_func_t find_string_generator(const Type_info& info) {
 }  // namespace detail
 
 std::string Type_info::full_type_name() const {
-    // Generate string based on function/pointer/object type
-    auto generate_string = detail::find_string_generator(*this);
-    return generate_string(*this);
+    // Generate string based on function/pointer/object type.
+    auto generate_string_fn = detail::find_string_generator(*this);
+    return generate_string_fn(*this);
 }
 
 std::string Type_info::type_name() const {
@@ -189,5 +190,4 @@ std::ostream& operator<<(std::ostream& os, const Type_info& rhs) {
 }
 
 }  // namespace utility
-
 #endif  // UTILITY_TYPE_INFO_HPP

@@ -163,24 +163,11 @@ displayed as binary. Combine with Unsigned_integer class to get past this.
 ```cpp
 #include <utility/memory_view.hpp>
 int main() {
-    const std::uint16_t i{255};
-
-    // Memory View Object
-    utility::Memory_view<std::uint16_t> int_view{i};
-    assert(int_view.str() == "0000 0000 1111 1111");
-
-    int_view.enable_seperators(false);  // Seperate into bytes, on by default.
-    assert(int_view.str() == "0000000011111111");
-
-    int_view.enable_seperators();
-    int_view.set_representation(utility::Hex);  // Or Binary, Decimal, Octal
-    assert(int_view.str() == "FF");
-
     // Convinience Functions
     char16_t c{0b0010000010101100};
     std::string binary{utility::as_binary(c)};  // (T obj, seperators = true)
-    std::string octal{utility::as_octal(c)};    // Does not have seperators
-    std::string hexadecimal{utility::as_hex(c, false)};
+    std::string octal{utility::as_octal(c)};    // Does not have separators
+    std::string hexadecimal{utility::as_hex(c, false)}; // false = no separators
     std::string decimal{utility::as_decimal(c)};
 
     assert(binary == "0010 0000 1010 1100");
@@ -495,3 +482,46 @@ int main() {
 }
 ```
 
+### from_file.hpp
+Retrieves a delimited dataset from a file.
+```cpp
+#include <utility/from_file.hpp>
+int main() {
+    // Defaults to vector of int, whitespace delimiters.
+    std::vector<int> foo = utility::from_file("my_data.txt");
+    
+    // Provide a list of delimiters as a string.
+    auto bar = utility::from_file("my_data.txt", ",;\n");
+    
+    // Override the container type and value type to be parsed.
+    auto baz = utility::from_file<std::vector<std::string>>("my_data.txt");
+}
+```
+
+### to_file.hpp
+Writes a container of data to a file, with given delimiters.
+```cpp
+#include <utility/to_file.hpp>
+int main() {
+    auto values = std::vector<int>{1, 2, 3, 4, 5, 6, 7, 8, 9, 0};
+    
+    // Inserts default delimiter of " " space.
+    utility::to_file(values, "values.txt");
+    
+    // Override default delimiter.
+    utility::to_file(values, "values.txt", ", ");
+}
+```
+
+### primes.hpp
+Generate container of prime values from 2 up to a given limit. Has an upper
+limit of about 1,000,000,000 before becoming prohibitivly slow.
+```cpp
+#include <utility/primes.hpp>
+int main() {
+    auto primes = utility::generate_primes<10>();
+    
+    auto expected = std::vector<int>{2, 3, 5, 7};
+    assert(expected == primes);
+}
+```

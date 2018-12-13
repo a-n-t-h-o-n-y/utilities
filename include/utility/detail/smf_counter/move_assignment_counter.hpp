@@ -1,5 +1,5 @@
-#ifndef UTILITY_DETAIL_MOVE_ASSIGNMENT_COUNTER_HPP
-#define UTILITY_DETAIL_MOVE_ASSIGNMENT_COUNTER_HPP
+#ifndef UTILITY_DETAIL_SMF_COUNTER_MOVE_ASSIGNMENT_COUNTER_HPP
+#define UTILITY_DETAIL_SMF_COUNTER_MOVE_ASSIGNMENT_COUNTER_HPP
 #include <string>
 
 #include <utility/count_t.hpp>
@@ -11,8 +11,9 @@ namespace detail {
 template <typename>
 class Move_assignment_counter {
    public:
-    /// Increment the counter by one. Should be called by the class inheriting
-    /// this class in the move assignment operator.
+    /// Increment the counter by one.
+    /** Should be called by the class inheriting this class in the move
+     *  assignment operator. */
     static void increment_move_assignment_count();
 
     /// Retrieve number of times the move assignment operator has been called.
@@ -48,8 +49,8 @@ void Move_assignment_counter<T>::reset_move_assignment_count() {
 
 template <typename T>
 std::string Move_assignment_counter<T>::move_assignment_count_as_string() {
-    std::string type_name{get_type_info<T>()};
-    std::string result{type_name};
+    const auto type_name = std::string{get_type_info<T>()};
+    auto result = type_name;
     result.append("& operator=(");
     result.append(type_name);
     result.append("&&) called ");
@@ -60,4 +61,4 @@ std::string Move_assignment_counter<T>::move_assignment_count_as_string() {
 
 }  // namespace detail
 }  // namespace utility
-#endif  // UTILITY_DETAIL_MOVE_ASSIGNMENT_COUNTER_HPP
+#endif  // UTILITY_DETAIL_SMF_COUNTER_MOVE_ASSIGNMENT_COUNTER_HPP

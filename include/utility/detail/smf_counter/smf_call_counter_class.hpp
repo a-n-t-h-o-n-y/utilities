@@ -1,23 +1,26 @@
-#ifndef UTILITY_SMF_CALL_COUNTER_CLASS_HPP
-#define UTILITY_SMF_CALL_COUNTER_CLASS_HPP
+#ifndef UTILITY_DETAIL_SMF_COUNTER_SMF_CALL_COUNTER_CLASS_HPP
+#define UTILITY_DETAIL_SMF_COUNTER_SMF_CALL_COUNTER_CLASS_HPP
 #include <string>
+#include <type_traits>
 #include <utility>
 
-#include <utility/detail/smf_counter/assignment_counter.hpp>
-#include <utility/detail/smf_counter/copy_assignment_counter.hpp>
-#include <utility/detail/smf_counter/copy_cstr_counter.hpp>
-#include <utility/detail/smf_counter/default_cstr_counter.hpp>
-#include <utility/detail/smf_counter/destructor_counter.hpp>
-#include <utility/detail/smf_counter/direct_cstr_counter.hpp>
-#include <utility/detail/smf_counter/move_assignment_counter.hpp>
-#include <utility/detail/smf_counter/move_cstr_counter.hpp>
+#include "../conjunction.hpp"
+#include "assignment_counter.hpp"
+#include "copy_assignment_counter.hpp"
+#include "copy_cstr_counter.hpp"
+#include "default_cstr_counter.hpp"
+#include "destructor_counter.hpp"
+#include "direct_cstr_counter.hpp"
+#include "move_assignment_counter.hpp"
+#include "move_cstr_counter.hpp"
+#include "smf_call_counter_fwd.hpp"
 
 namespace utility {
 
 template <typename T>
 using Is_class = typename std::enable_if<
-    std::conjunction<std::is_class<T>,
-                     std::negation<std::is_aggregate<T>>>::value>::type;
+    detail::Conjunction<std::is_class<T>,
+                        std::negation<std::is_aggregate<T>>>::value>::type;
 
 /// Specialization for Non-aggregate class types.
 template <typename T>
@@ -35,8 +38,7 @@ class SMF_call_counter<T, Is_class<T>>
     /// Increment the Default Constructor counter and default construct T.
     SMF_call_counter();
 
-    /// Increment the Direct Constructor counter for Args and construct T with
-    /// args...
+    /// Increment the Direct Cnstr counter for Args and construct T with args...
     template <typename... Args>
     SMF_call_counter(Args&&... args);
 
@@ -181,41 +183,38 @@ SMF_call_counter<T, Is_class<T>>::~SMF_call_counter() {
 // RESET_COUNTS()
 template <typename T>
 void SMF_call_counter<T, Is_class<T>>::reset_counts() {
-    detail::Default_cstr_counter<T>::reset_default_cstr_count();
-    detail::Direct_cstr_counter<T>::reset_direct_cstr_counts();
-    detail::Copy_cstr_counter<T>::reset_copy_cstr_count();
-    detail::Move_cstr_counter<T>::reset_move_cstr_count();
-    detail::Copy_assignment_counter<T>::reset_copy_assignment_count();
-    detail::Move_assignment_counter<T>::reset_move_assignment_count();
-    detail::Assignment_counter<T>::reset_assignment_counts();
-    detail::Destructor_counter<T>::reset_destructor_count();
+    using namespace detail;
+    Default_cstr_counter<T>::reset_default_cstr_count();
+    Direct_cstr_counter<T>::reset_direct_cstr_counts();
+    Copy_cstr_counter<T>::reset_copy_cstr_count();
+    Move_cstr_counter<T>::reset_move_cstr_count();
+    Copy_assignment_counter<T>::reset_copy_assignment_count();
+    Move_assignment_counter<T>::reset_move_assignment_count();
+    Assignment_counter<T>::reset_assignment_counts();
+    Destructor_counter<T>::reset_destructor_count();
 }
 
 // ALL_COUNTS_AS_STRING()
 template <typename T>
 std::string SMF_call_counter<T, Is_class<T>>::all_counts_as_string() {
-    const char nl{'\n'};
-    std::string description;
+    const auto nl = '\n';
+    auto description = std::string{""};
+    using namespace detail;
+    description.append(Default_cstr_counter<T>::default_cstr_count_as_string() +
+                       nl);
+    description.append(Direct_cstr_counter<T>::direct_cstr_counts_as_string() +
+                       nl);
+    description.append(Copy_cstr_counter<T>::copy_cstr_count_as_string() + nl);
+    description.append(Move_cstr_counter<T>::move_cstr_count_as_string() + nl);
     description.append(
-        detail::Default_cstr_counter<T>::default_cstr_count_as_string() + nl);
+        Copy_assignment_counter<T>::copy_assignment_count_as_string() + nl);
     description.append(
-        detail::Direct_cstr_counter<T>::direct_cstr_counts_as_string() + nl);
-    description.append(
-        detail::Copy_cstr_counter<T>::copy_cstr_count_as_string() + nl);
-    description.append(
-        detail::Move_cstr_counter<T>::move_cstr_count_as_string() + nl);
-    description.append(
-        detail::Copy_assignment_counter<T>::copy_assignment_count_as_string() +
-        nl);
-    description.append(
-        detail::Move_assignment_counter<T>::move_assignment_count_as_string() +
-        nl);
-    description.append(
-        detail::Assignment_counter<T>::Assignment_counts_as_string() + nl);
-    description.append(
-        detail::Destructor_counter<T>::destructor_count_as_string());
+        Move_assignment_counter<T>::move_assignment_count_as_string() + nl);
+    description.append(Assignment_counter<T>::Assignment_counts_as_string() +
+                       nl);
+    description.append(Destructor_counter<T>::destructor_count_as_string());
     return description;
 }
 
 }  // namespace utility
-#endif  // UTILITY_SMF_CALL_COUNTER_CLASS_HPP
+#endif  // UTILITY_DETAIL_SMF_COUNTER_SMF_CALL_COUNTER_CLASS_HPP

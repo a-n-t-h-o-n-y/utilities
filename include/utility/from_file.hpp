@@ -43,7 +43,7 @@ class Delimiters : public std::ctype<Char_t> {
 
 }  // namespace detail
 
-/// Retrieves values from a delimited file.
+/// Retrieves values from a delimited file, into a given Container_t object.
 template <typename Container_t = std::vector<int>>
 auto from_file(const std::string& filename,
                const std::string& delimiters = " \n\f\r\t\v") {
@@ -54,7 +54,7 @@ auto from_file(const std::string& filename,
     ifs.imbue(std::locale{
         ifs.getloc(),
         new detail::Delimiters<typename Filestream_t::char_type>{delimiters}});
-    // Delimiters ^^ is not leaked.
+    // Delimiters ^^ object is not leaked.
 
     auto container = Container_t{};
     std::copy(std::istream_iterator<Value_t>(ifs),

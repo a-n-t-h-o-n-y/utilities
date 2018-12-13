@@ -1,20 +1,21 @@
-#ifndef UTILITY_SMF_CALL_COUNTER_BUILTIN_HPP
-#define UTILITY_SMF_CALL_COUNTER_BUILTIN_HPP
+#ifndef UTILITY_DETAIL_SMF_COUNTER_SMF_CALL_COUNTER_BUILTIN_HPP
+#define UTILITY_DETAIL_SMF_COUNTER_SMF_CALL_COUNTER_BUILTIN_HPP
 #include <string>
 #include <type_traits>
-#include <utility>
 
-#include <utility/detail/smf_counter/copy_assignment_counter.hpp>
-#include <utility/detail/smf_counter/copy_cstr_counter.hpp>
-#include <utility/detail/smf_counter/default_cstr_counter.hpp>
-#include <utility/detail/smf_counter/destructor_counter.hpp>
+#include "../conjunction.hpp"
+#include "copy_assignment_counter.hpp"
+#include "copy_cstr_counter.hpp"
+#include "default_cstr_counter.hpp"
+#include "destructor_counter.hpp"
+#include "smf_call_counter_fwd.hpp"
 
 namespace utility {
 
 template <typename T>
 using Is_builtin = typename std::enable_if<
-    std::conjunction<std::negation<std::is_class<T>>,
-                     std::negation<std::is_array<T>>>::value>::type;
+    detail::Conjunction<std::negation<std::is_class<T>>,
+                        std::negation<std::is_array<T>>>::value>::type;
 
 /// Specialization for Built-in types which are not arrays.
 template <typename T>
@@ -121,28 +122,27 @@ SMF_call_counter<T, Is_builtin<T>>::operator T&() {
 // RESET_COUNTS()
 template <typename T>
 void SMF_call_counter<T, Is_builtin<T>>::reset_counts() {
-    detail::Default_cstr_counter<T>::reset_default_cstr_count();
-    detail::Copy_cstr_counter<T>::reset_copy_cstr_count();
-    detail::Copy_assignment_counter<T>::reset_copy_assignment_count();
-    detail::Destructor_counter<T>::reset_destructor_count();
+    using namespace detail;
+    Default_cstr_counter<T>::reset_default_cstr_count();
+    Copy_cstr_counter<T>::reset_copy_cstr_count();
+    Copy_assignment_counter<T>::reset_copy_assignment_count();
+    Destructor_counter<T>::reset_destructor_count();
 }
 
 // ALL_COUNTRS_AS_STRING()
 template <typename T>
 std::string SMF_call_counter<T, Is_builtin<T>>::all_counts_as_string() {
-    const char nl{'\n'};
-    std::string description;
+    const auto nl = '\n';
+    auto description = std::string{""};
+    using namespace detail;
+    description.append(Default_cstr_counter<T>::default_cstr_count_as_string() +
+                       nl);
+    description.append(Copy_cstr_counter<T>::copy_cstr_count_as_string() + nl);
     description.append(
-        detail::Default_cstr_counter<T>::default_cstr_count_as_string() + nl);
-    description.append(
-        detail::Copy_cstr_counter<T>::copy_cstr_count_as_string() + nl);
-    description.append(
-        detail::Copy_assignment_counter<T>::copy_assignment_count_as_string() +
-        nl);
-    description.append(
-        detail::Destructor_counter<T>::destructor_count_as_string());
+        Copy_assignment_counter<T>::copy_assignment_count_as_string() + nl);
+    description.append(Destructor_counter<T>::destructor_count_as_string());
     return description;
 }
 
 }  // namespace utility
-#endif  // UTILITY_SMF_CALL_COUNTER_BUILTIN_HPP
+#endif  // UTILITY_DETAIL_SMF_COUNTER_SMF_CALL_COUNTER_BUILTIN_HPP

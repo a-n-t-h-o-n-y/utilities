@@ -12,12 +12,12 @@ namespace detail {
 namespace usign {
 
 void inplace_half(std::string& value, int base) {
-    int digit{0};
-    const int kDivisor{2};
-    for (std::size_t i{0}; i < value.size(); ++i) {
+    auto digit = 0;
+    const auto divisor = 2;
+    for (auto i = std::size_t{0}; i < value.size(); ++i) {
         digit += char_to_int(value[i]);
-        value[i] = int_to_char(digit / kDivisor);
-        digit = (digit % kDivisor) * base;
+        value[i] = int_to_char(digit / divisor);
+        digit = (digit % divisor) * base;
     }
     if (value.size() > 1 && value.front() == '0') {
         value.erase(0, 1);
@@ -26,9 +26,9 @@ void inplace_half(std::string& value, int base) {
 
 template <std::size_t N>
 std::bitset<N> any_base_to_binary(std::string& value, int base) {
-    std::bitset<N> result;
-    for (std::size_t i{0}; i < N && value != "0"; ++i) {
-        bool digit{is_odd(value)};
+    auto result = std::bitset<N>{};
+    for (auto i = std::size_t{0}; i < N && value != "0"; ++i) {
+        const auto digit = is_odd(value);
         result[i] = digit;
         inplace_half(value, base);
     }
@@ -41,7 +41,7 @@ std::bitset<N> string_to_bitset(std::string value) {
     if (value.empty()) {
         return std::bitset<N>{0};
     }
-    int base{10};
+    auto base = 10;
     if (value[0] == '0' && value.size() > 1) {
         // BINARY
         if (std::tolower(value[1]) == 'b') {
@@ -63,5 +63,4 @@ std::bitset<N> string_to_bitset(std::string value) {
 }  // namespace usign
 }  // namespace detail
 }  // namespace utility
-
 #endif  // UTILITY_DETAIL_USIGN_STRING_TO_BITSET_HPP

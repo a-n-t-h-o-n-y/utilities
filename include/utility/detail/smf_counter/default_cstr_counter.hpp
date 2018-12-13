@@ -1,5 +1,5 @@
-#ifndef UTILITY_DETAIL_DEFAULT_CSTR_COUNTER_HPP
-#define UTILITY_DETAIL_DEFAULT_CSTR_COUNTER_HPP
+#ifndef UTILITY_DETAIL_SMF_COUNTER_DEFAULT_CSTR_COUNTER_HPP
+#define UTILITY_DETAIL_SMF_COUNTER_DEFAULT_CSTR_COUNTER_HPP
 #include <string>
 
 #include <utility/count_t.hpp>
@@ -11,8 +11,9 @@ namespace detail {
 template <typename>
 class Default_cstr_counter {
    public:
-    /// Increment the counter by one. Should be called by the class inheriting
-    /// this class in the default constructor.
+    /// Increment the counter by one.
+    /** Should be called by the class inheriting this class in the default
+     *  constructor. */
     static void increment_default_cstr_count();
 
     /// Retrieve number of times the default constructor has been called.
@@ -48,7 +49,7 @@ void Default_cstr_counter<T>::reset_default_cstr_count() {
 
 template <typename T>
 std::string Default_cstr_counter<T>::default_cstr_count_as_string() {
-    std::string result{get_type_info<T>()};
+    auto result = std::string{get_type_info<T>()};
     result.append("() called ");
     result.append(std::to_string(default_cstr_count_));
     result.append(" times.");
@@ -57,4 +58,4 @@ std::string Default_cstr_counter<T>::default_cstr_count_as_string() {
 
 }  // namespace detail
 }  // namespace utility
-#endif  // UTILITY_DETAIL_DEFAULT_CSTR_COUNTER_HPP
+#endif  // UTILITY_DETAIL_SMF_COUNTER_DEFAULT_CSTR_COUNTER_HPP

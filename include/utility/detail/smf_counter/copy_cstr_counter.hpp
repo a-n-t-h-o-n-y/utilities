@@ -1,5 +1,5 @@
-#ifndef UTILITY_DETAIL_COPY_CSTR_COUNTER_HPP
-#define UTILITY_DETAIL_COPY_CSTR_COUNTER_HPP
+#ifndef UTILITY_DETAIL_SMF_COUNTER_COPY_CSTR_COUNTER_HPP
+#define UTILITY_DETAIL_SMF_COUNTER_COPY_CSTR_COUNTER_HPP
 #include <string>
 
 #include <utility/count_t.hpp>
@@ -11,8 +11,9 @@ namespace detail {
 template <typename>
 class Copy_cstr_counter {
    public:
-    /// Increment the counter by one. Should be called by the class inheriting
-    /// this class in the copy constructor.
+    /// Increment the counter by one.
+    /** Should be called by the class inheriting this class in the copy
+     *  constructor. */
     static void increment_copy_cstr_count();
 
     /// Retrieve number of times the copy constructor has been called.
@@ -48,8 +49,8 @@ void Copy_cstr_counter<T>::reset_copy_cstr_count() {
 
 template <typename T>
 std::string Copy_cstr_counter<T>::copy_cstr_count_as_string() {
-    std::string type_name{get_type_info<T>()};
-    std::string result{type_name};
+    const auto type_name = std::string{get_type_info<T>()};
+    auto result = type_name;
     result.append("(");
     result.append("const ");
     result.append(type_name);
@@ -61,4 +62,4 @@ std::string Copy_cstr_counter<T>::copy_cstr_count_as_string() {
 
 }  // namespace detail
 }  // namespace utility
-#endif  // UTILITY_DETAIL_COPY_CSTR_COUNTER_HPP
+#endif  // UTILITY_DETAIL_SMF_COUNTER_COPY_CSTR_COUNTER_HPP

@@ -1,6 +1,6 @@
 #ifndef UTILITY_COMPOUND_TRAIT_HPP
 #define UTILITY_COMPOUND_TRAIT_HPP
-#include <type_traits>
+#include "detail/conjunction.hpp"
 
 namespace utility {
 
@@ -10,7 +10,7 @@ namespace utility {
 template <template <typename> typename... Traits>
 struct Compound_trait {
     template <typename T>
-    using type = std::conjunction<Traits<T>...>;
+    using type = detail::Conjunction<Traits<T>...>;
 };
 
 }  // namespace utility

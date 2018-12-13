@@ -1,5 +1,5 @@
-#ifndef UTILITY_DETAIL_DESTRUCTOR_COUNTER_HPP
-#define UTILITY_DETAIL_DESTRUCTOR_COUNTER_HPP
+#ifndef UTILITY_DETAIL_SMF_COUNTER_DESTRUCTOR_COUNTER_HPP
+#define UTILITY_DETAIL_SMF_COUNTER_DESTRUCTOR_COUNTER_HPP
 #include <string>
 
 #include <utility/count_t.hpp>
@@ -11,8 +11,9 @@ namespace detail {
 template <typename>
 class Destructor_counter {
    public:
-    /// Increment the counter by one. Should be called by the class inheriting
-    /// this class in the destructor.
+    /// Increment the counter by one.
+    /** Should be called by the class inheriting this class in the destructor.
+     * */
     static void increment_destructor_count();
 
     /// Retrieve number of times the destructor has been called.
@@ -48,7 +49,7 @@ void Destructor_counter<T>::reset_destructor_count() {
 
 template <typename T>
 std::string Destructor_counter<T>::destructor_count_as_string() {
-    std::string result{"~"};
+    auto result = std::string{"~"};
     result.append(get_type_info<T>());
     result.append("() called ");
     result.append(std::to_string(destructor_count_));
@@ -58,4 +59,4 @@ std::string Destructor_counter<T>::destructor_count_as_string() {
 
 }  // namespace detail
 }  // namespace utility
-#endif  // UTILITY_DETAIL_DESTRUCTOR_COUNTER_HPP
+#endif  // UTILITY_DETAIL_SMF_COUNTER_DESTRUCTOR_COUNTER_HPP

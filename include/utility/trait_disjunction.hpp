@@ -4,9 +4,9 @@
 
 namespace utility {
 
-/// Type trait to check a trait against multiple types, providing a static
-/// `value` member if at least one type is true to the trait. Logical OR.
-/// Requires C++17.
+/// Type trait to check a trait against multiple types
+/** Providing a static `value` member if at least one type is true to the trait.
+ *  Logical OR. Requires C++17. */
 template <template <typename> typename Trait,
           typename Type,
           typename... Trailing_types>

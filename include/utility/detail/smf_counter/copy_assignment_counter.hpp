@@ -1,5 +1,5 @@
-#ifndef UTILITY_DETAIL_COPY_ASSIGNMENT_COUNTER_HPP
-#define UTILITY_DETAIL_COPY_ASSIGNMENT_COUNTER_HPP
+#ifndef UTILITY_DETAIL_SMF_COUNTER_COPY_ASSIGNMENT_COUNTER_HPP
+#define UTILITY_DETAIL_SMF_COUNTER_COPY_ASSIGNMENT_COUNTER_HPP
 #include <string>
 
 #include <utility/count_t.hpp>
@@ -11,8 +11,9 @@ namespace detail {
 template <typename>
 class Copy_assignment_counter {
    public:
-    /// Increment the counter by one. Should be called by the class inheriting
-    /// this class in the copy assignment operator.
+    /// Increment the counter by one.
+    /** Should be called by the class inheriting this class in the copy
+     *  assignment operator. */
     static void increment_copy_assignment_count();
 
     /// Retrieve number of times the copy assignment operator has been called.
@@ -48,8 +49,8 @@ void Copy_assignment_counter<T>::reset_copy_assignment_count() {
 
 template <typename T>
 std::string Copy_assignment_counter<T>::copy_assignment_count_as_string() {
-    std::string type_name{get_type_info<T>()};
-    std::string result{type_name};
+    const auto type_name = std::string{get_type_info<T>()};
+    auto result = type_name;
     result.append("& operator=(const ");
     result.append(type_name);
     result.append("&) called ");
@@ -60,4 +61,4 @@ std::string Copy_assignment_counter<T>::copy_assignment_count_as_string() {
 
 }  // namespace detail
 }  // namespace utility
-#endif  // UTILITY_DETAIL_COPY_ASSIGNMENT_COUNTER_HPP
+#endif  // UTILITY_DETAIL_SMF_COUNTER_COPY_ASSIGNMENT_COUNTER_HPP
