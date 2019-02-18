@@ -210,7 +210,7 @@ std::string SMF_call_counter<T, Is_class<T>>::all_counts_as_string() {
         Copy_assignment_counter<T>::copy_assignment_count_as_string() + nl);
     description.append(
         Move_assignment_counter<T>::move_assignment_count_as_string() + nl);
-    description.append(Assignment_counter<T>::Assignment_counts_as_string() +
+    description.append(Assignment_counter<T>::assignment_counts_as_string() +
                        nl);
     description.append(Destructor_counter<T>::destructor_count_as_string());
     return description;
