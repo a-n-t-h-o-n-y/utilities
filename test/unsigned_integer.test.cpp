@@ -144,7 +144,7 @@ TEST(UnsignedIntegerTest, StringOutputDecimal) {
         "79716304835356329624224137215",
         i6.to_string());
 
-    // The below works, but takes around 2 seconds.
+    // Takes too long(~800ms)
     // Unsigned_integer<8192> i7{
     //     "1090748135619415929462984244733782862448264161996232692431832786189721"
     //     "3318491192952162642345252019872239572917961570252731098708201771840636"

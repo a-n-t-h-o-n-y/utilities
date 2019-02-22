@@ -3,6 +3,8 @@ project(libutility LANGUAGES CXX)
 include(GNUInstallDirs)
 enable_testing()
 
+add_subdirectory(external/Signals)
+
 # CREATE UTILITY LIBRARY
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 add_library(libutility INTERFACE)
@@ -13,8 +15,9 @@ target_include_directories(libutility
         $<INSTALL_INTERFACE:include>
 )
 
+target_link_libraries(libutility INTERFACE signals)
+target_compile_options(libutility INTERFACE -Wall -Wextra)
 target_compile_features(libutility INTERFACE cxx_std_17)
-
 
 # LIBRARY INSTALLATION
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -

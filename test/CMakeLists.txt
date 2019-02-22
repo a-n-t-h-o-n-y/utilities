@@ -9,7 +9,8 @@ set_property(TARGET gtest PROPERTY
 
 # CREATE TESTS
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-add_executable(tests
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+add_executable(utility_tests # EXCLUDE_FROM_ALL
     # async_trigger_test.cpp
     unsigned_integer.test.cpp
     strong_guarantee.test.cpp
@@ -30,12 +31,18 @@ add_executable(tests
     memory_view.test.cpp
     narrow_cast.test.cpp
     random_value.test.cpp
+    bit_array.test.cpp
 )
 
 find_package(Threads REQUIRED)
 
-target_link_libraries(tests PRIVATE gtest libutility ${CMAKE_THREAD_LIBS_INIT})
-target_compile_features(tests PRIVATE cxx_std_17)
-target_compile_options(tests PRIVATE -Wall -Wextra)
+target_link_libraries(utility_tests
+    PRIVATE
+        gtest
+        libutility
+        ${CMAKE_THREAD_LIBS_INIT}
+)
+target_compile_features(utility_tests PRIVATE cxx_std_17)
+target_compile_options(utility_tests PRIVATE -Wall -Wextra)
 
-add_test(tests tests)
+add_test(NAME utility COMMAND utility_tests)
