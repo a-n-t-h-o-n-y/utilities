@@ -533,7 +533,11 @@ bool type.
 #include <utility/bit_array.hpp>
 int main() {
     // Set first bit to true, others to false.
-    Bit_array<std::uint64_t[16'384]> bits{true};
+    utility::Bit_array<int> int_bits{true};
+    assert(int_bits.size() == sizeof(int) * CHAR_BIT);
+    assert(utility::Bit_array<int>::size() == sizeof(int) * CHAR_BIT);
+    
+    utility::Bit_array<std::uint64_t[16'384]> bits{true};
     for (decltype(bits)::Size_t i{1}; i < bits.size(); ++i) {
         bits.set(i, !bits.at(i - 1));
     }
