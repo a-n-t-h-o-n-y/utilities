@@ -1,5 +1,24 @@
 [Reference](https://a-n-t-h-o-n-y.github.io/utilities/annotated.html)
 
+# Benchmarks
+```
+cmake .. -DBUILD_BENCHMARK=ON
+make utility_bench
+make bench_baseline
+make bench_compare
+```
+ 
+# Tests
+```
+make utility_tests
+./test/utility_tests
+```
+
+# Install
+```
+make install
+```
+
 # Scripts
 ### cppinit.py
 Initialized a directory with `CMakeLists.txt`, `main.cpp`, `test.cpp` and a

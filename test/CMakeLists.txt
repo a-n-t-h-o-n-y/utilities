@@ -10,7 +10,7 @@ set_property(TARGET gtest PROPERTY
 # CREATE TESTS
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
-add_executable(utility_tests # EXCLUDE_FROM_ALL
+add_executable(utility_tests EXCLUDE_FROM_ALL
     # async_trigger_test.cpp
     unsigned_integer.test.cpp
     strong_guarantee.test.cpp

@@ -1,3 +1,6 @@
 [submodule "external/Signals"]
 	path = external/Signals
 	url = https://github.com/a-n-t-h-o-n-y/Signals.git
+[submodule "external/benchmark"]
+	path = external/benchmark
+	url = https://github.com/google/benchmark.git
