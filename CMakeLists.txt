@@ -31,10 +31,6 @@ target_include_directories(libutility INTERFACE include/)
 target_compile_options(libutility INTERFACE -Wall -Wextra)
 target_compile_features(libutility INTERFACE cxx_std_17)
 
-# LIBRARY INSTALLATION
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-install(DIRECTORY include/ DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
-
 # ADD TESTS
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 add_subdirectory(test)

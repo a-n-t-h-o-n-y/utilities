@@ -16,7 +16,7 @@ make utility_tests
 
 # Install
 ```
-make install
+sudo ./install.py
 ```
 
 # Scripts
