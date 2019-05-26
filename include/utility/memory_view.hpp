@@ -31,7 +31,7 @@ std::string as_decimal(const T& value, bool separators = true) {
 }
 
 /// Returns the Octal representation of the given object's raw data as a
-/// string. No separators availiable.
+/// string. No separators available.
 template <typename T>
 std::string as_octal(const T& value) {
     return as_base<Representation::Octal>(value, false);

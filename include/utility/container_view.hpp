@@ -11,10 +11,10 @@ namespace utility {
 template <typename Input_iterator_t>
 std::string container_view(Input_iterator_t first, Input_iterator_t last) {
     auto ss = std::stringstream{"{", std::ios_base::app | std::ios_base::out};
-    auto seperator = std::string{""};
+    auto separator = std::string{""};
     while (first != last) {
-        ss << seperator << *first;
-        seperator = ", ";
+        ss << separator << *first;
+        separator = ", ";
         ++first;
     }
     ss << "}";

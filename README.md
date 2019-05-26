@@ -311,7 +311,7 @@ int main() {
 ```
 
 ### type_info.hpp
-Provides unmangled names as well as cv-qualified and reference type infomation
+Provides unmangled names as well as cv-qualified and reference type information
 for a provided type.
 ```cpp
 #include <utility/type_info.hpp>
@@ -446,13 +446,13 @@ int main() {
 }
 ```
 
-### thousands_seperator.hpp
-Convinience function to add a seperator at every thousands place in a number.
+### thousands_separator.hpp
+Convinience function to add a separator at every thousands place in a number.
 ```cpp
-#include <utility/thousands_seperator.hpp>
+#include <utility/thousands_separator.hpp>
 int main() {
     const int value{123456789};
-    std::string formatted_value{utility::thousands_seperator(value)};
+    std::string formatted_value{utility::thousands_separator(value)};
     assert(formatted_value == "123,456,789");
 }
 ```

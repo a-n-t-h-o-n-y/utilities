@@ -108,11 +108,11 @@ std::string Direct_cstr_counter<T>::direct_cstr_count_as_string() {
     const auto parameters = Parameter_list{utility::get_type_info<Args>()...};
     auto description = std::string{utility::get_type_info<T>()};
     description.append("{");
-    auto comma_seperator = std::string{""};
+    auto comma_separator = std::string{""};
     for (const auto& type_name : parameters) {
-        description.append(comma_seperator);
+        description.append(comma_separator);
         description.append(type_name);
-        comma_seperator = ", ";
+        comma_separator = ", ";
     }
     description.append("}");
     description.append(" called ");
@@ -131,11 +131,11 @@ std::string Direct_cstr_counter<T>::direct_cstr_counts_as_string() {
     for (const auto& parameter_count : direct_cstr_counts_) {
         description.append(utility::get_type_info<T>());
         description.append("{");
-        auto comma_seperator = std::string{""};
+        auto comma_separator = std::string{""};
         for (const auto& type_name : parameter_count.first) {
-            description.append(comma_seperator);
+            description.append(comma_separator);
             description.append(type_name);
-            comma_seperator = ", ";
+            comma_separator = ", ";
         }
         description.append("} called ");
         description.append(std::to_string(parameter_count.second));

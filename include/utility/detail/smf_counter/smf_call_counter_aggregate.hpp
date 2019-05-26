@@ -96,7 +96,7 @@ SMF_call_counter<T, Is_aggregate<T>>::SMF_call_counter(
 }
 
 // COPY CONSTRUCTOR
-// Supresses the variadic template from handling non-const copies.
+// Suppresses the variadic template from handling non-const copies.
 template <typename T>
 SMF_call_counter<T, Is_aggregate<T>>::SMF_call_counter(SMF_call_counter& other)
     : T{other} {

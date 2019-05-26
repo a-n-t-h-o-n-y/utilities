@@ -108,7 +108,7 @@ SMF_call_counter<T, Is_class<T>>::SMF_call_counter(
 }
 
 // COPY CONSTRUCTOR
-// Supresses the variadic template from handling non-const copies.
+// Suppresses the variadic template from handling non-const copies.
 template <typename T>
 SMF_call_counter<T, Is_class<T>>::SMF_call_counter(SMF_call_counter& other)
     : SMF_call_counter{const_cast<const SMF_call_counter&>(other)} {}
@@ -149,7 +149,7 @@ SMF_call_counter<T, Is_class<T>>& SMF_call_counter<T, Is_class<T>>::operator=(
     return *this;
 }
 
-// Supresses template from handling non-const assignments.
+// Suppresses template from handling non-const assignments.
 template <typename T>
 SMF_call_counter<T, Is_class<T>>& SMF_call_counter<T, Is_class<T>>::operator=(
     SMF_call_counter& other) {

@@ -59,7 +59,7 @@ Container_t random_values(std::size_t n,
 }
 
 /// Generate a container of random values.
-/** Conatiner_t != array; value_type == float type.
+/** Container_t != array; value_type == float type.
  * Bounds are inclusive. \p n = number of values to generate. */
 template <typename Container_t,
           typename std::enable_if<

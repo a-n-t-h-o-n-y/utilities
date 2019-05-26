@@ -1,5 +1,5 @@
-#ifndef UTILITY_THOUSANDS_SEPERATOR_HPP
-#define UTILITY_THOUSANDS_SEPERATOR_HPP
+#ifndef UTILITY_THOUSANDS_SEPARATOR_HPP
+#define UTILITY_THOUSANDS_SEPARATOR_HPP
 #include <iomanip>
 #include <locale>
 #include <sstream>
@@ -18,7 +18,7 @@ inline constexpr bool is_string_type_v =
 /// Insert locale specific thousands seperators into `value`. Returns a string.
 /** Requires C++17 */
 template <typename T>
-std::string thousands_seperator(T value) {
+std::string thousands_separator(T value) {
     auto ss = std::stringstream{};
     ss.imbue(std::locale{""});
     ss << std::fixed;
@@ -36,4 +36,4 @@ std::string thousands_seperator(T value) {
 }
 
 }  // namespace utility
-#endif  // UTILITY_THOUSANDS_SEPERATOR_HPP
+#endif  // UTILITY_THOUSANDS_SEPARATOR_HPP

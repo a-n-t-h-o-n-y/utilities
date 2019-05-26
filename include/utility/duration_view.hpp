@@ -4,7 +4,7 @@
 #include <sstream>
 #include <string>
 
-#include <utility/thousands_seperator.hpp>
+#include <utility/thousands_separator.hpp>
 
 #include "detail/time_unit_string.hpp"
 #include "detail/under_digit_limit.hpp"
@@ -15,12 +15,12 @@ namespace utility {
 /// Requires C++17
 template <typename Time_unit, typename Duration>
 std::string duration_view(const Duration& duration,
-                          bool thousands_seperator = true) {
+                          bool thousands_separator = true) {
     auto ss = std::stringstream{};
     auto ticks = std::chrono::duration_cast<Time_unit>(duration).count();
     auto ticks_str = std::to_string(ticks);
-    if (thousands_seperator) {
-        ticks_str = utility::thousands_seperator(ticks_str);
+    if (thousands_separator) {
+        ticks_str = utility::thousands_separator(ticks_str);
     }
     ss << ticks_str;
     auto unit_name = detail::time_unit_string<Time_unit>();
@@ -40,21 +40,21 @@ std::string duration_view(const Duration& duration,
 template <typename Duration>
 std::string duration_view(const Duration& duration,
                           int digit_limit,
-                          bool thousands_seperator = true) {
+                          bool thousands_separator = true) {
     using namespace std::chrono;
     using detail::is_under_digit_limit;
     if (is_under_digit_limit<nanoseconds>(duration, digit_limit)) {
-        return duration_view<nanoseconds>(duration, thousands_seperator);
+        return duration_view<nanoseconds>(duration, thousands_separator);
     } else if (is_under_digit_limit<microseconds>(duration, digit_limit)) {
-        return duration_view<microseconds>(duration, thousands_seperator);
+        return duration_view<microseconds>(duration, thousands_separator);
     } else if (is_under_digit_limit<milliseconds>(duration, digit_limit)) {
-        return duration_view<milliseconds>(duration, thousands_seperator);
+        return duration_view<milliseconds>(duration, thousands_separator);
     } else if (is_under_digit_limit<seconds>(duration, digit_limit)) {
-        return duration_view<seconds>(duration, thousands_seperator);
+        return duration_view<seconds>(duration, thousands_separator);
     } else if (is_under_digit_limit<minutes>(duration, digit_limit)) {
-        return duration_view<minutes>(duration, thousands_seperator);
+        return duration_view<minutes>(duration, thousands_separator);
     } else {
-        return duration_view<hours>(duration, thousands_seperator);
+        return duration_view<hours>(duration, thousands_separator);
     }
 }
 

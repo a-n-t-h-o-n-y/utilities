@@ -24,7 +24,7 @@ add_executable(utility_tests EXCLUDE_FROM_ALL
     compound_trait.test.cpp
     property.test.cpp
     duration_view.test.cpp
-    thousands_seperator.test.cpp
+    thousands_separator.test.cpp
     primes.test.cpp
     from_file.test.cpp
     to_file.test.cpp
