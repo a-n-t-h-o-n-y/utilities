@@ -19,12 +19,13 @@ add_executable(utility_tests EXCLUDE_FROM_ALL
     smf_call_counter_builtin.test.cpp
     smf_call_counter_aggregate.test.cpp
     type_info.test.cpp
+    type_view.test.cpp
     trait_conjunction.test.cpp
     trait_disjunction.test.cpp
     compound_trait.test.cpp
     property.test.cpp
     duration_view.test.cpp
-    thousands_separator.test.cpp
+    digit_separator.test.cpp
     primes.test.cpp
     from_file.test.cpp
     to_file.test.cpp

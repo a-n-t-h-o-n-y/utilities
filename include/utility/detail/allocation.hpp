@@ -10,11 +10,12 @@
 namespace utility {
 namespace detail {
 
-static std::uint64_t total_allocs_{0};
-static std::uint64_t total_deallocs_{0};
-static std::uint64_t total_bytes_{0};
+static auto total_allocs_   = std::uint64_t{0};
+static auto total_deallocs_ = std::uint64_t{0};
+static auto total_bytes_    = std::uint64_t{0};
 
-void output_totals() {
+void output_totals()
+{
     stream_
         << "- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -\n";
     stream_ << "Total Allocations:     " << total_allocs_ << '\n';
@@ -24,7 +25,8 @@ void output_totals() {
 
 static int register_atexit_{std::atexit(output_totals)};
 
-void* generic_allocator(std::size_t bytes, std::ostream& os) {
+void* generic_allocator(std::size_t bytes, std::ostream& os)
+{
     void* p = std::malloc(bytes);
     if (p == nullptr) {
         os << "Allocation of " << bytes << " bytes failed.\n";
@@ -36,7 +38,8 @@ void* generic_allocator(std::size_t bytes, std::ostream& os) {
     return p;
 }
 
-void generic_deallocator(void* ptr, std::ostream& os) {
+void generic_deallocator(void* ptr, std::ostream& os)
+{
     os << "DEALLOCATING" << std::setw(17) << " at " << ptr << '\n';
     std::free(ptr);
     ++total_deallocs_;

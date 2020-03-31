@@ -9,8 +9,10 @@ namespace utility {
 
 /// Return formatted output from [first, last).
 template <typename Input_iterator_t>
-std::string container_view(Input_iterator_t first, Input_iterator_t last) {
-    auto ss = std::stringstream{"{", std::ios_base::app | std::ios_base::out};
+auto container_view(Input_iterator_t first, Input_iterator_t last)
+    -> std::string
+{
+    auto ss        = std::ostringstream{"{"};
     auto separator = std::string{""};
     while (first != last) {
         ss << separator << *first;
@@ -23,7 +25,8 @@ std::string container_view(Input_iterator_t first, Input_iterator_t last) {
 
 /// Return formatted output of container elements.
 template <typename Container_t>
-std::string container_view(const Container_t& container) {
+auto container_view(const Container_t& container) -> std::string
+{
     return container_view(std::begin(container), std::end(container));
 }
 

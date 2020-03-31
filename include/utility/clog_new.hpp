@@ -6,7 +6,7 @@ namespace utility {
 namespace detail {
 
 // Only include one new overload header in the entire program.
-std::ostream& stream_{std::clog};
+inline std::ostream& stream_{std::clog};
 
 }  // namespace detail
 }  // namespace utility

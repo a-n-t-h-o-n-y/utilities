@@ -1,5 +1,6 @@
 #include <gtest/gtest.h>
 
+#include <algorithm>
 #include <climits>
 #include <cstdint>
 
@@ -7,96 +8,103 @@
 
 using namespace utility;
 
-TEST(BitArray, DefaultConstruction) {
-    Bit_array<int> bai;
-    for (bool b : bai) {
+TEST(BitArray, DefaultConstruction)
+{
+    for (auto const x = Bit_array<int>{}; bool b : x)
         EXPECT_FALSE(b);
-    }
 
-    Bit_array<long[50]> bala;
-    for (bool b : bala) {
+    for (auto const x = Bit_array<long[50]>{}; bool b : x)
         EXPECT_FALSE(b);
+}
+
+TEST(BitArray, InitListConstructor)
+{
+    {
+        auto const x = Bit_array<short>{true, false, false, true};
+        EXPECT_TRUE(x[0]);
+        EXPECT_FALSE(x[1]);
+        EXPECT_FALSE(x[2]);
+        EXPECT_FALSE(x[15]);
+    }
+    {
+        auto const x = Bit_array<int[4]>{true, false, true};
+        EXPECT_TRUE(x[0]);
+        EXPECT_FALSE(x[1]);
+        EXPECT_TRUE(x[2]);
+        EXPECT_FALSE(x[3]);
+        EXPECT_FALSE(x[60]);
     }
 }
 
-TEST(BitArray, InitListConstructor) {
-    const Bit_array<short> bas{true, false, false, true};
-    EXPECT_TRUE(bas[0]);
-    EXPECT_FALSE(bas[1]);
-    EXPECT_FALSE(bas[2]);
-    EXPECT_FALSE(bas[15]);
-
-    const Bit_array<int[4]> baia{true, false, true};
-    EXPECT_TRUE(baia[0]);
-    EXPECT_FALSE(baia[1]);
-    EXPECT_TRUE(baia[2]);
-    EXPECT_FALSE(baia[3]);
-    EXPECT_FALSE(baia[60]);
-}
-
-TEST(BitArray, Size) {
-    Bit_array<int> bai;
-    Bit_array<int[1024]> baia;
-    EXPECT_EQ(4 * CHAR_BIT, bai.size());
-    EXPECT_EQ(1024 * 4 * CHAR_BIT, baia.size());
+TEST(BitArray, Size)
+{
+    {
+        auto const x = Bit_array<int>{};
+        EXPECT_EQ(4 * CHAR_BIT, x.size());
+    }
+    {
+        auto const x = Bit_array<int[1024]>{};
+        EXPECT_EQ(1024 * 4 * CHAR_BIT, x.size());
+    }
     EXPECT_EQ(4 * CHAR_BIT, Bit_array<int>::size());
     EXPECT_EQ(256 * CHAR_BIT, Bit_array<char[256]>::size());
 }
 
-TEST(BitArray, Set) {
-    Bit_array<char> bac;
-    for (decltype(bac)::Size_t i{0}; i < bac.size(); ++i) {
-        bac.set(i, true);
-    }
-    for (bool b : bac) {
-        EXPECT_TRUE(b);
-    }
-    for (decltype(bac)::Size_t i{0}; i < bac.size(); ++i) {
-        bac.set(i, false);
-    }
-    for (bool b : bac) {
-        EXPECT_FALSE(b);
+TEST(BitArray, Set)
+{
+    {
+        auto x = Bit_array<char>{};
+        for (auto i = 0uL; i < x.size(); ++i)
+            x.set(i, true);
+        for (bool b : x)
+            EXPECT_TRUE(b);
+
+        for (auto i = 0uL; i < x.size(); ++i)
+            x.set(i, false);
+        for (bool b : x)
+            EXPECT_FALSE(b);
     }
 
-    Bit_array<unsigned char[512]> baba;
-    for (decltype(baba)::Size_t i{0}; i < baba.size(); ++i) {
-        baba.set(i, true);
-    }
-    for (bool b : baba) {
-        EXPECT_TRUE(b);
-    }
-    for (decltype(baba)::Size_t i{0}; i < baba.size(); ++i) {
-        baba.set(i, false);
-    }
-    for (bool b : baba) {
-        EXPECT_FALSE(b);
+    {
+        auto x = Bit_array<unsigned char[512]>{};
+        for (auto i = 0uL; i < x.size(); ++i)
+            x.set(i, true);
+        for (bool b : x)
+            EXPECT_TRUE(b);
+
+        for (auto i = 0uL; i < x.size(); ++i)
+            x.set(i, false);
+        for (bool b : x)
+            EXPECT_FALSE(b);
     }
 }
 
-TEST(BitArray, At) {
-    Bit_array<std::uint64_t> bau{true};
-    for (decltype(bau)::Size_t i{1}; i < bau.size(); ++i) {
-        bau.set(i, !bau.at(i - 1));
-    }
-    bool foo{true};
-    for (decltype(bau)::Size_t i{0}; i < bau.size(); ++i) {
-        EXPECT_EQ(foo, bau.at(i));
-        foo = !foo;
-    }
+TEST(BitArray, At)
+{
+    {
+        auto x = Bit_array<std::uint64_t>{true};
+        for (auto i = 1uL; i < x.size(); ++i)
+            x.set(i, !x.at(i - 1));
 
-    EXPECT_THROW(bau.at(bau.size()), std::out_of_range);
-    EXPECT_THROW(bau.at(bau.size() + 1), std::out_of_range);
-
-    Bit_array<std::uint64_t[16'384]> baua{true};
-    for (decltype(baua)::Size_t i{1}; i < baua.size(); ++i) {
-        baua.set(i, !baua.at(i - 1));
+        auto foo = true;
+        for (auto i = 0uL; i < x.size(); ++i) {
+            EXPECT_EQ(foo, x.at(i));
+            foo = !foo;
+        }
+        EXPECT_THROW(x.at(x.size()), std::out_of_range);
+        EXPECT_THROW(x.at(x.size() + 1), std::out_of_range);
     }
-    foo = true;
-    for (decltype(baua)::Size_t i{0}; i < baua.size(); ++i) {
-        EXPECT_EQ(foo, baua.at(i));
-        foo = !foo;
-    }
+    {
+        auto x = Bit_array<std::uint64_t[16'384]>{true};
+        for (auto i = 1uL; i < x.size(); ++i)
+            x.set(i, !x.at(i - 1));
 
-    EXPECT_THROW(baua.at(baua.size()), std::out_of_range);
-    EXPECT_THROW(baua.at(baua.size() + 1), std::out_of_range);
+        auto foo = true;
+        for (auto i = 0uL; i < x.size(); ++i) {
+            EXPECT_EQ(foo, x.at(i));
+            foo = !foo;
+        }
+        EXPECT_THROW(x.at(x.size()), std::out_of_range);
+        EXPECT_THROW(x.at(x.size() + 1), std::out_of_range);
+    }
 }

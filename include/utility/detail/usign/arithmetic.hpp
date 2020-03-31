@@ -7,40 +7,39 @@
 #include "bit_comparisons.hpp"
 #include "common.hpp"
 
-namespace utility {
-namespace detail {
-namespace usign {
+namespace utility::detail::usign {
 
 // ADDITION
 template <std::size_t N>
-std::bitset<N> bit_addition(std::bitset<N> lhs, const std::bitset<N>& rhs) {
-    if (lhs == rhs) {
+auto bit_addition(std::bitset<N> lhs, std::bitset<N> const& rhs)
+    -> std::bitset<N>
+{
+    if (lhs == rhs)
         return lhs << 1;
-    }
-    const auto limit = std::max(msb(lhs), msb(rhs)) + 1;
-    auto carry_out = false;
+    auto const limit = std::max(msb(lhs), msb(rhs)) + 1;
+    auto carry_out   = false;
     for (auto i = std::size_t{0}; i < limit; ++i) {
         const auto sum = carry_out + lhs[i] + rhs[i];
-        lhs[i] = sum == 1 || sum == 3;
-        carry_out = sum > 1;
+        lhs[i]         = sum == 1 || sum == 3;
+        carry_out      = sum > 1;
     }
-    if (limit != N) {
+    if (limit != N)
         lhs[limit] = carry_out + lhs[limit] + rhs[limit];
-    }
     return lhs;
 }
 
 // SUBTRACTION
 template <std::size_t N>
-std::bitset<N> bit_subtraction(std::bitset<N> lhs, const std::bitset<N>& rhs) {
-    for (auto i = std::size_t{0}; i < N; ++i) {
+auto bit_subtraction(std::bitset<N> lhs, std::bitset<N> const& rhs)
+    -> std::bitset<N>
+{
+    for (auto i = 0uL; i < N; ++i) {
         lhs[i] = lhs[i] != rhs[i];
         if (lhs[i] && rhs[i]) {
             for (auto j = i + 1; j < N; ++j) {
                 lhs.flip(j);
-                if (!lhs[j]) {
+                if (!lhs[j])
                     break;
-                }
             }
         }
     }
@@ -49,8 +48,9 @@ std::bitset<N> bit_subtraction(std::bitset<N> lhs, const std::bitset<N>& rhs) {
 
 // DIVISION
 template <std::size_t N>
-std::bitset<N> bit_division(const std::bitset<N>& num,
-                            const std::bitset<N>& den) {
+auto bit_division(std::bitset<N> const& num, std::bitset<N> const& den)
+    -> std::bitset<N>
+{
     if (den == std::bitset<N>(2)) {
         auto result = std::bitset<N>{num};
         result >>= 1;
@@ -62,7 +62,7 @@ std::bitset<N> bit_division(const std::bitset<N>& num,
         rem <<= 1;
         rem[0] = num[i];
         if (detail::usign::operator>=(rem, den)) {
-            rem = bit_subtraction(rem, den);
+            rem    = bit_subtraction(rem, den);
             quo[i] = true;
         }
     }
@@ -71,88 +71,81 @@ std::bitset<N> bit_division(const std::bitset<N>& num,
 
 // MODULO
 template <std::size_t N>
-std::bitset<N> bit_modulo(const std::bitset<N>& num,
-                          const std::bitset<N>& den) {
+auto bit_modulo(std::bitset<N> const& num, std::bitset<N> const& den)
+    -> std::bitset<N>
+{
     auto rem = std::bitset<N>{0};
     for (auto i = N - 1; i < N; --i) {
         rem <<= 1;
         rem[0] = num[i];
-        if (detail::usign::operator>=(rem, den)) {
+        if (detail::usign::operator>=(rem, den))
             rem = bit_subtraction(rem, den);
-        }
     }
     return rem;
 }
 
 // MULTIPLICATION
 template <std::size_t N>
-std::bitset<N> bit_multiplication(const std::bitset<N>& lhs,
-                                  const std::bitset<N>& rhs) {
+auto bit_multiplication(std::bitset<N> const& lhs, std::bitset<N> const& rhs)
+    -> std::bitset<N>
+{
     auto product = std::bitset<N>{0};
-    for (auto i = std::size_t{0}; i < N; ++i) {
-        if (rhs[i]) {
+    for (auto i = 0uL; i < N; ++i) {
+        if (rhs[i])
             product = bit_addition(product, lhs << i);
-        }
     }
     return product;
 }
 
 // EXPONENTIATION
 template <std::size_t N>
-std::bitset<N> bit_exponentiation(const std::bitset<N>& base,
-                                  const std::bitset<N>& exponent) {
+auto bit_exponentiation(std::bitset<N> const& base,
+                        std::bitset<N> const& exponent) -> std::bitset<N>
+{
     auto multiple = std::bitset<N>{base};
-    auto result = std::bitset<N>{1};
-    auto limit = std::size_t{0};
-    for (auto i = std::size_t{0}; i < N; ++i) {
-        if (exponent[i]) {
+    auto result   = std::bitset<N>{1};
+    auto limit    = 0uL;
+    for (auto i = 0uL; i < N; ++i) {
+        if (exponent[i])
             limit = i + 1;
-        }
     }
-    for (auto i = std::size_t{1}; i < limit; ++i) {
+    for (auto i = 1uL; i < limit; ++i) {
         multiple = bit_multiplication(multiple, multiple);
-        if (exponent[i]) {
+        if (exponent[i])
             result = bit_multiplication(result, multiple);
-        }
     }
-    if (exponent[0]) {
+    if (exponent[0])
         result = bit_multiplication(result, base);
-    }
     return result;
 }
 
 // ROOT
 template <std::size_t N>
-std::bitset<N> bit_root(std::bitset<N> radicand, const std::bitset<N>& index) {
-    if (index.count() == 0) {
+auto bit_root(std::bitset<N> radicand, std::bitset<N> const& index)
+    -> std::bitset<N>
+{
+    if (index.count() == 0)
         return std::bitset<N>{0};
-    }
-    if (index.count() == 1 && index[0]) {
+    if (index.count() == 1 && index[0])
         return radicand;
-    }
-    if (radicand.count() == 0) {
+    if (radicand.count() == 0)
         return std::bitset<N>{0};
-    }
-    if (radicand.count() == 1 && radicand[0]) {
+    if (radicand.count() == 1 && radicand[0])
         return std::bitset<N>{1};
-    }
-    std::bitset<N> result{2};
+    auto result = std::bitset<N>{2};
     while (true) {
-        std::bitset<N> test{result};
-        std::bitset<N> limit{bit_subtraction(index, std::bitset<N>{1})};
+        auto test  = result;
+        auto limit = bit_subtraction(index, std::bitset<N>{1});
         for (auto i = std::bitset<N>{0}; i < limit;
-             i = bit_addition(i, std::bitset<N>{1})) {
+             i      = bit_addition(i, std::bitset<N>{1})) {
             test = bit_multiplication(test, result);
         }
-        if (test > radicand) {
+        if (test > radicand)
             return bit_subtraction(result, std::bitset<N>{1});
-        }
         result = bit_addition(result, std::bitset<N>{1});
     }
 }
 
-}  // namespace usign
-}  // namespace detail
-}  // namespace utility
+}  // namespace utility::detail::usign
 
 #endif  // UTILITY_DETAIL_USIGN_ARITHMETIC_HPP

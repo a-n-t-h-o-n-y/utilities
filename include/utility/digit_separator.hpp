@@ -15,23 +15,25 @@ inline constexpr bool is_string_type_v =
                        std::is_same<T, const char*>>;
 }
 
-/// Insert locale specific thousands seperators into `value`. Returns a string.
+/// Insert locale specific thousands separators into `value`. Returns a string.
 /** Requires C++17 */
 template <typename T>
-std::string thousands_separator(T value) {
-    auto ss = std::stringstream{};
-    ss.imbue(std::locale{""});
+auto digit_separator(T value, std::string locale_str = "en_US.UTF-8")
+    -> std::string
+{
+    auto ss = std::ostringstream{};
+    ss.imbue(std::locale{locale_str});
     ss << std::fixed;
     if constexpr (detail::is_string_type_v<T>) {
-        auto value_str = std::string{value};
-        if (value_str.find('.') != std::string::npos) {
+        if (auto const value_str = std::string{value};
+            value_str.find('.') != std::string::npos) {
             ss << std::stold(value_str);
-        } else {
-            ss << std::stoll(value_str);
         }
-    } else {
-        ss << value;
+        else
+            ss << std::stoll(value_str);
     }
+    else
+        ss << value;
     return ss.str();
 }
 

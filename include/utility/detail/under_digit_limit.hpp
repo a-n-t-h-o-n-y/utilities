@@ -7,7 +7,8 @@ namespace utility {
 namespace detail {
 
 template <typename Type_unit, typename Duration>
-bool is_under_digit_limit(const Duration& duration, int limit) {
+auto is_under_digit_limit(Duration const& duration, int limit) -> bool
+{
     return std::chrono::duration_cast<Type_unit>(duration).count() <
            std::pow(10, limit);
 }

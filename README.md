@@ -106,7 +106,7 @@ int main() {
     // 3 digit output limit
     assert("300 minutes", duration_view(long_duration, 3));
 
-    // 6 digit output limit, thousands seperators by default.
+    // 6 digit output limit, thousands separators by default.
     assert("18,000 seconds", duration_view(long_duration, 6));
     assert("18000 seconds", duration_view(long_duration, 6, false));
 
@@ -184,7 +184,7 @@ displayed as binary. Combine with Unsigned_integer class to get past this.
 int main() {
     // Convinience Functions
     char16_t c{0b0010000010101100};
-    std::string binary{utility::as_binary(c)};  // (T obj, seperators = true)
+    std::string binary{utility::as_binary(c)};  // (T obj, separators = true)
     std::string octal{utility::as_octal(c)};    // Does not have separators
     std::string hexadecimal{utility::as_hex(c, false)}; // false = no separators
     std::string decimal{utility::as_decimal(c)};
@@ -446,13 +446,13 @@ int main() {
 }
 ```
 
-### thousands_separator.hpp
+### digit_separator.hpp
 Convinience function to add a separator at every thousands place in a number.
 ```cpp
-#include <utility/thousands_separator.hpp>
+#include <utility/digit_separator.hpp>
 int main() {
     const int value{123456789};
-    std::string formatted_value{utility::thousands_separator(value)};
+    std::string formatted_value{utility::digit_separator(value)};
     assert(formatted_value == "123,456,789");
 }
 ```

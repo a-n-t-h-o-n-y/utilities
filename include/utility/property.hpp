@@ -18,17 +18,19 @@ class Property {
 
     /// Construct object of type T that is constructible from type U.
     template <typename... Args>
-    Property(Args&&... args) : value_{std::forward<Args>(args)...} {}
+    Property(Args&&... args) : value_{std::forward<Args>(args)...}
+    {}
 
     /// Return a non-const reference to the property's value.
-    T& get() { return value_; }
+    auto get() -> T& { return value_; }
 
     /// Return a const reference to the property's value.
-    const T& get() const { return value_; }
+    auto get() const -> T const& { return value_; }
 
     /// Set value from any U object that can be constructed into a T object.
     template <typename U>
-    void set(U&& value) {
+    void set(U&& value)
+    {
         if (value != value_) {
             value_ = std::forward<U>(value);
             on_change_(value_);
@@ -36,25 +38,30 @@ class Property {
     }
 
     /// Return a reference to the signal emitted on change of value.
-    sig::Signal<void(const T&)>& on_change() { return on_change_; }
+    auto on_change() -> sig::Signal<void(T const&)>& { return on_change_; }
 
     /// Return a const reference to the signal emitted on change of value.
-    const sig::Signal<void(const T&)>& on_change() const { return on_change_; }
+    auto on_change() const -> sig::Signal<void(T const&)> const&
+    {
+        return on_change_;
+    }
 
    private:
     T value_;
-    sig::Signal<void(const T&)> on_change_;
+    sig::Signal<void(T const&)> on_change_;
 };
 
 /// std::ostream operator
 template <typename T>
-std::ostream& operator<<(std::ostream& os, const Property<T>& prop) {
+auto operator<<(std::ostream& os, Property<T> const& prop) -> std::ostream&
+{
     return os << prop.get();
 }
 
 /// std::istream operator
 template <typename T>
-std::istream& operator>>(std::istream& is, Property<T>& prop) {
+auto operator>>(std::istream& is, Property<T>& prop) -> std::istream&
+{
     auto temp = T();
     is >> temp;
     prop.set(std::move(temp));
@@ -64,46 +71,60 @@ std::istream& operator>>(std::istream& is, Property<T>& prop) {
 // Specialized default constructors. UB if pod type comparison with
 // uninitialized value in set member function.
 template <>
-Property<std::int8_t>::Property() : value_{0} {}
+Property<std::int8_t>::Property() : value_{0}
+{}
 
 template <>
-Property<std::int16_t>::Property() : value_{0} {}
+Property<std::int16_t>::Property() : value_{0}
+{}
 
 template <>
-Property<std::int32_t>::Property() : value_{0} {}
+Property<std::int32_t>::Property() : value_{0}
+{}
 
 template <>
-Property<std::int64_t>::Property() : value_{0} {}
+Property<std::int64_t>::Property() : value_{0}
+{}
 
 template <>
-Property<std::uint8_t>::Property() : value_{0} {}
+Property<std::uint8_t>::Property() : value_{0}
+{}
 
 template <>
-Property<std::uint16_t>::Property() : value_{0} {}
+Property<std::uint16_t>::Property() : value_{0}
+{}
 
 template <>
-Property<std::uint32_t>::Property() : value_{0} {}
+Property<std::uint32_t>::Property() : value_{0}
+{}
 
 template <>
-Property<std::uint64_t>::Property() : value_{0} {}
+Property<std::uint64_t>::Property() : value_{0}
+{}
 
 template <>
-Property<float>::Property() : value_{0.0} {}
+Property<float>::Property() : value_{0.f}
+{}
 
 template <>
-Property<double>::Property() : value_{0.0} {}
+Property<double>::Property() : value_{0.}
+{}
 
 template <>
-Property<bool>::Property() : value_{false} {}
+Property<bool>::Property() : value_{false}
+{}
 
 template <>
-Property<char>::Property() : value_{static_cast<char>(0)} {}
+Property<char>::Property() : value_{static_cast<char>(0)}
+{}
 
 template <>
-Property<char16_t>::Property() : value_{static_cast<char16_t>(0)} {}
+Property<char16_t>::Property() : value_{static_cast<char16_t>(0)}
+{}
 
 template <>
-Property<char32_t>::Property() : value_{static_cast<char32_t>(0)} {}
+Property<char32_t>::Property() : value_{static_cast<char32_t>(0)}
+{}
 
 }  // namespace utility
 #endif  // UTILITY_PROPERTY_HPP

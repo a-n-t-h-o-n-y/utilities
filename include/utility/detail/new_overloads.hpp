@@ -5,19 +5,23 @@
 
 #include "allocation.hpp"
 
-void* operator new(std::size_t bytes) {
+void* operator new(std::size_t bytes)
+{
     return utility::detail::generic_allocator(bytes, utility::detail::stream_);
 }
 
-void* operator new[](std::size_t bytes) {
+void* operator new[](std::size_t bytes)
+{
     return utility::detail::generic_allocator(bytes, utility::detail::stream_);
 }
 
-void operator delete(void* ptr) {
+void operator delete(void* ptr)
+{
     return utility::detail::generic_deallocator(ptr, utility::detail::stream_);
 }
 
-void operator delete[](void* ptr) {
+void operator delete[](void* ptr)
+{
     return utility::detail::generic_deallocator(ptr, utility::detail::stream_);
 }
 

@@ -28,7 +28,7 @@ def make_header():
     if len(sys.argv) > 3 and sys.argv[2] == '-t':
         is_template = True
         template_args = sys.argv[3:]
-     
+
     header = open(class_name.lower() + ".hpp", "w")
     define = class_name.upper() + "_HPP"
     header_contents = (

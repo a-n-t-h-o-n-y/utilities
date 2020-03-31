@@ -8,22 +8,22 @@ namespace utility {
 namespace detail {
 
 template <typename Time_unit>
-std::string time_unit_string() {
-    if constexpr (std::is_same_v<Time_unit, std::chrono::nanoseconds>) {
+auto time_unit_string() -> std::string
+{
+    if constexpr (std::is_same_v<Time_unit, std::chrono::nanoseconds>)
         return "nanoseconds";
-    } else if constexpr (std::is_same_v<Time_unit, std::chrono::microseconds>) {
+    else if constexpr (std::is_same_v<Time_unit, std::chrono::microseconds>)
         return "microseconds";
-    } else if constexpr (std::is_same_v<Time_unit, std::chrono::milliseconds>) {
+    else if constexpr (std::is_same_v<Time_unit, std::chrono::milliseconds>)
         return "milliseconds";
-    } else if constexpr (std::is_same_v<Time_unit, std::chrono::seconds>) {
+    else if constexpr (std::is_same_v<Time_unit, std::chrono::seconds>)
         return "seconds";
-    } else if constexpr (std::is_same_v<Time_unit, std::chrono::minutes>) {
+    else if constexpr (std::is_same_v<Time_unit, std::chrono::minutes>)
         return "minutes";
-    } else if constexpr (std::is_same_v<Time_unit, std::chrono::hours>) {
+    else if constexpr (std::is_same_v<Time_unit, std::chrono::hours>)
         return "hours";
-    } else {  // Unsupported Time_unit Type.
+    else  // Unsupported Time_unit Type.
         return "";
-    }
 }
 
 }  // namespace detail

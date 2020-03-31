@@ -9,10 +9,11 @@ namespace utility {
 
 /// Sends \p container to a file \p filename with \p delimiter between values.
 template <typename Container_t>
-void to_file(const Container_t& container,
-             const std::string& filename,
-             const std::string& delimiter = "\n",
-             std::ios_base::openmode mode = std::ios_base::out) {
+void to_file(Container_t const& container,
+             std::string const& filename,
+             std::string const& delimiter = "\n",
+             std::ios_base::openmode mode = std::ios_base::out)
+{
     auto ofs = std::ofstream{filename, mode};
     std::copy(std::begin(container), std::end(container),
               std::ostream_iterator<typename Container_t::value_type>(

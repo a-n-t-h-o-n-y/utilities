@@ -6,7 +6,7 @@ namespace utility {
 namespace detail {
 
 // Only include one new overload header in the entire program.
-std::ostream& stream_{std::cerr};
+inline std::ostream& stream_{std::cerr};
 
 }  // namespace detail
 }  // namespace utility

@@ -2,16 +2,13 @@
 #define UTILITY_DETAIL_MEMORY_VIEW_BIT_AT_HPP
 #include <cstddef>
 
-namespace utility {
-namespace detail {
-namespace memory_view {
+namespace utility::detail::memory_view {
 
 // \p i is bit index into \p address.
-bool bit_at(const unsigned char* address, std::size_t i) {
+auto bit_at(unsigned char const* address, std::size_t i) -> bool
+{
     return address[i / 8] >> (i % 8) & 0x01 ? true : false;
 }
 
-}  // namespace memory_view
-}  // namespace detail
-}  // namespace utility
+}  // namespace utility::detail::memory_view
 #endif  // UTILITY_DETAIL_MEMORY_VIEW_BIT_AT_HPP

@@ -12,28 +12,32 @@ using detail::memory_view::Representation;
 /// Returns the binary representation of the given object's raw data as a
 /// string. Space inserted every 4 digits(nibble) if separators set to true.
 template <typename T>
-std::string as_binary(const T& value, bool separators = true) {
+auto as_binary(T const& value, bool separators = true) -> std::string
+{
     return as_base<Representation::Binary>(value, separators);
 }
 
 /// Returns the hexadecimal representation of the given object's raw data as a
 /// string. Space inserted every 2 digits(byte) if separators set to true.
 template <typename T>
-std::string as_hex(const T& value, bool separators = true) {
+auto as_hex(T const& value, bool separators = true) -> std::string
+{
     return as_base<Representation::Hex>(value, separators);
 }
 
 /// Returns the decimal representation of the given object's raw data as a
 /// string. Comma inserted every 3 digits if separators set to true.
 template <typename T>
-std::string as_decimal(const T& value, bool separators = true) {
+auto as_decimal(T const& value, bool separators = true) -> std::string
+{
     return as_base<Representation::Decimal>(value, separators);
 }
 
 /// Returns the Octal representation of the given object's raw data as a
 /// string. No separators available.
 template <typename T>
-std::string as_octal(const T& value) {
+auto as_octal(T const& value) -> std::string
+{
     return as_base<Representation::Octal>(value, false);
 }
 

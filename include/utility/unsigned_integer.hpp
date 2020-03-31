@@ -19,70 +19,167 @@ namespace utility {
 template <std::size_t N>
 class Unsigned_integer {
    public:
-    static const std::size_t precision{N};
+    static inline auto const precision = N;
 
     /// Default constructs with value 0.
     Unsigned_integer() = default;
 
     /// Construct from integral types.
-    template <
-        typename T,
-        typename std::enable_if<std::is_arithmetic<T>::value, int>::type = 0>
-    Unsigned_integer(const T& value)
-        : data_{static_cast<unsigned long long>(value)} {}
+    template <typename T,
+              typename std::enable_if_t<std::is_arithmetic_v<T>, int> = 0>
+    Unsigned_integer(T const& value)
+        : data_{static_cast<unsigned long long>(value)}
+    {}
 
     /// Construct from string, represented in dec, hex, oct, or binary.
-    Unsigned_integer(const std::string& value)
-        : data_{detail::usign::string_to_bitset<N>(value)} {}
+    Unsigned_integer(std::string const& value)
+        : data_{detail::usign::string_to_bitset<N>(value)}
+    {}
 
-    /// Construct from const char*, represented in dec, hex, oct, or binary.
-    Unsigned_integer(const char* value)
-        : data_{detail::usign::string_to_bitset<N>(value)} {}
+    /// Construct from char const*, represented in dec, hex, oct, or binary.
+    Unsigned_integer(char const* value)
+        : data_{detail::usign::string_to_bitset<N>(value)}
+    {}
 
     /// Construct from bitset
-    Unsigned_integer(const std::bitset<N>& value) : data_{value} {}
+    Unsigned_integer(std::bitset<N> const& value) : data_{value} {}
 
     /// Construct from another Unsigned_integer<N>
-    Unsigned_integer(const Unsigned_integer& other) : data_{other.data_} {}
+    Unsigned_integer(Unsigned_integer const& other) : data_{other.data_} {}
 
     /// Construct from other sized Integer types.
     template <std::size_t N2>
-    Unsigned_integer(const Unsigned_integer<N2>& other);
+    Unsigned_integer(Unsigned_integer<N2> const& other)
+    {
+        for (auto i = 0uL; i < data_.size() && i < other.data_.size(); ++i)
+            data_[i] = other.data_[i];
+    }
 
     /// Return value as string in representation determined by base.
-    std::string to_string(int base = 10) const;
+    auto to_string(int base = 10) const -> std::string
+    {
+        if (base != 2)
+            return detail::usign::bitset_to_string(data_, base);
+        auto const result    = data_.to_string();
+        auto const start_pos = result.find_first_not_of('0');
+        if (start_pos == std::string::npos)
+            return "0";
+        else
+            return result.substr(start_pos);
+    }
 
     // Arithmetic
-    Unsigned_integer operator+(const Unsigned_integer& rhs) const;
-    Unsigned_integer operator-(const Unsigned_integer& rhs) const;
-    Unsigned_integer operator/(const Unsigned_integer& divisor) const;
-    Unsigned_integer operator*(const Unsigned_integer& rhs) const;
-    Unsigned_integer operator%(const Unsigned_integer& divisor) const;
-    Unsigned_integer exp(const Unsigned_integer& exponent) const;
-    Unsigned_integer root(const Unsigned_integer& index) const;
+    auto operator+(Unsigned_integer const& rhs) const -> Unsigned_integer
+    {
+        return detail::usign::bit_addition(data_, rhs.data_);
+    }
+    auto operator-(Unsigned_integer const& rhs) const -> Unsigned_integer
+    {
+        return detail::usign::bit_subtraction(data_, rhs.data_);
+    }
+    auto operator/(Unsigned_integer const& divisor) const -> Unsigned_integer
+    {
+        if (N == 0 || divisor == 0)
+            return 0;
+        if (divisor == 1)
+            return *this;
+        return detail::usign::bit_division(this->data_, divisor.data_);
+    }
+    auto operator*(Unsigned_integer const& rhs) const -> Unsigned_integer
+    {
+        return detail::usign::bit_multiplication(this->data_, rhs.data_);
+    }
+    auto operator%(Unsigned_integer const& divisor) const -> Unsigned_integer
+    {
+        if (N == 0 || divisor == 0 || divisor == 1)
+            return 0;
+        else
+            return detail::usign::bit_modulo(this->data_, divisor.data_);
+    }
+    auto exp(Unsigned_integer const& exponent) const -> Unsigned_integer
+    {
+        return detail::usign::bit_exponentiation(this->data_, exponent.data_);
+    }
+    auto root(Unsigned_integer const& index) const -> Unsigned_integer
+    {
+        return detail::usign::bit_root(this->data_, index.data_);
+    }
 
     // Comparison Operators
-    bool operator==(const Unsigned_integer& rhs) const;
-    bool operator!=(const Unsigned_integer& rhs) const;
-    bool operator<(const Unsigned_integer& rhs) const;
-    bool operator<=(const Unsigned_integer& rhs) const;
-    bool operator>(const Unsigned_integer& rhs) const;
-    bool operator>=(const Unsigned_integer& rhs) const;
+    auto operator==(Unsigned_integer const& rhs) const -> bool
+    {
+        return this->data_ == rhs.data_;
+    }
+    auto operator!=(Unsigned_integer const& rhs) const -> bool
+    {
+        return this->data_ != rhs.data_;
+    }
+    auto operator<(Unsigned_integer const& rhs) const -> bool
+    {
+        return detail::usign::operator<(this->data_, rhs.data_);
+    }
+    auto operator<=(Unsigned_integer const& rhs) const -> bool
+    {
+        return detail::usign::operator<=(this->data_, rhs.data_);
+    }
+    auto operator>(Unsigned_integer const& rhs) const -> bool
+    {
+        return detail::usign::operator>(this->data_, rhs.data_);
+    }
+    auto operator>=(Unsigned_integer const& rhs) const -> bool
+    {
+        return detail::usign::operator>=(this->data_, rhs.data_);
+    }
 
     // Bit Operators
-    Unsigned_integer operator&(const Unsigned_integer& rhs) const;
-    Unsigned_integer operator|(const Unsigned_integer& rhs) const;
-    Unsigned_integer operator^(const Unsigned_integer& rhs) const;
-    Unsigned_integer operator~() const;
-    Unsigned_integer operator<<(std::size_t pos) const;
-    Unsigned_integer operator>>(std::size_t pos) const;
+    auto operator&(Unsigned_integer const& rhs) const -> Unsigned_integer
+    {
+        return this->data_ & rhs.data_;
+    }
+    auto operator|(Unsigned_integer const& rhs) const -> Unsigned_integer
+    {
+        return this->data_ | rhs.data_;
+    }
+    auto operator^(Unsigned_integer const& rhs) const -> Unsigned_integer
+    {
+        return this->data_ ^ rhs.data_;
+    }
+    auto operator~() const -> Unsigned_integer { return ~(this->data_); }
+    auto operator<<(std::size_t pos) const -> Unsigned_integer
+    {
+        return this->data_ << pos;
+    }
+    auto operator>>(std::size_t pos) const -> Unsigned_integer
+    {
+        return this->data_ >> pos;
+    }
 
     // Compound Bit Operator Assignments
-    Unsigned_integer& operator&=(const Unsigned_integer& other);
-    Unsigned_integer& operator|=(const Unsigned_integer& other);
-    Unsigned_integer& operator^=(const Unsigned_integer& other);
-    Unsigned_integer& operator<<=(std::size_t pos);
-    Unsigned_integer& operator>>=(std::size_t pos);
+    auto operator&=(Unsigned_integer const& other) -> Unsigned_integer&
+    {
+        this->data_ &= other.data_;
+        return *this;
+    }
+    auto operator|=(Unsigned_integer const& other) -> Unsigned_integer&
+    {
+        this->data_ |= other.data_;
+        return *this;
+    }
+    auto operator^=(Unsigned_integer const& other) -> Unsigned_integer&
+    {
+        this->data_ ^= other.data_;
+        return *this;
+    }
+    auto operator<<=(std::size_t pos) -> Unsigned_integer&
+    {
+        this->data_ <<= pos;
+        return *this;
+    }
+    auto operator>>=(std::size_t pos) -> Unsigned_integer&
+    {
+        this->data_ >>= pos;
+        return *this;
+    }
 
     // friend class template
     template <std::size_t N2>
@@ -94,27 +191,31 @@ class Unsigned_integer {
 
 // INCREMENT / DECREMENT - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 template <std::size_t N>
-Unsigned_integer<N>& operator++(Unsigned_integer<N>& i) {
+auto operator++(Unsigned_integer<N>& i) -> Unsigned_integer<N>&
+{
     i = i + 1;
     return i;
 }
 
 template <std::size_t N>
-Unsigned_integer<N> operator++(Unsigned_integer<N>& i, int) {
-    Unsigned_integer<N> result{i};
+auto operator++(Unsigned_integer<N>& i, int) -> Unsigned_integer<N>
+{
+    auto result = Unsigned_integer<N>{i};
     ++i;
     return result;
 }
 
 template <std::size_t N>
-Unsigned_integer<N>& operator--(Unsigned_integer<N>& i) {
+auto operator--(Unsigned_integer<N>& i) -> Unsigned_integer<N>&
+{
     i = i - 1;
     return i;
 }
 
 template <std::size_t N>
-Unsigned_integer<N> operator--(Unsigned_integer<N>& i, int) {
-    Unsigned_integer<N> result{i};
+auto operator--(Unsigned_integer<N>& i, int) -> Unsigned_integer<N>
+{
+    auto result = Unsigned_integer<N>{i};
     --i;
     return result;
 }
@@ -122,420 +223,260 @@ Unsigned_integer<N> operator--(Unsigned_integer<N>& i, int) {
 // COMPOUND ASSIGNMENT OPERATORS - - - - - - - - - - - - - - - - - - - - - - - -
 // Addition
 template <std::size_t N, typename T>
-Unsigned_integer<N>& operator+=(Unsigned_integer<N>& lhs, const T& rhs) {
+auto operator+=(Unsigned_integer<N>& lhs, const T& rhs) -> Unsigned_integer<N>&
+{
     lhs = lhs + Unsigned_integer<N>{rhs};
     return lhs;
 }
 
 // Subtraction
 template <std::size_t N, typename T>
-Unsigned_integer<N>& operator-=(Unsigned_integer<N>& lhs, const T& rhs) {
+auto operator-=(Unsigned_integer<N>& lhs, const T& rhs) -> Unsigned_integer<N>&
+{
     lhs = lhs - Unsigned_integer<N>{rhs};
     return lhs;
 }
 
 // Division
 template <std::size_t N, typename T>
-Unsigned_integer<N>& operator/=(Unsigned_integer<N>& num, const T& den) {
+auto operator/=(Unsigned_integer<N>& num, const T& den) -> Unsigned_integer<N>&
+{
     num = num / Unsigned_integer<N>{den};
     return num;
 }
 
 // Modulo
 template <std::size_t N, typename T>
-Unsigned_integer<N>& operator%=(Unsigned_integer<N>& num, const T& den) {
+auto operator%=(Unsigned_integer<N>& num, const T& den) -> Unsigned_integer<N>&
+{
     num = num % Unsigned_integer<N>{den};
     return num;
 }
 
 // Multiplication
 template <std::size_t N, typename T>
-Unsigned_integer<N>& operator*=(Unsigned_integer<N>& lhs, const T& rhs) {
+auto operator*=(Unsigned_integer<N>& lhs, const T& rhs) -> Unsigned_integer<N>&
+{
     lhs = lhs * Unsigned_integer<N>{rhs};
     return lhs;
 }
 
-// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-// For external linkage - C++17 inline in class to get rid of this.
-template <std::size_t N>
-const std::size_t Unsigned_integer<N>::precision;
-
-// Copy Constructor
-template <std::size_t N>
-template <std::size_t N2>
-Unsigned_integer<N>::Unsigned_integer(const Unsigned_integer<N2>& other) {
-    for (std::size_t i{0}; i < data_.size() && i < other.data_.size(); ++i) {
-        data_[i] = other.data_[i];
-    }
-}
-
-// to_string(base)
-template <std::size_t N>
-std::string Unsigned_integer<N>::to_string(int base) const {
-    if (base == 2) {
-        const auto result = data_.to_string();
-        const auto start_pos = result.find_first_not_of('0');
-        if (start_pos == std::string::npos) {
-            return "0";
-        }
-        return result.substr(start_pos);
-    }
-    return detail::usign::bitset_to_string(data_, base);
-}
-
-// COMPARISON OPERATORS - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-template <std::size_t N>
-bool Unsigned_integer<N>::operator==(const Unsigned_integer& rhs) const {
-    return this->data_ == rhs.data_;
-}
-
-template <std::size_t N>
-bool Unsigned_integer<N>::operator!=(const Unsigned_integer& rhs) const {
-    return this->data_ != rhs.data_;
-}
-template <std::size_t N>
-bool Unsigned_integer<N>::operator<(const Unsigned_integer& rhs) const {
-    return detail::usign::operator<(this->data_, rhs.data_);
-}
-
-template <std::size_t N>
-bool Unsigned_integer<N>::operator<=(const Unsigned_integer& rhs) const {
-    return detail::usign::operator<=(this->data_, rhs.data_);
-}
-
-template <std::size_t N>
-bool Unsigned_integer<N>::operator>(const Unsigned_integer& rhs) const {
-    return detail::usign::operator>(this->data_, rhs.data_);
-}
-
-template <std::size_t N>
-bool Unsigned_integer<N>::operator>=(const Unsigned_integer& rhs) const {
-    return detail::usign::operator>=(this->data_, rhs.data_);
-}
-
 // FORWARDING COMPARISON OPERATORS - - - - - - - - - - - - - - - - - - - - - - -
 template <std::size_t N>
-bool operator==(std::uint64_t lhs, const Unsigned_integer<N>& rhs) {
+auto operator==(std::uint64_t lhs, Unsigned_integer<N> const& rhs) -> bool
+{
     return rhs == lhs;
 }
 
 template <std::size_t N>
-bool operator==(const std::string& lhs, const Unsigned_integer<N>& rhs) {
+auto operator==(std::string const& lhs, Unsigned_integer<N> const& rhs) -> bool
+{
     return rhs == lhs;
 }
 
 template <std::size_t N>
-bool operator!=(std::uint64_t lhs, const Unsigned_integer<N>& rhs) {
+auto operator!=(std::uint64_t lhs, Unsigned_integer<N> const& rhs) -> bool
+{
     return !(lhs == rhs);
 }
 
 template <std::size_t N>
-bool operator!=(const std::string lhs, const Unsigned_integer<N>& rhs) {
+auto operator!=(std::string const& lhs, Unsigned_integer<N> const& rhs) -> bool
+{
     return !(lhs == rhs);
 }
 
 template <std::size_t N>
-bool operator<(std::uint64_t lhs, const Unsigned_integer<N>& rhs) {
+auto operator<(std::uint64_t lhs, Unsigned_integer<N> const& rhs) -> bool
+{
     return Unsigned_integer<N>{lhs} < rhs;
 }
 
 template <std::size_t N>
-bool operator<(const std::string lhs, const Unsigned_integer<N>& rhs) {
+auto operator<(std::string const& lhs, Unsigned_integer<N> const& rhs) -> bool
+{
     return Unsigned_integer<N>{lhs} < rhs;
 }
 
 template <std::size_t N>
-bool operator<=(std::uint64_t lhs, const Unsigned_integer<N>& rhs) {
+auto operator<=(std::uint64_t lhs, Unsigned_integer<N> const& rhs) -> bool
+{
     return Unsigned_integer<N>{lhs} <= rhs;
 }
 
 template <std::size_t N>
-bool operator<=(const std::string lhs, const Unsigned_integer<N>& rhs) {
+auto operator<=(std::string const& lhs, Unsigned_integer<N> const& rhs) -> bool
+{
     return Unsigned_integer<N>{lhs} <= rhs;
 }
 
 template <std::size_t N>
-bool operator>(std::uint64_t lhs, const Unsigned_integer<N>& rhs) {
+auto operator>(std::uint64_t lhs, Unsigned_integer<N> const& rhs) -> bool
+{
     return Unsigned_integer<N>{lhs} > rhs;
 }
 
 template <std::size_t N>
-bool operator>(const std::string lhs, const Unsigned_integer<N>& rhs) {
+auto operator>(std::string const& lhs, Unsigned_integer<N> const& rhs) -> bool
+{
     return Unsigned_integer<N>{lhs} > rhs;
 }
 
 template <std::size_t N>
-bool operator>=(std::uint64_t lhs, const Unsigned_integer<N>& rhs) {
+auto operator>=(std::uint64_t lhs, Unsigned_integer<N> const& rhs) -> bool
+{
     return Unsigned_integer<N>{lhs} >= rhs;
 }
 
 template <std::size_t N>
-bool operator>=(const std::string lhs, const Unsigned_integer<N>& rhs) {
+auto operator>=(std::string const& lhs, Unsigned_integer<N> const& rhs) -> bool
+{
     return Unsigned_integer<N>{lhs} >= rhs;
-}
-
-// BIT OPERATORS - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-// AND
-template <std::size_t N>
-Unsigned_integer<N> Unsigned_integer<N>::operator&(
-    const Unsigned_integer& rhs) const {
-    return this->data_ & rhs.data_;
-}
-
-// OR
-template <std::size_t N>
-Unsigned_integer<N> Unsigned_integer<N>::operator|(
-    const Unsigned_integer& rhs) const {
-    return this->data_ | rhs.data_;
-}
-
-// XOR
-template <std::size_t N>
-Unsigned_integer<N> Unsigned_integer<N>::operator^(
-    const Unsigned_integer& rhs) const {
-    return this->data_ ^ rhs.data_;
-}
-
-// NOT
-template <std::size_t N>
-Unsigned_integer<N> Unsigned_integer<N>::operator~() const {
-    return ~this->data_;
-}
-
-// Shift Left
-template <std::size_t N>
-Unsigned_integer<N> Unsigned_integer<N>::operator<<(std::size_t pos) const {
-    return this->data_ << pos;
-}
-
-// Shift Right
-template <std::size_t N>
-Unsigned_integer<N> Unsigned_integer<N>::operator>>(std::size_t pos) const {
-    return this->data_ >> pos;
 }
 
 // FORWARDING BIT OPERATORS - - - - - - - - - - - - - - - - - - - - - - - -
 // - - AND
 template <std::size_t N>
-Unsigned_integer<N> operator&(std::uint64_t lhs,
-                              const Unsigned_integer<N>& rhs) {
+auto operator&(std::uint64_t lhs, Unsigned_integer<N> const& rhs)
+    -> Unsigned_integer<N>
+{
     return rhs & lhs;
 }
 
 template <std::size_t N>
-Unsigned_integer<N> operator&(const std::string& lhs,
-                              const Unsigned_integer<N>& rhs) {
+auto operator&(std::string const& lhs, Unsigned_integer<N> const& rhs)
+    -> Unsigned_integer<N>
+{
     return rhs & lhs;
 }
 
 // OR
 template <std::size_t N>
-Unsigned_integer<N> operator|(std::uint64_t lhs,
-                              const Unsigned_integer<N>& rhs) {
+auto operator|(std::uint64_t lhs, Unsigned_integer<N> const& rhs)
+    -> Unsigned_integer<N>
+{
     return rhs | lhs;
 }
 
 template <std::size_t N>
-Unsigned_integer<N> operator|(const std::string& lhs,
-                              const Unsigned_integer<N>& rhs) {
+auto operator|(std::string const& lhs, Unsigned_integer<N> const& rhs)
+    -> Unsigned_integer<N>
+{
     return rhs | lhs;
 }
 
 // XOR
 template <std::size_t N>
-Unsigned_integer<N> operator^(std::uint64_t lhs,
-                              const Unsigned_integer<N>& rhs) {
+auto operator^(std::uint64_t lhs, Unsigned_integer<N> const& rhs)
+    -> Unsigned_integer<N>
+{
     return rhs ^ lhs;
 }
 
 template <std::size_t N>
-Unsigned_integer<N> operator^(const std::string& lhs,
-                              const Unsigned_integer<N>& rhs) {
+auto operator^(std::string const& lhs, Unsigned_integer<N> const& rhs)
+    -> Unsigned_integer<N>
+{
     return rhs ^ lhs;
-}
-
-// COMPOUND BIT OPERATOR ASSIGNMENT - - - - - - - - - - - - - - - - - - - -
-// - -
-template <std::size_t N>
-Unsigned_integer<N>& Unsigned_integer<N>::operator&=(
-    const Unsigned_integer& other) {
-    this->data_ &= other.data_;
-    return *this;
-}
-
-template <std::size_t N>
-Unsigned_integer<N>& Unsigned_integer<N>::operator|=(
-    const Unsigned_integer& other) {
-    this->data_ |= other.data_;
-    return *this;
-}
-
-template <std::size_t N>
-Unsigned_integer<N>& Unsigned_integer<N>::operator^=(
-    const Unsigned_integer& other) {
-    this->data_ ^= other.data_;
-    return *this;
-}
-
-// Shift Left
-template <std::size_t N>
-Unsigned_integer<N>& Unsigned_integer<N>::operator<<=(std::size_t pos) {
-    this->data_ <<= pos;
-    return *this;
-}
-
-// Shift Right
-template <std::size_t N>
-Unsigned_integer<N>& Unsigned_integer<N>::operator>>=(std::size_t pos) {
-    this->data_ >>= pos;
-    return *this;
-}
-
-// ARITHMETIC - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-// - - Addition
-template <std::size_t N>
-Unsigned_integer<N> Unsigned_integer<N>::operator+(
-    const Unsigned_integer& rhs) const {
-    return detail::usign::bit_addition(data_, rhs.data_);
-}
-
-// Subtraction
-template <std::size_t N>
-Unsigned_integer<N> Unsigned_integer<N>::operator-(
-    const Unsigned_integer& rhs) const {
-    return detail::usign::bit_subtraction(data_, rhs.data_);
-}
-
-// Division
-template <std::size_t N>
-Unsigned_integer<N> Unsigned_integer<N>::operator/(
-    const Unsigned_integer& divisor) const {
-    if (N == 0 || divisor == 0) {
-        return 0;
-    }
-    if (divisor == 1) {
-        return *this;
-    }
-    return detail::usign::bit_division(this->data_, divisor.data_);
-}
-
-// Modulo
-template <std::size_t N>
-Unsigned_integer<N> Unsigned_integer<N>::operator%(
-    const Unsigned_integer& divisor) const {
-    if (N == 0 || divisor == 0 || divisor == 1) {
-        return 0;
-    }
-    return detail::usign::bit_modulo(this->data_, divisor.data_);
-}
-
-// Multiplication
-template <std::size_t N>
-Unsigned_integer<N> Unsigned_integer<N>::operator*(
-    const Unsigned_integer& rhs) const {
-    return detail::usign::bit_multiplication(this->data_, rhs.data_);
-}
-
-// Exponentiation
-template <std::size_t N>
-Unsigned_integer<N> Unsigned_integer<N>::exp(
-    const Unsigned_integer& exponent) const {
-    return detail::usign::bit_exponentiation(this->data_, exponent.data_);
-}
-
-// Root
-template <std::size_t N>
-Unsigned_integer<N> Unsigned_integer<N>::root(
-    const Unsigned_integer& index) const {
-    return detail::usign::bit_root(this->data_, index.data_);
 }
 
 // FORWARDING ARITHMETIC - - - - - - - - - - - - - - - - - - - - - - - - - -
-// - - Addition
+// Addition
 template <std::size_t N>
-Unsigned_integer<N> operator+(std::uint64_t lhs,
-                              const Unsigned_integer<N>& rhs) {
+auto operator+(std::uint64_t lhs, Unsigned_integer<N> const& rhs)
+    -> Unsigned_integer<N>
+{
     return rhs + lhs;
 }
 
 template <std::size_t N>
-Unsigned_integer<N> operator+(const std::string& lhs,
-                              const Unsigned_integer<N>& rhs) {
+auto operator+(std::string const& lhs, Unsigned_integer<N> const& rhs)
+    -> Unsigned_integer<N>
+{
     return rhs + lhs;
 }
 
 // Subtraction
 template <std::size_t N>
-Unsigned_integer<N> operator-(std::uint64_t lhs,
-                              const Unsigned_integer<N>& rhs) {
+auto operator-(std::uint64_t lhs, Unsigned_integer<N> const& rhs)
+    -> Unsigned_integer<N>
+{
     return Unsigned_integer<N>{lhs} - rhs;
 }
 
 template <std::size_t N>
-Unsigned_integer<N> operator-(const std::string& lhs,
-                              const Unsigned_integer<N>& rhs) {
+auto operator-(std::string const& lhs, Unsigned_integer<N> const& rhs)
+    -> Unsigned_integer<N>
+{
     return Unsigned_integer<N>{lhs} - rhs;
 }
 
 // Division
 template <std::size_t N>
-Unsigned_integer<N> operator/(std::uint64_t num,
-                              const Unsigned_integer<N>& den) {
+auto operator/(std::uint64_t num, Unsigned_integer<N> const& den)
+    -> Unsigned_integer<N>
+{
     return Unsigned_integer<N>{num} / den;
 }
 
 template <std::size_t N>
-Unsigned_integer<N> operator/(const std::string& num,
-                              const Unsigned_integer<N>& den) {
+auto operator/(std::string const& num, Unsigned_integer<N> const& den)
+    -> Unsigned_integer<N>
+{
     return Unsigned_integer<N>{num} / den;
 }
 
 // Modulo
 template <std::size_t N>
-Unsigned_integer<N> operator%(std::uint64_t num,
-                              const Unsigned_integer<N>& den) {
+auto operator%(std::uint64_t num, Unsigned_integer<N> const& den)
+    -> Unsigned_integer<N>
+{
     return Unsigned_integer<N>{num} % den;
 }
 
 template <std::size_t N>
-Unsigned_integer<N> operator%(const std::string& num,
-                              const Unsigned_integer<N>& den) {
+auto operator%(std::string const& num, Unsigned_integer<N> const& den)
+    -> Unsigned_integer<N>
+{
     return Unsigned_integer<N>{num} % den;
 }
 
 // Multiplication
 template <std::size_t N>
-Unsigned_integer<N> operator*(std::uint64_t lhs,
-                              const Unsigned_integer<N>& rhs) {
+auto operator*(std::uint64_t lhs, Unsigned_integer<N> const& rhs)
+    -> Unsigned_integer<N>
+{
     return rhs * lhs;
 }
 
 template <std::size_t N>
-Unsigned_integer<N> operator*(const std::string& lhs,
-                              const Unsigned_integer<N>& rhs) {
+auto operator*(std::string const& lhs, Unsigned_integer<N> const& rhs)
+    -> Unsigned_integer<N>
+{
     return rhs * lhs;
 }
 
 // IOSTREAMS - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 template <std::size_t N>
-std::ostream& operator<<(std::ostream& os, const Unsigned_integer<N>& value) {
-    auto base = 10;
+auto operator<<(std::ostream& os, Unsigned_integer<N> const& value)
+    -> std::ostream&
+{
+    auto base  = 10;
     auto flags = os.flags() & std::ios::basefield;
-    if (flags == std::ios::hex) {
+    if (flags == std::ios::hex)
         base = 16;
-    } else if (flags == std::ios::oct) {
+    else if (flags == std::ios::oct)
         base = 8;
-    }
     os << value.to_string(base);
     return os;
 }
 
 template <std::size_t N>
-std::istream& operator>>(std::istream& is, Unsigned_integer<N>& value) {
+auto operator>>(std::istream& is, Unsigned_integer<N>& value) -> std::istream&
+{
     auto input = std::string{};
-    if (is.good()) {
+    if (is.good())
         is >> input;
-    }
     value = Unsigned_integer<N>{input};
     return is;
 }

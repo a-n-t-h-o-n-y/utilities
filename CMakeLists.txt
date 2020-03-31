@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.8 FATAL_ERROR)
+cmake_minimum_required(VERSION 3.14 FATAL_ERROR)
 project(libutility LANGUAGES CXX)
 include(GNUInstallDirs)
 enable_testing()
@@ -29,7 +29,7 @@ target_include_directories(libutility
 target_link_libraries(libutility INTERFACE signals)
 target_include_directories(libutility INTERFACE include/)
 target_compile_options(libutility INTERFACE -Wall -Wextra)
-target_compile_features(libutility INTERFACE cxx_std_17)
+target_compile_features(libutility INTERFACE cxx_std_20)
 
 # ADD TESTS
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -

@@ -3,39 +3,37 @@
 #include <bitset>
 #include <cstddef>
 
-namespace utility {
-namespace detail {
-namespace usign {
+namespace utility::detail::usign {
 
 template <std::size_t N>
-bool operator<(const std::bitset<N>& lhs, const std::bitset<N>& rhs) {
-    if (N == 0) {
+auto operator<(std::bitset<N> const& lhs, std::bitset<N> const& rhs) -> bool
+{
+    if (N == 0)
         return false;
-    }
     for (auto i = N - 1; i < N; --i) {
-        if (lhs[i] != rhs[i]) {
+        if (lhs[i] != rhs[i])
             return rhs[i];
-        }
     }
     return false;
 }
 
 template <std::size_t N>
-bool operator<=(const std::bitset<N>& lhs, const std::bitset<N>& rhs) {
+auto operator<=(std::bitset<N> const& lhs, std::bitset<N> const& rhs) -> bool
+{
     return lhs < rhs || lhs == rhs;
 }
 
 template <std::size_t N>
-bool operator>(const std::bitset<N>& lhs, const std::bitset<N>& rhs) {
+auto operator>(std::bitset<N> const& lhs, std::bitset<N> const& rhs) -> bool
+{
     return !(lhs <= rhs);
 }
 
 template <std::size_t N>
-bool operator>=(const std::bitset<N>& lhs, const std::bitset<N>& rhs) {
+auto operator>=(std::bitset<N> const& lhs, std::bitset<N> const& rhs) -> bool
+{
     return lhs > rhs || lhs == rhs;
 }
 
-}  // namespace usign
-}  // namespace detail
-}  // namespace utility
+}  // namespace utility::detail::usign
 #endif  // UTILITY_DETAIL_USIGN_BIT_COMPARISONS_HPP
