@@ -10,24 +10,25 @@
 
 #include <utility/async_trigger.hpp>
 
-TEST(AsyncTrigger, Default) {
+TEST(AsyncTrigger, Default)
+{
     const auto frame_time = std::chrono::microseconds(1);
-    const auto test_time = std::chrono::seconds(5);
+    const auto test_time  = std::chrono::seconds(5);
 
     auto sin_duration = [] {
         const double pi{std::atan(1.0) * 4.0};
         const double two_pi{2.0 * pi};
         static double i{0.0};
         const double depth{250.0};  // depth
-        std::chrono::milliseconds result{0};
+        auto result = std::chrono::milliseconds{0};
         if (i <= two_pi) {
             double relative_level{std::sin(i)};
             result = std::chrono::milliseconds(
                 static_cast<long>(std::abs(relative_level * depth)));
             i += 0.2;  // period or rate
-        } else {
-            i = 0.0;
         }
+        else
+            i = 0.0;
         return result;
     };
 

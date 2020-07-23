@@ -11,7 +11,8 @@ using Container_t = std::vector<int>;
 template <typename Ret, typename... Args>
 using Mem_fn_t = Ret (Container_t::*)(Args...);
 
-TEST(StrongGuaranteeTest, Test) {
+TEST(StrongGuaranteeTest, Test)
+{
     Container_t v{5, 4, 3, 2, 1};
 
     EXPECT_FALSE(utility::make_operation_strong(&Container_t::empty, v));

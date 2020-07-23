@@ -5,7 +5,8 @@
 
 #include <utility/memory_view.hpp>
 
-TEST(MemoryView, IntegralValues) {
+TEST(MemoryView, IntegralValues)
+{
     using namespace utility;
     const auto a = 765;
     EXPECT_EQ("0000 0000 0000 0000 0000 0010 1111 1101", as_binary(a));
@@ -26,7 +27,8 @@ TEST(MemoryView, IntegralValues) {
     EXPECT_EQ("0", as_octal(c));
 }
 
-TEST(MemoryView, 64BitStruct) {
+TEST(MemoryView, 64BitStruct)
+{
     using namespace utility;
     struct Foo {
         int a{7654};

@@ -13,7 +13,8 @@ void foobar(const int&, Foo&&) {}
 struct Foo {};
 }  // namespace test
 
-TEST(TypeInfo, ObjectType) {
+TEST(TypeInfo, ObjectType)
+{
     utility::Type_info info_1{utility::get_type_info<int>()};
     EXPECT_EQ("int", info_1.full_type_name());
 
@@ -54,7 +55,8 @@ TEST(TypeInfo, ObjectType) {
     EXPECT_EQ("const std::type_info&", static_cast<std::string>(info_12));
 }
 
-TEST(TypeInfo, PointerType) {
+TEST(TypeInfo, PointerType)
+{
     utility::Type_info info_1{utility::get_type_info<long*>()};
     EXPECT_EQ("long*", static_cast<std::string>(info_1));
 
@@ -99,7 +101,8 @@ TEST(TypeInfo, PointerType) {
     EXPECT_EQ("int* const&&", static_cast<std::string>(info_12));
 }
 
-TEST(TypeInfo, FunctionPointerType) {
+TEST(TypeInfo, FunctionPointerType)
+{
     using Func1_t = void (*)();
     utility::Type_info info_1{utility::get_type_info<Func1_t>()};
     EXPECT_EQ("void (*)()", static_cast<std::string>(info_1));
@@ -143,16 +146,19 @@ TEST(TypeInfo, FunctionPointerType) {
     EXPECT_EQ("Foo (* const)(int, long)", static_cast<std::string>(info_10));
 }
 
-TEST(TypeInfo, InNamespace) {
+TEST(TypeInfo, InNamespace)
+{
     utility::Type_info info_1{utility::get_type_info<const test::Foo&>()};
     EXPECT_EQ("const test::Foo&", static_cast<std::string>(info_1));
 }
 
-TEST(TypeInfo, ArrayTypes) {
+TEST(TypeInfo, ArrayTypes)
+{
     // TODO
 }
 
-TEST(TypeInfo, EqualityComparison) {
+TEST(TypeInfo, EqualityComparison)
+{
     using Func_t = Foo (*)(int, long);
     utility::Type_info info_1{utility::get_type_info<Func_t>()};
     utility::Type_info info_2{utility::get_type_info<Foo (*)(int, long)>()};
@@ -171,7 +177,8 @@ TEST(TypeInfo, EqualityComparison) {
     EXPECT_NE(info_5, info_6);
 }
 
-TEST(TypeInfo, LessThanComparison) {
+TEST(TypeInfo, LessThanComparison)
+{
     utility::Type_info info_1{utility::get_type_info<int>()};
     utility::Type_info info_2{utility::get_type_info<const int>()};
 

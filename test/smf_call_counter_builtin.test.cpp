@@ -6,7 +6,8 @@
 
 using namespace utility;
 
-TEST(SMFCallCounterBuiltin, Int) {
+TEST(SMFCallCounterBuiltin, Int)
+{
     using Integer = utility::SMF_call_counter<int>;
     Integer::reset_counts();
     {
@@ -30,11 +31,10 @@ TEST(SMFCallCounterBuiltin, Int) {
     EXPECT_EQ(0, Integer::get_destructor_count());
 }
 
-void zero(int& i) {
-    i = 0;
-}
+void zero(int& i) { i = 0; }
 
-TEST(SMFCallCounterBuiltin, ConversionOperators) {
+TEST(SMFCallCounterBuiltin, ConversionOperators)
+{
     using Integer = utility::SMF_call_counter<int>;
     Integer::reset_counts();
     Integer var{7};
@@ -42,13 +42,14 @@ TEST(SMFCallCounterBuiltin, ConversionOperators) {
     zero(var);
     EXPECT_EQ(0, var);
     int& i = var;
-    i = 4;
+    i      = 4;
     EXPECT_EQ(4, var);
     const int& ci{var};
     EXPECT_EQ(4, ci);
 }
 
-TEST(SMFCallCounterBuiltin, DefaultCstrStringOutput) {
+TEST(SMFCallCounterBuiltin, DefaultCstrStringOutput)
+{
     using Integer = utility::SMF_call_counter<int>;
     Integer::reset_counts();
     Integer var_1;
@@ -56,7 +57,8 @@ TEST(SMFCallCounterBuiltin, DefaultCstrStringOutput) {
     EXPECT_EQ("int() called 2 times.", Integer::default_cstr_count_as_string());
 }
 
-TEST(SMFCallCounterBuiltin, CopyCstrStringOutput) {
+TEST(SMFCallCounterBuiltin, CopyCstrStringOutput)
+{
     using Integer = utility::SMF_call_counter<int>;
     Integer::reset_counts();
     Integer var_1;
@@ -67,7 +69,8 @@ TEST(SMFCallCounterBuiltin, CopyCstrStringOutput) {
               Integer::copy_cstr_count_as_string());
 }
 
-TEST(SMFCallCounterBuiltin, CopyAssignmentStringOutput) {
+TEST(SMFCallCounterBuiltin, CopyAssignmentStringOutput)
+{
     using Integer = utility::SMF_call_counter<int>;
     Integer::reset_counts();
     Integer var_1;
@@ -79,7 +82,8 @@ TEST(SMFCallCounterBuiltin, CopyAssignmentStringOutput) {
               Integer::copy_assignment_count_as_string());
 }
 
-TEST(SMFCallCounterBuiltin, DestructorStringOutput) {
+TEST(SMFCallCounterBuiltin, DestructorStringOutput)
+{
     using Integer = utility::SMF_call_counter<int>;
     Integer::reset_counts();
     {
@@ -93,18 +97,24 @@ TEST(SMFCallCounterBuiltin, DestructorStringOutput) {
 
 void foo() {}
 
-TEST(SMFCallCounterBuiltin, FunctionPointer) {
+TEST(SMFCallCounterBuiltin, FunctionPointer)
+{
     using FuncPtr = SMF_call_counter<void (*)()>;
-    { FuncPtr func_ptr{&foo}; }
+    {
+        FuncPtr func_ptr{&foo};
+    }
     EXPECT_EQ(0, FuncPtr::get_default_cstr_count());
     EXPECT_EQ(1, FuncPtr::get_copy_cstr_count());
     EXPECT_EQ(0, FuncPtr::get_copy_assignment_count());
     EXPECT_EQ(1, FuncPtr::get_destructor_count());
 }
 
-TEST(SMFCallCounterBuiltin, Nullptr) {
+TEST(SMFCallCounterBuiltin, Nullptr)
+{
     using NullPtr = SMF_call_counter<decltype(nullptr)>;
-    { NullPtr null_ptr{nullptr}; }
+    {
+        NullPtr null_ptr{nullptr};
+    }
     EXPECT_EQ(0, NullPtr::get_default_cstr_count());
     EXPECT_EQ(1, NullPtr::get_copy_cstr_count());
     EXPECT_EQ(0, NullPtr::get_copy_assignment_count());
@@ -113,7 +123,8 @@ TEST(SMFCallCounterBuiltin, Nullptr) {
 
 enum Color { Red, Blue, Green };
 
-TEST(SMFCallCounterBuiltin, Enum) {
+TEST(SMFCallCounterBuiltin, Enum)
+{
     using ColorEnum = SMF_call_counter<Color>;
     {
         ColorEnum color_enum_1{Color::Red};

@@ -4,7 +4,8 @@
 
 #include <utility/narrow_cast.hpp>
 
-TEST(NarrowCast, General) {
+TEST(NarrowCast, General)
+{
     EXPECT_THROW(utility::narrow_cast<std::int8_t>(5'000), std::runtime_error);
     EXPECT_NO_THROW(utility::narrow_cast<std::int8_t>(50));
     // try {

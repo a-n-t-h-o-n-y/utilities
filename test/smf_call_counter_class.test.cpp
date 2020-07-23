@@ -6,7 +6,8 @@
 
 #include <utility/smf_call_counter.hpp>
 
-TEST(SMFCallCounterClass, UniquePtr) {
+TEST(SMFCallCounterClass, UniquePtr)
+{
     using Unique_ptr = utility::SMF_call_counter<std::unique_ptr<int>>;
     Unique_ptr::reset_counts();
     Unique_ptr var_1;                            // Default constructor
@@ -34,10 +35,11 @@ struct Foo {
     Foo(Foo&&) {}
     Foo& operator=(const Foo&) = default;
     Foo& operator=(Foo&&) = default;
-    int operator=(bool) { return 5; }
+    int operator          =(bool) { return 5; }
 };
 
-TEST(SMFCallCounterClass, NonTrivialType) {
+TEST(SMFCallCounterClass, NonTrivialType)
+{
     using Foobar = utility::SMF_call_counter<Foo>;
     Foobar::reset_counts();
     Foobar var_1;                      // Foo()
@@ -51,9 +53,11 @@ TEST(SMFCallCounterClass, NonTrivialType) {
     Foobar var_6{"abc"};               // Foo(const char[4])
     Foobar var_7(7.6f, 5);             // Foo(int, double)
     Foobar var_8{var_7};               // Copy Construction
-    { Foobar var_9; }                  // Foo(); ~Foo();
-    int i = var_7 = true;              // Misc. Assignment Operator
-    EXPECT_EQ(5, i);                   // Transparent Misc. operator=(U)
+    {
+        Foobar var_9;
+    }                      // Foo(); ~Foo();
+    int i = var_7 = true;  // Misc. Assignment Operator
+    EXPECT_EQ(5, i);       // Transparent Misc. operator=(U)
 
     EXPECT_EQ(2, Foobar::get_default_cstr_count());
     EXPECT_EQ(5, Foobar::get_direct_cstr_counts());
@@ -130,7 +134,8 @@ TEST(SMFCallCounterClass, NonTrivialType) {
 //     EXPECT_EQ(0, Foobar::get_destructor_count());
 // }
 
-TEST(SMFCallCounterClass, TranparentClassWrapper) {
+TEST(SMFCallCounterClass, TranparentClassWrapper)
+{
     using Unique_ptr = utility::SMF_call_counter<std::unique_ptr<int>>;
     Unique_ptr::reset_counts();
     Unique_ptr var{std::make_unique<int>(5)};
@@ -138,7 +143,8 @@ TEST(SMFCallCounterClass, TranparentClassWrapper) {
     EXPECT_EQ(nullptr, var.get());
 }
 
-TEST(SMFCallCounterClass, DefaultCstrStringOutput) {
+TEST(SMFCallCounterClass, DefaultCstrStringOutput)
+{
     using Foobar = utility::SMF_call_counter<Foo>;
     Foobar::reset_counts();
     Foobar var_1;
@@ -146,7 +152,8 @@ TEST(SMFCallCounterClass, DefaultCstrStringOutput) {
     EXPECT_EQ("Foo() called 2 times.", Foobar::default_cstr_count_as_string());
 }
 
-TEST(SMFCallCounterClass, DirectCstrStringOutput) {
+TEST(SMFCallCounterClass, DirectCstrStringOutput)
+{
     using Foobar = utility::SMF_call_counter<Foo>;
     Foobar::reset_counts();
     Foobar var_1{5, 1.2};
@@ -157,7 +164,8 @@ TEST(SMFCallCounterClass, DirectCstrStringOutput) {
               Foobar::direct_cstr_counts_as_string());
 }
 
-TEST(SMFCallCounterClass, CopyCstrStringOutput) {
+TEST(SMFCallCounterClass, CopyCstrStringOutput)
+{
     using Foobar = utility::SMF_call_counter<Foo>;
     Foobar::reset_counts();
     Foobar var_1;
@@ -168,7 +176,8 @@ TEST(SMFCallCounterClass, CopyCstrStringOutput) {
               Foobar::copy_cstr_count_as_string());
 }
 
-TEST(SMFCallCounterClass, MoveCstrStringOutput) {
+TEST(SMFCallCounterClass, MoveCstrStringOutput)
+{
     using Foobar = utility::SMF_call_counter<Foo>;
     Foobar::reset_counts();
     Foobar var_1;
@@ -179,7 +188,8 @@ TEST(SMFCallCounterClass, MoveCstrStringOutput) {
               Foobar::move_cstr_count_as_string());
 }
 
-TEST(SMFCallCounterClass, CopyAssignmentStringOutput) {
+TEST(SMFCallCounterClass, CopyAssignmentStringOutput)
+{
     using Foobar = utility::SMF_call_counter<Foo>;
     Foobar::reset_counts();
     Foobar var_1;
@@ -191,7 +201,8 @@ TEST(SMFCallCounterClass, CopyAssignmentStringOutput) {
               Foobar::copy_assignment_count_as_string());
 }
 
-TEST(SMFCallCounterClass, MoveAssignmentStringOutput) {
+TEST(SMFCallCounterClass, MoveAssignmentStringOutput)
+{
     using Foobar = utility::SMF_call_counter<Foo>;
     Foobar::reset_counts();
     Foobar var_1;
@@ -203,7 +214,8 @@ TEST(SMFCallCounterClass, MoveAssignmentStringOutput) {
               Foobar::move_assignment_count_as_string());
 }
 
-TEST(SMFCallCounterClass, AssignmentStringOutput) {
+TEST(SMFCallCounterClass, AssignmentStringOutput)
+{
     using Foobar = utility::SMF_call_counter<Foo>;
     Foobar::reset_counts();
     Foobar var_1;
@@ -216,7 +228,8 @@ TEST(SMFCallCounterClass, AssignmentStringOutput) {
               Foobar::assignment_count_as_string<bool>());
 }
 
-TEST(SMFCallCounterClass, DestructorStringOutput) {
+TEST(SMFCallCounterClass, DestructorStringOutput)
+{
     using Foobar = utility::SMF_call_counter<Foo>;
     Foobar::reset_counts();
     {

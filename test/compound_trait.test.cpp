@@ -15,7 +15,8 @@ using Is_const_class =
 template <typename... Types>
 using Are_const_classes = utility::Trait_conjunction<Is_const_class, Types...>;
 
-TEST(CompoundTrait, Default) {
+TEST(CompoundTrait, Default)
+{
     EXPECT_FALSE(Is_const_class<int>::value);
     EXPECT_FALSE(Is_const_class<const int>::value);
     EXPECT_TRUE(Is_const_class<const Foo>::value);

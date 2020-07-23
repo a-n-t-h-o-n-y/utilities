@@ -10,7 +10,8 @@ struct Bar {
     char c;
 };
 
-TEST(SMFCallCounterAggregate, Counts) {
+TEST(SMFCallCounterAggregate, Counts)
+{
     using Baz = utility::SMF_call_counter<Bar>;
     Baz::reset_counts();
     {
@@ -39,7 +40,8 @@ TEST(SMFCallCounterAggregate, Counts) {
     EXPECT_EQ(0, Baz::get_destructor_count());
 }
 
-TEST(SMFCallCounterAggregate, TranparentMemberAccess) {
+TEST(SMFCallCounterAggregate, TranparentMemberAccess)
+{
     using Baz = utility::SMF_call_counter<Bar>;
     Baz::reset_counts();
     Baz var{3, 2.1, 'a'};
@@ -48,7 +50,8 @@ TEST(SMFCallCounterAggregate, TranparentMemberAccess) {
     EXPECT_EQ('a', var.c);
 }
 
-TEST(SMFCallCounterAggregate, DefaultCstrStringOutput) {
+TEST(SMFCallCounterAggregate, DefaultCstrStringOutput)
+{
     using Baz = utility::SMF_call_counter<Bar>;
     Baz::reset_counts();
     Baz var_1;
@@ -56,7 +59,8 @@ TEST(SMFCallCounterAggregate, DefaultCstrStringOutput) {
     EXPECT_EQ("Bar() called 2 times.", Baz::default_cstr_count_as_string());
 }
 
-TEST(SMFCallCounterAggregate, DirectCstrStringOutput) {
+TEST(SMFCallCounterAggregate, DirectCstrStringOutput)
+{
     using Baz = utility::SMF_call_counter<Bar>;
     Baz::reset_counts();
     Baz var_1{5, 1.2, 'b'};
@@ -67,7 +71,8 @@ TEST(SMFCallCounterAggregate, DirectCstrStringOutput) {
               (Baz::direct_cstr_count_as_string<int, double, char>()));
 }
 
-TEST(SMFCallCounterAggregate, CopyCstrStringOutput) {
+TEST(SMFCallCounterAggregate, CopyCstrStringOutput)
+{
     using Baz = utility::SMF_call_counter<Bar>;
     Baz::reset_counts();
     Baz var_1;
@@ -78,7 +83,8 @@ TEST(SMFCallCounterAggregate, CopyCstrStringOutput) {
               Baz::copy_cstr_count_as_string());
 }
 
-TEST(SMFCallCounterAggregate, CopyAssignmentStringOutput) {
+TEST(SMFCallCounterAggregate, CopyAssignmentStringOutput)
+{
     using Baz = utility::SMF_call_counter<Bar>;
     Baz::reset_counts();
     Baz var_1;
@@ -90,7 +96,8 @@ TEST(SMFCallCounterAggregate, CopyAssignmentStringOutput) {
               Baz::copy_assignment_count_as_string());
 }
 
-TEST(SMFCallCounterAggregate, DestructorStringOutput) {
+TEST(SMFCallCounterAggregate, DestructorStringOutput)
+{
     using Baz = utility::SMF_call_counter<Bar>;
     Baz::reset_counts();
     {

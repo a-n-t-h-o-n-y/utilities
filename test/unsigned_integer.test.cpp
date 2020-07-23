@@ -7,7 +7,8 @@
 
 using namespace utility;
 
-TEST(UnsignedIntegerTest, ConstructorDefault) {
+TEST(UnsignedIntegerTest, ConstructorDefault)
+{
     Unsigned_integer<32> i;
     auto binary = i.to_string(2);
     EXPECT_EQ(i.precision, 32);
@@ -24,7 +25,8 @@ TEST(UnsignedIntegerTest, ConstructorDefault) {
     EXPECT_EQ(binary, "0");
 }
 
-TEST(UnsignedIntegerTest, ConstructorUnsignedInt64) {
+TEST(UnsignedIntegerTest, ConstructorUnsignedInt64)
+{
     Unsigned_integer<16> i1{128};
     EXPECT_EQ(i1, 0b10000000);
 
@@ -44,7 +46,8 @@ TEST(UnsignedIntegerTest, ConstructorUnsignedInt64) {
     EXPECT_EQ(0b0, i5);
 }
 
-TEST(UnsignedIntegerTest, ConstructorStringBinary) {
+TEST(UnsignedIntegerTest, ConstructorStringBinary)
+{
     Unsigned_integer<12> i1{"0B111111111111"};
     EXPECT_EQ(i1, 0b111111111111);
 
@@ -58,7 +61,8 @@ TEST(UnsignedIntegerTest, ConstructorStringBinary) {
     EXPECT_EQ(i4, 0b10101);
 }
 
-TEST(UnsignedIntegerTest, ConstructorStringDecimal) {
+TEST(UnsignedIntegerTest, ConstructorStringDecimal)
+{
     Unsigned_integer<8> i1{"128"};
     EXPECT_EQ(i1, 0b10000000);
 
@@ -72,7 +76,8 @@ TEST(UnsignedIntegerTest, ConstructorStringDecimal) {
     EXPECT_EQ(i4, 0b11000101011100101);
 }
 
-TEST(UnsignedIntegerTest, ConstructorStringHex) {
+TEST(UnsignedIntegerTest, ConstructorStringHex)
+{
     Unsigned_integer<8> i1{"0x80"};
     EXPECT_EQ(i1, 0b10000000);
 
@@ -92,7 +97,8 @@ TEST(UnsignedIntegerTest, ConstructorStringHex) {
     EXPECT_EQ(i6, 0b1011111000000101100);
 }
 
-TEST(UnsignedIntegerTest, ConstructorStringOctal) {
+TEST(UnsignedIntegerTest, ConstructorStringOctal)
+{
     Unsigned_integer<8> i1{"0200"};
     EXPECT_EQ(i1, 0b10000000);
 
@@ -109,7 +115,8 @@ TEST(UnsignedIntegerTest, ConstructorStringOctal) {
     EXPECT_EQ(i6, 0b1011111000000101100);
 }
 
-TEST(UnsignedIntegerTest, StringOutputDecimal) {
+TEST(UnsignedIntegerTest, StringOutputDecimal)
+{
     Unsigned_integer<8> i1{"127"};
     EXPECT_EQ("127", i1.to_string());
 
@@ -222,7 +229,8 @@ TEST(UnsignedIntegerTest, StringOutputDecimal) {
     //     i7.to_string());
 }
 
-TEST(UnsignedIntegerTest, StringOutputHex) {
+TEST(UnsignedIntegerTest, StringOutputHex)
+{
     Unsigned_integer<64> i1{"736489"};
     EXPECT_EQ("B3CE9", i1.to_string(16));
 
@@ -242,7 +250,8 @@ TEST(UnsignedIntegerTest, StringOutputHex) {
     EXPECT_EQ("F", i6.to_string(16));
 }
 
-TEST(UnsignedIntegerTest, StringOutputOctal) {
+TEST(UnsignedIntegerTest, StringOutputOctal)
+{
     Unsigned_integer<64> i1{"736489"};
     EXPECT_EQ("2636351", i1.to_string(8));
 
@@ -262,7 +271,8 @@ TEST(UnsignedIntegerTest, StringOutputOctal) {
     EXPECT_EQ("7", i6.to_string(8));
 }
 
-TEST(UnsignedIntegerTest, StringOutputBinary) {
+TEST(UnsignedIntegerTest, StringOutputBinary)
+{
     Unsigned_integer<64> i1{"736489"};
     EXPECT_EQ("10110011110011101001", i1.to_string(2));
 
@@ -282,7 +292,8 @@ TEST(UnsignedIntegerTest, StringOutputBinary) {
     EXPECT_EQ("1", i6.to_string(2));
 }
 
-TEST(UnsignedIntegerTest, ImplicitCasting) {
+TEST(UnsignedIntegerTest, ImplicitCasting)
+{
     Unsigned_integer<64> i1{999};
     Unsigned_integer<128> i2{i1};
     EXPECT_EQ(999, i2);
@@ -305,7 +316,8 @@ TEST(UnsignedIntegerTest, ImplicitCasting) {
     EXPECT_EQ(999, i6);
 }
 
-TEST(UnsignedIntegerTest, Addition) {
+TEST(UnsignedIntegerTest, Addition)
+{
     Unsigned_integer<64> i1{0};
     Unsigned_integer<64> i2{1};
     Unsigned_integer<64> i3{9'999'999'999};
@@ -348,7 +360,8 @@ TEST(UnsignedIntegerTest, Addition) {
     EXPECT_EQ(5, i2 + "0b100");
 }
 
-TEST(UnsignedIntegerTest, Subtraction) {
+TEST(UnsignedIntegerTest, Subtraction)
+{
     Unsigned_integer<64> i1{0};
     Unsigned_integer<64> i2{1};
     Unsigned_integer<64> i3{9'999'999'999};
@@ -397,7 +410,8 @@ TEST(UnsignedIntegerTest, Subtraction) {
     EXPECT_NE("", result10.to_string());
 }
 
-TEST(UnsignedIntegerTest, PreIncrementOperator) {
+TEST(UnsignedIntegerTest, PreIncrementOperator)
+{
     Unsigned_integer<64> i1{0};
     EXPECT_EQ(1, ++i1);
     ++i1;
@@ -407,7 +421,8 @@ TEST(UnsignedIntegerTest, PreIncrementOperator) {
     EXPECT_EQ(5, i1);
 }
 
-TEST(UnsignedIntegerTest, PostIncrementOperator) {
+TEST(UnsignedIntegerTest, PostIncrementOperator)
+{
     Unsigned_integer<64> i1{0};
     EXPECT_EQ(0, i1++);
     EXPECT_EQ(1, i1);
@@ -418,7 +433,8 @@ TEST(UnsignedIntegerTest, PostIncrementOperator) {
     EXPECT_EQ(5, i1);
 }
 
-TEST(UnsignedIntegerTest, PreDecrementOperator) {
+TEST(UnsignedIntegerTest, PreDecrementOperator)
+{
     Unsigned_integer<64> i1{10};
     EXPECT_EQ(9, --i1);
     --i1;
@@ -428,7 +444,8 @@ TEST(UnsignedIntegerTest, PreDecrementOperator) {
     EXPECT_EQ(5, i1);
 }
 
-TEST(UnsignedIntegerTest, PostDecrementOperator) {
+TEST(UnsignedIntegerTest, PostDecrementOperator)
+{
     Unsigned_integer<64> i1{10};
     EXPECT_EQ(10, i1--);
     EXPECT_EQ(9, i1);
@@ -439,7 +456,8 @@ TEST(UnsignedIntegerTest, PostDecrementOperator) {
     EXPECT_EQ(5, i1);
 }
 
-TEST(UnsignedIntegerTest, AdditionCompoundAssignment) {
+TEST(UnsignedIntegerTest, AdditionCompoundAssignment)
+{
     Unsigned_integer<16> i1{10};
     Unsigned_integer<32> i2{15};
     i1 += i2;
@@ -450,7 +468,8 @@ TEST(UnsignedIntegerTest, AdditionCompoundAssignment) {
     EXPECT_EQ(53, i1 += "2");
 }
 
-TEST(UnsignedIntegerTest, SubtractionCompoundAssignment) {
+TEST(UnsignedIntegerTest, SubtractionCompoundAssignment)
+{
     Unsigned_integer<16> i1{10};
     Unsigned_integer<32> i2{15};
     i2 -= i1;
@@ -461,7 +480,8 @@ TEST(UnsignedIntegerTest, SubtractionCompoundAssignment) {
     EXPECT_EQ(6, i1 -= "2");
 }
 
-TEST(UnsignedIntegerTest, DivisionCompoundAssignment) {
+TEST(UnsignedIntegerTest, DivisionCompoundAssignment)
+{
     Unsigned_integer<16> i1{100};
     Unsigned_integer<32> i2{10};
     i1 /= i2;
@@ -472,7 +492,8 @@ TEST(UnsignedIntegerTest, DivisionCompoundAssignment) {
     EXPECT_EQ(2, i1 /= "2");
 }
 
-TEST(UnsignedIntegerTest, ModuloCompoundAssignment) {
+TEST(UnsignedIntegerTest, ModuloCompoundAssignment)
+{
     Unsigned_integer<16> i1{10};
     Unsigned_integer<32> i2{15};
     i1 %= i2;
@@ -483,7 +504,8 @@ TEST(UnsignedIntegerTest, ModuloCompoundAssignment) {
     EXPECT_EQ(0, i1 %= "2");
 }
 
-TEST(UnsignedIntegerTest, MultiplicationCompoundAssignment) {
+TEST(UnsignedIntegerTest, MultiplicationCompoundAssignment)
+{
     Unsigned_integer<16> i1{10};
     Unsigned_integer<32> i2{15};
     i2 *= i1;
@@ -494,7 +516,8 @@ TEST(UnsignedIntegerTest, MultiplicationCompoundAssignment) {
     EXPECT_EQ(40, i1 *= "2");
 }
 
-TEST(UnsignedIntegerTest, ComparisonOperators) {
+TEST(UnsignedIntegerTest, ComparisonOperators)
+{
     Unsigned_integer<16> i1{10};
     Unsigned_integer<32> i2{15};
     Unsigned_integer<128> i3{15};
@@ -536,7 +559,8 @@ TEST(UnsignedIntegerTest, ComparisonOperators) {
     EXPECT_TRUE("10" != i3);
 }
 
-TEST(UnsignedIntegerTest, Division) {
+TEST(UnsignedIntegerTest, Division)
+{
     Unsigned_integer<64> i1{0};
     Unsigned_integer<16> i2{1};
     Unsigned_integer<64> i3{9'999'999'999};
@@ -571,7 +595,8 @@ TEST(UnsignedIntegerTest, Division) {
     EXPECT_EQ(2, 4.0 / i6);
 }
 
-TEST(UnsignedIntegerTest, Modulo) {
+TEST(UnsignedIntegerTest, Modulo)
+{
     Unsigned_integer<64> i1{0};
     Unsigned_integer<16> i2{1};
     Unsigned_integer<64> i3{9'999'999'999};
@@ -604,7 +629,8 @@ TEST(UnsignedIntegerTest, Modulo) {
     EXPECT_EQ(0, 4.0 % i6);
 }
 
-TEST(UnsignedIntegerTest, Multiplication) {
+TEST(UnsignedIntegerTest, Multiplication)
+{
     Unsigned_integer<64> i1{0};
     Unsigned_integer<16> i2{1};
     Unsigned_integer<64> i3{9'999'999'999};
@@ -644,7 +670,8 @@ TEST(UnsignedIntegerTest, Multiplication) {
     EXPECT_EQ("8", 4.0 * i6);
 }
 
-TEST(UnsignedIntegerTest, BitOperators) {
+TEST(UnsignedIntegerTest, BitOperators)
+{
     Unsigned_integer<64> i1{6};
     Unsigned_integer<16> i2{3};
     Unsigned_integer<4> i3{3};
@@ -672,7 +699,8 @@ TEST(UnsignedIntegerTest, BitOperators) {
     EXPECT_EQ(0, i1 >> 4);
 }
 
-TEST(UnsignedIntegerTest, CompoundBitOperators) {
+TEST(UnsignedIntegerTest, CompoundBitOperators)
+{
     Unsigned_integer<64> i1{6};
     Unsigned_integer<16> i2{3};
 
@@ -717,7 +745,8 @@ TEST(UnsignedIntegerTest, CompoundBitOperators) {
     i1 = 6;
 }
 
-TEST(UnsignedIntegerTest, OStreamOutput) {
+TEST(UnsignedIntegerTest, OStreamOutput)
+{
     std::stringstream ss;
     Unsigned_integer<64> i{9999999};
     ss << i;
@@ -733,7 +762,8 @@ TEST(UnsignedIntegerTest, OStreamOutput) {
     ss.str("");
 }
 
-TEST(UnsignedIntegerTest, IStreamInput) {
+TEST(UnsignedIntegerTest, IStreamInput)
+{
     std::stringstream ss;
     Unsigned_integer<64> i1{9999999};
     Unsigned_integer<64> i2{0};
@@ -758,7 +788,8 @@ TEST(UnsignedIntegerTest, IStreamInput) {
     ss.clear();
 }
 
-TEST(UnsignedIntegerTest, Exponentiation) {
+TEST(UnsignedIntegerTest, Exponentiation)
+{
     Unsigned_integer<64> i1{1};
     Unsigned_integer<64> i2{0};
     Unsigned_integer<64> i3{4};
@@ -775,7 +806,8 @@ TEST(UnsignedIntegerTest, Exponentiation) {
     EXPECT_EQ(1, i2.exp(i2));
 }
 
-TEST(UnsignedIntegerTest, Root) {
+TEST(UnsignedIntegerTest, Root)
+{
     Unsigned_integer<128> i1{16};
     Unsigned_integer<64> i2{7776};
     Unsigned_integer<54> i3{78126};

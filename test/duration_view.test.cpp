@@ -11,7 +11,8 @@ using Duration_t = std::chrono::duration<long, std::nano>;
 
 using utility::duration_view;
 
-TEST(DurationView, SpecifiedUnitsSingular) {
+TEST(DurationView, SpecifiedUnitsSingular)
+{
     Duration_t duration_nanosecond{1};
     Duration_t duration_microsecond{1'000};
     Duration_t duration_millisecond{1'000'000};
@@ -35,7 +36,8 @@ TEST(DurationView, SpecifiedUnitsSingular) {
     EXPECT_EQ("1 hour", duration_view<std::chrono::hours>(duration_hour));
 }
 
-TEST(DurationView, SpecifiedUnitsUnExact) {
+TEST(DurationView, SpecifiedUnitsUnExact)
+{
     Duration_t duration_microsecond{1'050};
     Duration_t duration_millisecond{1'500'000};
     Duration_t duration_second{1'000'050'000};
@@ -55,7 +57,8 @@ TEST(DurationView, SpecifiedUnitsUnExact) {
     EXPECT_EQ("1 hour", duration_view<std::chrono::hours>(duration_hour));
 }
 
-TEST(DurationView, SpecifiedUnitsZero) {
+TEST(DurationView, SpecifiedUnitsZero)
+{
     Duration_t duration_nanosecond{0};
     Duration_t duration_microsecond{50};
     Duration_t duration_millisecond{500'000};
@@ -81,7 +84,8 @@ TEST(DurationView, SpecifiedUnitsZero) {
     EXPECT_EQ("0 hours", duration_view<std::chrono::hours>(duration_hour));
 }
 
-TEST(DurationView, SpecifiedUnitsPlural) {
+TEST(DurationView, SpecifiedUnitsPlural)
+{
     Duration_t duration_nanosecond{5};
     Duration_t duration_microsecond{5'000};
     Duration_t duration_millisecond{5'000'000};
@@ -107,7 +111,8 @@ TEST(DurationView, SpecifiedUnitsPlural) {
     EXPECT_EQ("5 hours", duration_view<std::chrono::hours>(duration_hour));
 }
 
-TEST(DurationView, SpecifiedUnitsWithSeperators) {
+TEST(DurationView, SpecifiedUnitsWithSeperators)
+{
     Duration_t duration_1{5'000'000'000'000};
     Duration_t duration_2{18'000'000'000'000'000};
 
@@ -127,7 +132,8 @@ TEST(DurationView, SpecifiedUnitsWithSeperators) {
 
     EXPECT_EQ("5,000 hours", duration_view<std::chrono::hours>(duration_2));
 }
-TEST(DurationView, SpecifiedUnitsNoSeperators) {
+TEST(DurationView, SpecifiedUnitsNoSeperators)
+{
     Duration_t duration_1{5'000'000'000'000};
     Duration_t duration_2{18'000'000'000'000'000};
 
@@ -150,7 +156,8 @@ TEST(DurationView, SpecifiedUnitsNoSeperators) {
               duration_view<std::chrono::hours>(duration_2, false));
 }
 
-TEST(DurationView, SpecifiedDigits) {
+TEST(DurationView, SpecifiedDigits)
+{
     // Long Duration
     Duration_t duration_long{18'000'000'000'000};
     EXPECT_EQ("18,000,000,000,000 nanoseconds",
@@ -195,7 +202,8 @@ TEST(DurationView, SpecifiedDigits) {
     EXPECT_EQ("5 nanoseconds", duration_view(duration_short, 16));
 }
 
-TEST(DurationView, SpecifiedDigitsNoSeperators) {
+TEST(DurationView, SpecifiedDigitsNoSeperators)
+{
     Duration_t duration_long{18'000'000'000'000};
     EXPECT_EQ("18000000000000 nanoseconds",
               duration_view(duration_long, 16, false));

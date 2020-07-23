@@ -4,7 +4,8 @@
 
 using namespace utility;
 
-TEST(SMFCallCounterArray, SMFCounts) {
+TEST(SMFCallCounterArray, SMFCounts)
+{
     using Array = utility::SMF_call_counter<int[5]>;
     Array::reset_counts();
     {
@@ -24,7 +25,8 @@ TEST(SMFCallCounterArray, SMFCounts) {
     EXPECT_EQ(0, Array::get_destructor_count());
 }
 
-TEST(SMFCallCounterArray, ConstIntArray) {
+TEST(SMFCallCounterArray, ConstIntArray)
+{
     using Array = utility::SMF_call_counter<const int[5]>;
     Array::reset_counts();
     Array var{1, 2, 3, 4, 5};
@@ -34,7 +36,8 @@ TEST(SMFCallCounterArray, ConstIntArray) {
     EXPECT_EQ(1, p[0]);
 }
 
-TEST(SMFCallCounterArray, ConstCharArray) {
+TEST(SMFCallCounterArray, ConstCharArray)
+{
     using Array = utility::SMF_call_counter<const char[6]>;
     Array::reset_counts();
     // Array var{"Hello"}; // Not possible to pass literal to non-aggregate memb
@@ -46,7 +49,8 @@ TEST(SMFCallCounterArray, ConstCharArray) {
     EXPECT_EQ('H', p[0]);
 }
 
-TEST(SMFCallCounterArray, AccessOperator) {
+TEST(SMFCallCounterArray, AccessOperator)
+{
     using Array = utility::SMF_call_counter<int[5]>;
     Array::reset_counts();
     Array var{1, 2, 3, 4, 5};
@@ -62,7 +66,8 @@ TEST(SMFCallCounterArray, AccessOperator) {
     EXPECT_EQ(6, *p);
 }
 
-TEST(SMFCallCounterArray, DefaultCstrStringOutput) {
+TEST(SMFCallCounterArray, DefaultCstrStringOutput)
+{
     using Array = utility::SMF_call_counter<int[5]>;
     Array::reset_counts();
     Array var_1;
@@ -71,7 +76,8 @@ TEST(SMFCallCounterArray, DefaultCstrStringOutput) {
               Array::default_cstr_count_as_string());
 }
 
-TEST(SMFCallCounterArray, InitializerListConstructorStringOutput) {
+TEST(SMFCallCounterArray, InitializerListConstructorStringOutput)
+{
     using Array = utility::SMF_call_counter<int[5]>;
     Array::reset_counts();
     Array var_1{1, 2, 3, 4, 5};
@@ -80,7 +86,8 @@ TEST(SMFCallCounterArray, InitializerListConstructorStringOutput) {
               Array::initializer_list_cstr_count_as_string());
 }
 
-TEST(SMFCallCounterArray, DestructorStringOutput) {
+TEST(SMFCallCounterArray, DestructorStringOutput)
+{
     using Array = utility::SMF_call_counter<int[5]>;
     Array::reset_counts();
     {

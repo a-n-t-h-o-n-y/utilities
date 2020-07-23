@@ -11,7 +11,8 @@ struct Bar {};
 
 struct Baz {};
 
-TEST(TypeDisjunction, IsClass) {
+TEST(TypeDisjunction, IsClass)
+{
     {
         using TD = utility::Trait_disjunction<std::is_class, int, double, Foo>;
         EXPECT_TRUE(TD::value);
@@ -45,7 +46,8 @@ TEST(TypeDisjunction, IsClass) {
     }
 }
 
-TEST(TypeDisjunction, IsVoid) {
+TEST(TypeDisjunction, IsVoid)
+{
     {
         using TD = utility::Trait_disjunction<std::is_void, void>;
         EXPECT_TRUE(TD::value);
@@ -71,11 +73,13 @@ TEST(TypeDisjunction, IsVoid) {
 }
 
 template <typename... Types>
-constexpr bool has_class() {
+constexpr bool has_class()
+{
     return utility::trait_disjunction_v<std::is_class, Types...>;
 }
 
-TEST(TypeDisjunction, HelperValue) {
+TEST(TypeDisjunction, HelperValue)
+{
     {
         constexpr bool var =
             utility::trait_disjunction_v<std::is_void, void, void, int, void,

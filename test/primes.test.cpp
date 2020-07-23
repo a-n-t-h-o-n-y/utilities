@@ -7,7 +7,8 @@
 #include <utility/from_file.hpp>
 #include <utility/primes.hpp>
 
-TEST(Primes, UnderOneThousand) {
+TEST(Primes, UnderOneThousand)
+{
     auto expected = std::vector<int>{
         2,   3,   5,   7,   11,  13,  17,  19,  23,  29,  31,  37,  41,  43,
         47,  53,  59,  61,  67,  71,  73,  79,  83,  89,  97,  101, 103, 107,
@@ -27,8 +28,9 @@ TEST(Primes, UnderOneThousand) {
                            std::begin(generated)));
 }
 
-TEST(Primes, UnderOneMillion) {
-    auto expected = utility::from_file("../test/primes.txt");
+TEST(Primes, UnderOneMillion)
+{
+    auto expected  = utility::from_file("../test/primes.txt");
     auto generated = utility::generate_primes<1'000'000>();
     ASSERT_EQ(expected.size(), generated.size());
     EXPECT_TRUE(std::equal(std::begin(expected), std::end(expected),

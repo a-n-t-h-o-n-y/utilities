@@ -8,7 +8,8 @@ struct Foo {
     double d;
 };
 
-TEST(PropertyTest, Construction) {
+TEST(PropertyTest, Construction)
+{
     utility::Property<int> var_1{5};
     EXPECT_EQ(5, var_1.get());
 
